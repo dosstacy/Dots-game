@@ -44,9 +44,8 @@ public class ConsoleUI {
                     if(gameMode == GameMode.SELECTION){
                         field.missingAnimation();
                         Thread.sleep(1000);
-                        field.shiftBallsDown();
+                        field.shiftDotsDown();
                         gameMode = GameMode.CURSOR;
-                        field.gameBoard[cursor.getPosX()][cursor.getPosY()] = color;
                         field.gameBoard[cursor.getPosX()][cursor.getPosY()] = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
                     }
                     break;

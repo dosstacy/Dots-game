@@ -53,7 +53,7 @@ public class GameBoard {
         printGameBoard();
         cleanArray();
     }
-    public void shiftBallsDown() {
+    public void shiftDotsDown() {
         for (int i = 0; i < boardSize; i++) {
             for (int j = boardSize - 1; j >= 0; j--) {
                 if (gameBoard[j][i].equals("*")) {
