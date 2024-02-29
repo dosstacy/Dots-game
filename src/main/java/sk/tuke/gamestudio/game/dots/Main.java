@@ -7,8 +7,6 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         ConsoleUI consoleUI = new ConsoleUI();
         consoleUI.play();
-        System.out.println();
-        System.out.println();
-        //new TimeMode().Timer();;
+        //new TimeMode().Timer();;;
     }
 }
