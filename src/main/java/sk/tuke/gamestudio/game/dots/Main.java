@@ -8,6 +8,7 @@ public class Main {
         ConsoleUI consoleUI = new ConsoleUI();
         consoleUI.play();
         System.out.println();
+        System.out.println();
         //new TimeMode().Timer();;
     }
 }
