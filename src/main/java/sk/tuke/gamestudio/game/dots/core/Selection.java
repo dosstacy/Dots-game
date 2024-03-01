@@ -1,6 +1,7 @@
 package main.java.sk.tuke.gamestudio.game.dots.core;
 
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
+import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 
 public class Selection implements GameMode{
     private int posX;
@@ -8,7 +9,6 @@ public class Selection implements GameMode{
     private final GameBoard field;
     private int x;
     private int y;
-    private String temp;
     int dotsCount = 0;
     public Selection(GameBoard field) {
         this.field = field;
@@ -16,7 +16,6 @@ public class Selection implements GameMode{
         posY = 0;
         x = 0;
         y = 0;
-        temp = null;
     }
 
     public Selection() {
@@ -47,23 +46,19 @@ public class Selection implements GameMode{
         }
         x = posX;
 
-        //temp = resetSelection(field.selectedDots[posX][posY]);
-        field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
-        if(field.gameBoard[posX][posY].contains(field.gameBoard[x-1][posY])){
-            //System.out.println(selectionState(field.gameBoard[x-1][posY]) + field.gameBoard[x-1][posY] + x + posY);
-            if(!selectionState(field.gameBoard[x-1][posY])){
-                //System.out.println("X2: " + x);
+        field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
+        if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX-1][posY].dot)){
+            if(field.gameBoard[posX-1][posY].getState() == DotState.NOT_SELECTED){
                 posX--;
-                field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
+                field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
+                field.gameBoard[posX][posY].setState(DotState.SELECTED);
+                field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
-                //System.out.println("you have already chose this color");
-                //System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.gameBoard[posX][posY] = resetSelection(field.gameBoard[posX][posY]);
-                //System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = "0";
+                System.out.println("you have already chose this color");
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
+                field.selectedDots[posX][posY].dot = "0";
                 posX--;
-                //System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
             }
         }else{
             System.out.println("Not the same color!");
@@ -78,20 +73,19 @@ public class Selection implements GameMode{
         }
         x = posX;
 
-        field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
-        if(field.gameBoard[posX][posY].contains(field.gameBoard[x+1][posY])){
-            if(!selectionState(field.gameBoard[x+1][posY])) {
+        field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
+        if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX+1][posY].dot)){
+            if(field.gameBoard[posX+1][posY].getState() == DotState.NOT_SELECTED) {
                 posX++;
-                field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
+                field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
+                field.gameBoard[posX][posY].setState(DotState.SELECTED);
+                field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
                 System.out.println("you have already chose this color");
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.gameBoard[posX][posY] = resetSelection(field.gameBoard[posX][posY]);
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = "0";
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
+                field.selectedDots[posX][posY].dot = "0";
                 posX++;
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
             }
         }else{
             System.out.println("Not the same color!");
@@ -106,20 +100,19 @@ public class Selection implements GameMode{
         }
         y = posY;
 
-        field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
-        if(field.gameBoard[posX][posY].contains(field.gameBoard[posX][y+1])){
-            if(!selectionState(field.gameBoard[posX][y+1])) {
+        field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
+        if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX][posY+1].dot)){
+            if(field.gameBoard[posX][posY+1].getState() == DotState.NOT_SELECTED) {
                 posY++;
-                field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
+                field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
+                field.gameBoard[posX][posY].setState(DotState.SELECTED);
+                field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
                 System.out.println("you have already chose this color");
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.gameBoard[posX][posY] = resetSelection(field.gameBoard[posX][posY]);
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = "0";
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
+                field.selectedDots[posX][posY].dot = "0";
                 posY++;
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
             }
         }else{
             System.out.println("Not the same color!");
@@ -134,20 +127,19 @@ public class Selection implements GameMode{
         }
         y = posY;
 
-        field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
-        if(field.gameBoard[posX][posY].contains(field.gameBoard[posX][y-1])){
-            if(!selectionState(field.gameBoard[posX][y-1])) {
+        field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
+        if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX][posY-1].dot)){
+            if(field.gameBoard[posX][posY-1].getState() == DotState.NOT_SELECTED) {
                 posY--;
-                field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = field.gameBoard[posX][posY];
+                field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
+                field.gameBoard[posX][posY].setState(DotState.SELECTED);
+                field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
                 System.out.println("you have already chose this color");
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.gameBoard[posX][posY] = resetSelection(field.gameBoard[posX][posY]);
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
-                field.selectedDots[posX][posY] = "0";
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
+                field.selectedDots[posX][posY].dot = "0";
                 posY--;
-                System.out.println(posX + " " + posY + " " + field.gameBoard[posX][posY]);
             }
         }else{
             System.out.println("Not the same color!");
@@ -155,7 +147,8 @@ public class Selection implements GameMode{
     }
 
     @Override
-    public String selectDot(String string) {
+    public String selectDot(Dot dot) {
+        String string = dot.dot;
         if(string.contains(Color.ANSI_RED)){
             return Color.RED_BACKGROUND + string;
         } else if (string.contains(Color.ANSI_BLUE)) {
@@ -174,16 +167,16 @@ public class Selection implements GameMode{
     public void resetAllSelection(GameBoard board){
         for(int i = 0; i < board.getBoardSize(); i++){
             for(int j = 0; j < board.getBoardSize(); j++){
-                if(board.gameBoard[i][j].contains(Color.RED_BACKGROUND)){
-                    board.gameBoard[i][j] = board.gameBoard[i][j].replace(Color.RED_BACKGROUND, "");
-                } else if (board.gameBoard[i][j].contains(Color.BLUE_BACKGROUND)) {
-                    board.gameBoard[i][j] = board.gameBoard[i][j].replace(Color.BLUE_BACKGROUND, "");
-                } else if (board.gameBoard[i][j].contains(Color.GREEN_BACKGROUND)) {
-                    board.gameBoard[i][j] = board.gameBoard[i][j].replace(Color.GREEN_BACKGROUND, "");
-                } else if (board.gameBoard[i][j].contains(Color.PURPLE_BACKGROUND)) {
-                    board.gameBoard[i][j] = board.gameBoard[i][j].replace(Color.PURPLE_BACKGROUND, "");
-                } else if (board.gameBoard[i][j].contains(Color.YELLOW_BACKGROUND)) {
-                    board.gameBoard[i][j] = board.gameBoard[i][j].replace(Color.YELLOW_BACKGROUND, "");
+                if(board.gameBoard[i][j].dot.contains(Color.RED_BACKGROUND)){
+                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.RED_BACKGROUND, "");
+                } else if (board.gameBoard[i][j].dot.contains(Color.BLUE_BACKGROUND)) {
+                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.BLUE_BACKGROUND, "");
+                } else if (board.gameBoard[i][j].dot.contains(Color.GREEN_BACKGROUND)) {
+                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.GREEN_BACKGROUND, "");
+                } else if (board.gameBoard[i][j].dot.contains(Color.PURPLE_BACKGROUND)) {
+                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.PURPLE_BACKGROUND, "");
+                } else if (board.gameBoard[i][j].dot.contains(Color.YELLOW_BACKGROUND)) {
+                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.YELLOW_BACKGROUND, "");
                 }
             }
         }
@@ -201,20 +194,5 @@ public class Selection implements GameMode{
             string = string.replace(Color.YELLOW_BACKGROUND, "");
         }
         return string;
-    }
-
-    public boolean selectionState(String string){
-        if(string.contains(Color.RED_BACKGROUND)){
-            return true;
-        } else if (string.contains(Color.BLUE_BACKGROUND)) {
-            return true;
-        } else if (string.contains(Color.GREEN_BACKGROUND)) {
-            return true;
-        } else if (string.contains(Color.PURPLE_BACKGROUND)) {
-            return true;
-        } else if (string.contains(Color.YELLOW_BACKGROUND)) {
-            return true;
-        }
-        return false;
     }
 }

@@ -4,6 +4,7 @@ import main.java.sk.tuke.gamestudio.game.dots.core.Cursor;
 import main.java.sk.tuke.gamestudio.game.dots.core.GameBoard;
 import main.java.sk.tuke.gamestudio.game.dots.core.Selection;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
+import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 import main.java.sk.tuke.gamestudio.game.dots.features.GameMode;
 
 import java.util.Scanner;
@@ -24,8 +25,8 @@ public class ConsoleUI {
     }
 
     public void play() throws InterruptedException {
-        cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()];
-        field.gameBoard[cursor.getPosX()][cursor.getPosY()] = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+        cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
+        field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
 
         Scanner scanner = new Scanner(System.in);
 
@@ -46,7 +47,7 @@ public class ConsoleUI {
                         Thread.sleep(1000);
                         field.shiftDotsDown();
                         gameMode = GameMode.CURSOR;
-                        field.gameBoard[cursor.getPosX()][cursor.getPosY()] = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+                        field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
                     }
                     break;
                 case "e":
@@ -63,17 +64,19 @@ public class ConsoleUI {
             gameMode = GameMode.SELECTION;
             selection.setPosX(cursor.getPosX());
             selection.setPosY(cursor.getPosY());
-            if(field.gameBoard[selection.getPosX()][selection.getPosY()].contains(Color.WHITE_BACKGROUND)){
-                field.gameBoard[selection.getPosX()][selection.getPosY()] = field.gameBoard[selection.getPosX()][selection.getPosY()].replace(Color.WHITE_BACKGROUND, "");
+            if(field.gameBoard[selection.getPosX()][selection.getPosY()].dot.contains(Color.WHITE_BACKGROUND)){
+                field.gameBoard[selection.getPosX()][selection.getPosY()].dot = field.gameBoard[selection.getPosX()][selection.getPosY()].dot.replace(Color.WHITE_BACKGROUND, "");
             }
-            color = field.gameBoard[selection.getPosX()][selection.getPosY()];
-            field.gameBoard[selection.getPosX()][selection.getPosY()] = selection.selectDot(field.gameBoard[selection.getPosX()][selection.getPosY()]);
+            color = field.gameBoard[selection.getPosX()][selection.getPosY()].dot;
+            field.gameBoard[selection.getPosX()][selection.getPosY()].dot = selection.selectDot(field.gameBoard[selection.getPosX()][selection.getPosY()]);
+            field.gameBoard[selection.getPosX()][selection.getPosY()].setState(DotState.SELECTED);
         } else {
             gameMode = GameMode.CURSOR;
             selection.resetAllSelection(field);
             field.cleanArray();
-            field.gameBoard[cursor.getPosX()][cursor.getPosY()] = color;
-            field.gameBoard[cursor.getPosX()][cursor.getPosY()] = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+            field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = color;
+            field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+            field.gameBoard[cursor.getPosX()][cursor.getPosY()].setState(DotState.NOT_SELECTED);
         }
     }
 

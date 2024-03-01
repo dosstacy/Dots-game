@@ -22,43 +22,44 @@ public class Cursor implements GameMode{
         if (posX == 0) {
             return;
         }
-        field.gameBoard[posX][posY] = prevColor;
+        field.gameBoard[posX][posY].dot = prevColor;
         posX--;
-        prevColor = field.gameBoard[posX][posY];
-        field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
+        prevColor = field.gameBoard[posX][posY].dot;
+        field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
     }
 
     public void moveDown() {
         if (posX == field.getBoardSize()-1) {
             return;
         }
-        field.gameBoard[posX][posY] = prevColor;
+        field.gameBoard[posX][posY].dot = prevColor;
         posX++;
-        prevColor = field.gameBoard[posX][posY];
-        field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
+        prevColor = field.gameBoard[posX][posY].dot;
+        field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
     }
 
     public void moveRight() {
         if (posY == field.getBoardSize()-1) {
             return;
         }
-        field.gameBoard[posX][posY] = prevColor;
+        field.gameBoard[posX][posY].dot = prevColor;
         posY++;
-        prevColor = field.gameBoard[posX][posY];
-        field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
+        prevColor = field.gameBoard[posX][posY].dot;
+        field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
     }
 
     public void moveLeft() {
         if (posY == 0) {
             return;
         }
-        field.gameBoard[posX][posY] = prevColor;
+        field.gameBoard[posX][posY].dot = prevColor;
         posY--;
-        prevColor = field.gameBoard[posX][posY];
-        field.gameBoard[posX][posY] = selectDot(field.gameBoard[posX][posY]);
+        prevColor = field.gameBoard[posX][posY].dot;
+        field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
     }
 
-    public String selectDot(String string) {
+    public String selectDot(Dot dot) {
+        String string = dot.dot;
         string = Color.WHITE_BACKGROUND + string;
         return string;
     }

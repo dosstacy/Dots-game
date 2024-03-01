@@ -5,5 +5,5 @@ public interface GameMode {
     void moveDown();
     void moveRight();
     void moveLeft();
-    String selectDot(String string);
+    String selectDot(Dot dot);
 }
