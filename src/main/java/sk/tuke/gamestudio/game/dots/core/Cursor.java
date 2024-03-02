@@ -2,7 +2,7 @@ package main.java.sk.tuke.gamestudio.game.dots.core;
 
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 
-public class Cursor implements GameMode{
+public class Cursor implements DotsAction {
     protected int posX;
     protected int posY;
     public String prevColor;

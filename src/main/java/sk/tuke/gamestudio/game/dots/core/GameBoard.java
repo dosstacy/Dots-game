@@ -1,9 +1,11 @@
 package main.java.sk.tuke.gamestudio.game.dots.core;
 
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
+import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 
 public class GameBoard {
     public Dot[][] gameBoard;
+    //private final String[][] gameWindow;
     private final int boardSize = 6;
     private final Selection selection;
     public Dot[][] selectedDots;
@@ -17,6 +19,7 @@ public class GameBoard {
             }
         }
         selection = new Selection();
+        //gameWindow = new String[getBoardSize()*2][getBoardSize()*2];
     }
 
     public int getBoardSize() {
@@ -48,6 +51,7 @@ public class GameBoard {
             for (int j = 0; j < selectedDots.length; j++) {
                 if (selectedDots[i][j].dot.contains("◯")) {
                     selection.resetSelection(gameBoard[i][j].dot);
+                    gameBoard[i][j].setState(DotState.NOT_SELECTED);
                     gameBoard[i][j].dot = "*";
                 }
             }
@@ -77,7 +81,7 @@ public class GameBoard {
     public void cleanArray(){
         for(int i = 0; i < selectedDots.length; i++){
             for(int j = 0; j < selectedDots.length; j++){
-                selectedDots[i][j].dot = " ";
+                selectedDots[i][j].dot = "0";
             }
         }
     }

@@ -13,7 +13,6 @@ public class ConsoleUI {
     private final GameBoard field;
     private final Cursor cursor;
     private GameMode gameMode;
-    private String color;
     private final Selection selection;
 
     public ConsoleUI() {
@@ -31,6 +30,8 @@ public class ConsoleUI {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            System.out.println("Please choose the mode you want to play: ");
+            System.out.println();
             field.printGameBoard();
             System.out.println("Enter a letter (u, d, r, l), 'ok' or 'exit':");
             String input = scanner.nextLine().trim().toLowerCase();
@@ -41,15 +42,7 @@ public class ConsoleUI {
                 case "d": moveDown(); break;
                 case "r": moveRight(); break;
                 case "l": moveLeft(); break;
-                case "":
-                    if(gameMode == GameMode.SELECTION){
-                        field.missingAnimation();
-                        Thread.sleep(1000);
-                        field.shiftDotsDown();
-                        gameMode = GameMode.CURSOR;
-                        field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
-                    }
-                    break;
+                case "": connectionButton(); break;
                 case "e":
                     System.exit(0);
                 default:
@@ -64,17 +57,15 @@ public class ConsoleUI {
             gameMode = GameMode.SELECTION;
             selection.setPosX(cursor.getPosX());
             selection.setPosY(cursor.getPosY());
-            if(field.gameBoard[selection.getPosX()][selection.getPosY()].dot.contains(Color.WHITE_BACKGROUND)){
+            if(field.gameBoard[selection.getPosX()][selection.getPosY()].dot.contains(Color.WHITE_BACKGROUND)) {
                 field.gameBoard[selection.getPosX()][selection.getPosY()].dot = field.gameBoard[selection.getPosX()][selection.getPosY()].dot.replace(Color.WHITE_BACKGROUND, "");
             }
-            color = field.gameBoard[selection.getPosX()][selection.getPosY()].dot;
             field.gameBoard[selection.getPosX()][selection.getPosY()].dot = selection.selectDot(field.gameBoard[selection.getPosX()][selection.getPosY()]);
             field.gameBoard[selection.getPosX()][selection.getPosY()].setState(DotState.SELECTED);
         } else {
             gameMode = GameMode.CURSOR;
             selection.resetAllSelection(field);
             field.cleanArray();
-            field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = color;
             field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
             field.gameBoard[cursor.getPosX()][cursor.getPosY()].setState(DotState.NOT_SELECTED);
         }
@@ -112,9 +103,38 @@ public class ConsoleUI {
         }
     }
 
-    /*public void connectionAnimation(String[][] board, int x, int y) throws InterruptedException {
-        board[x][y] = "*";
-        printGameBoard(board);
-        Thread.sleep(500);
-    }*/
+    private void connectionButton() throws InterruptedException {
+        if(gameMode == GameMode.SELECTION){
+            int countDots = 0;
+            for(int i = 0; i < field.selectedDots.length; i++){
+                for(int j = 0; j < field.selectedDots.length; j++){
+                    if(field.selectedDots[i][j].dot.equals("0")){
+                        countDots++;
+                    }
+                }
+            }
+            if(countDots > 1) {
+                field.missingAnimation();
+                Thread.sleep(1000);
+                field.shiftDotsDown();
+                gameMode = GameMode.CURSOR;
+                selection.resetAllSelection(field);
+                cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
+                field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+            }else{
+                gameMode = GameMode.CURSOR;
+                selection.resetAllSelection(field);
+                cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
+                field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+            }
+        }
+    }
+
+    public void createButtonWindow(){
+        System.out.println("\n             ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂Welcome to the game \"Dots\"!⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");
+        System.out.println("                            Please choose the mode you want to play:");
+        System.out.println("                                ⏱⭑⟡༄⏱⭑⟡༄. Time .⏱⭑⟡༄⏱⭑⟡༄\n");
+        System.out.println("                                ˖°༄˖°༄˖°༄˖° Moves ˖°༄˖°༄˖˖°༄\n");
+        System.out.println("                                ⋆⁺˚⋆｡°✩₊⋆ထ Endles ထ⁺˚⋆｡°✩₊⋆\n");
+    }
 }
