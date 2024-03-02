@@ -5,7 +5,6 @@ import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 
 public class GameBoard {
     public Dot[][] gameBoard;
-    //private final String[][] gameWindow;
     private final int boardSize = 6;
     private final Selection selection;
     public Dot[][] selectedDots;
@@ -19,7 +18,6 @@ public class GameBoard {
             }
         }
         selection = new Selection();
-        //gameWindow = new String[getBoardSize()*2][getBoardSize()*2];
     }
 
     public int getBoardSize() {

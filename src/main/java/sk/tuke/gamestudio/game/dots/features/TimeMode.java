@@ -13,7 +13,7 @@ public class TimeMode implements Mode {
 
     }
 
-    public static void Timer() throws InterruptedException {
+    public void Timer() throws InterruptedException {
         int charsWritten = 0;
         int start = 5000;
 
@@ -45,5 +45,7 @@ public class TimeMode implements Mode {
         Thread.sleep(1000);
         System.out.print("\b");
         System.out.println("0");
+        System.out.println("Time is up!");
+        System.exit(0);
     }
 }

@@ -6,6 +6,7 @@ import main.java.sk.tuke.gamestudio.game.dots.core.Selection;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 import main.java.sk.tuke.gamestudio.game.dots.features.GameMode;
+import main.java.sk.tuke.gamestudio.game.dots.features.TimeMode;
 
 import java.util.Scanner;
 
@@ -22,16 +23,34 @@ public class ConsoleUI {
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);
     }
+    public void startWindowAndChooseMode() throws InterruptedException {
+        createButtonWindow();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please write the mode you want to play or \"e\" to exit: ");
+        String input = scanner.nextLine().trim().toLowerCase();
+
+        switch (input) {
+            case "timed":
+                new TimeMode().Timer();
+                play();
+            case "moves":
+            case "endless":
+                while(true){
+                    play();
+                }
+            case "e":
+                System.exit(0);
+            default:
+                System.out.println("Invalid input");
+        }
+    }
 
     public void play() throws InterruptedException {
         cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
         field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
 
         Scanner scanner = new Scanner(System.in);
-
         while (true) {
-            System.out.println("Please choose the mode you want to play: ");
-            System.out.println();
             field.printGameBoard();
             System.out.println("Enter a letter (u, d, r, l), 'ok' or 'exit':");
             String input = scanner.nextLine().trim().toLowerCase();
@@ -130,11 +149,11 @@ public class ConsoleUI {
         }
     }
 
-    public void createButtonWindow(){
+    public void createButtonWindow() {
         System.out.println("\n             ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂Welcome to the game \"Dots\"!⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");
         System.out.println("                            Please choose the mode you want to play:");
-        System.out.println("                                ⏱⭑⟡༄⏱⭑⟡༄. Time .⏱⭑⟡༄⏱⭑⟡༄\n");
+        System.out.println("                                ⏱⭑⟡༄⏱⭑⟡༄. Timed .⏱⭑⟡༄⏱⭑⟡༄\n");
         System.out.println("                                ˖°༄˖°༄˖°༄˖° Moves ˖°༄˖°༄˖˖°༄\n");
-        System.out.println("                                ⋆⁺˚⋆｡°✩₊⋆ထ Endles ထ⁺˚⋆｡°✩₊⋆\n");
+        System.out.println("                                ⁺˚⋆｡°✩₊⋆ထ Endless ထ⁺˚⋆｡°✩₊⋆\n");
     }
 }
