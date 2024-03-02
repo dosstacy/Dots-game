@@ -1,4 +1,4 @@
-package main.java.sk.tuke.gamestudio.game.dots.core;
+package main.java.sk.tuke.gamestudio.game.dots.core;;
 
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.game.dots.features.DotState;

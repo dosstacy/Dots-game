@@ -31,7 +31,7 @@ public class ConsoleUI {
 
         switch (input) {
             case "timed":
-                new TimeMode().Timer();
+                new TimeMode().Timer(); //?
                 play();
             case "moves":
             case "endless":

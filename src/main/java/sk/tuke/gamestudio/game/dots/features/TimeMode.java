@@ -47,5 +47,6 @@ public class TimeMode implements Mode {
         System.out.println("0");
         System.out.println("Time is up!");
         System.exit(0);
+        //?
     }
 }
