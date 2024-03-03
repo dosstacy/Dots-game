@@ -1,21 +1,10 @@
 package main.java.sk.tuke.gamestudio.game.dots.features;
 
-import main.java.sk.tuke.gamestudio.game.dots.core.Mode;
-
-public class TimeMode implements Mode {
-    @Override
-    public void startGame() {
-
-    }
-
-    @Override
-    public void isWinOrLose() {
-
-    }
+public class TimeMode {
 
     public void Timer() throws InterruptedException {
         int charsWritten = 0;
-        int start = 5000;
+        int start = 40000;
 
         while (start != 0) {
             Thread.sleep(1000);
@@ -47,6 +36,5 @@ public class TimeMode implements Mode {
         System.out.println("0");
         System.out.println("Time is up!");
         System.exit(0);
-        //?
     }
 }

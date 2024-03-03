@@ -1,5 +1,6 @@
-package main.java.sk.tuke.gamestudio.game.dots.core;;
+package main.java.sk.tuke.gamestudio.game.dots.core;
 
+import main.java.sk.tuke.gamestudio.game.dots.consoleUI.ConsoleUI;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 
@@ -32,18 +33,6 @@ public class GameBoard {
         }
     }
 
-    public void printGameBoard() {
-        System.out.println("╔════ஓ๑♡๑ஓ═══╗");
-        for (Dot[] dots : gameBoard) {
-            System.out.print("| ");
-            for (Dot dot : dots) {
-                System.out.print(dot.dot + " ");
-            }
-            System.out.println("|");
-        }
-        System.out.println("╚════ஓ๑♡๑ஓ═══╝");
-    }
-
     public void missingAnimation() {
         for (int i = 0; i < selectedDots.length; i++) {
             for (int j = 0; j < selectedDots.length; j++) {
@@ -54,7 +43,7 @@ public class GameBoard {
                 }
             }
         }
-        printGameBoard();
+        //new ConsoleUI().printGameBoard();
         cleanArray();
     }
     public void shiftDotsDown() {

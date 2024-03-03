@@ -1,12 +1,10 @@
 package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
-import main.java.sk.tuke.gamestudio.game.dots.core.Cursor;
-import main.java.sk.tuke.gamestudio.game.dots.core.GameBoard;
-import main.java.sk.tuke.gamestudio.game.dots.core.Selection;
+import main.java.sk.tuke.gamestudio.game.dots.core.*;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 import main.java.sk.tuke.gamestudio.game.dots.features.GameMode;
-import main.java.sk.tuke.gamestudio.game.dots.features.TimeMode;
+import main.java.sk.tuke.gamestudio.game.dots.features.PlayingMode;
 
 import java.util.Scanner;
 
@@ -15,6 +13,10 @@ public class ConsoleUI {
     private final Cursor cursor;
     private GameMode gameMode;
     private final Selection selection;
+    private final String[] addition;
+    private int scores = 0;
+    private int moves = 3;
+    private PlayingMode playingMode;
 
     public ConsoleUI() {
         field = new GameBoard();
@@ -22,27 +24,56 @@ public class ConsoleUI {
         cursor = new Cursor(field);
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);
+        addition = new String[]{
+                Color.ANSI_YELLOW + "                -\"d\" for moving down;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"u\" for moving up;" + Color.ANSI_RESET,
+                "SCORES: " + scores + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"l\" for moving left;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"e\" to exit;" + Color.ANSI_RESET
+        };
     }
-    public void startWindowAndChooseMode() throws InterruptedException {
-        createButtonWindow();
+    public void gameStart() throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please write the mode you want to play or \"e\" to exit: ");
-        String input = scanner.nextLine().trim().toLowerCase();
+        String input;
 
-        switch (input) {
-            case "timed":
-                new TimeMode().Timer(); //?
-                play();
-            case "moves":
-            case "endless":
-                while(true){
+        do {
+            createButtonsWindow();
+            System.out.println("Please write the mode you want to play or \"e\" to exit: ");
+            input = scanner.nextLine().trim().toLowerCase();
+            switch (input) {
+                case "timed":
+                    playingMode = PlayingMode.TIMED;
+                    TimeModeThread timeModeThread = new TimeModeThread();
+                    GameThread gameThread = new GameThread();
+                    timeModeThread.start();
+                    if(timeModeThread.getState() == Thread.State.RUNNABLE){
+                        gameThread.sleep(5000);
+                        gameThread.start();
+                    }
+                case "moves":
+                    playingMode = PlayingMode.MOVES;
+                    if (moves == 5 || moves == 4) {
+                        addition[3] = "MOVES: " + Color.ANSI_YELLOW + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+                    } else if (moves <= 3) {
+                        addition[3] = "MOVES: " + Color.ANSI_RED + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+                    } else {
+                        addition[3] = "MOVES: " + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+                    }
                     play();
-                }
-            case "e":
-                System.exit(0);
-            default:
-                System.out.println("Invalid input");
-        }
+                    break;
+                case "endless":
+                    playingMode = PlayingMode.ENDLESS;
+                    play();
+                    break;
+                case "e":
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid input");
+                    break;
+            }
+        }while(!isValidInput(input));
     }
 
     public void play() throws InterruptedException {
@@ -51,7 +82,7 @@ public class ConsoleUI {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            field.printGameBoard();
+            printGameBoard();
             System.out.println("Enter a letter (u, d, r, l), 'ok' or 'exit':");
             String input = scanner.nextLine().trim().toLowerCase();
 
@@ -127,14 +158,27 @@ public class ConsoleUI {
             int countDots = 0;
             for(int i = 0; i < field.selectedDots.length; i++){
                 for(int j = 0; j < field.selectedDots.length; j++){
-                    if(field.selectedDots[i][j].dot.equals("0")){
+                    if(!field.selectedDots[i][j].dot.equals("0")){
                         countDots++;
                     }
                 }
             }
             if(countDots > 1) {
+                scores += countDots;
+                updateScores();
+                if(playingMode == PlayingMode.MOVES) {
+                    moves -= 1;
+                    updateMoves();
+                    if(moves == 0){
+                        field.missingAnimation();
+                        field.shiftDotsDown();
+                        gameMode = GameMode.CURSOR;
+                        selection.resetAllSelection(field);
+                        printGameBoard();
+                        System.exit(0);
+                    }
+                }
                 field.missingAnimation();
-                Thread.sleep(1000);
                 field.shiftDotsDown();
                 gameMode = GameMode.CURSOR;
                 selection.resetAllSelection(field);
@@ -149,11 +193,40 @@ public class ConsoleUI {
         }
     }
 
-    public void createButtonWindow() {
+    public void createButtonsWindow() {
         System.out.println("\n             ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂Welcome to the game \"Dots\"!⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");
         System.out.println("                            Please choose the mode you want to play:");
-        System.out.println("                                ⏱⭑⟡༄⏱⭑⟡༄. Timed .⏱⭑⟡༄⏱⭑⟡༄\n");
-        System.out.println("                                ˖°༄˖°༄˖°༄˖° Moves ˖°༄˖°༄˖˖°༄\n");
-        System.out.println("                                ⁺˚⋆｡°✩₊⋆ထ Endless ထ⁺˚⋆｡°✩₊⋆\n");
+        System.out.println(Color.ANSI_YELLOW + "                                ⏱⭑⟡༄⏱⭑⟡༄. Timed .⏱⭑⟡༄⏱⭑⟡༄\n" + Color.ANSI_RESET);
+        System.out.println(Color.ANSI_RED + "                                ˖°༄˖°༄˖°༄˖° Moves ˖°༄˖°༄˖˖°༄\n" + Color.ANSI_RESET);
+        System.out.println(Color.ANSI_BLUE + "                                ⁺˚⋆｡°✩₊⋆ထ Endless ထ⁺˚⋆｡°✩₊⋆\n" + Color.ANSI_RESET);
+    }
+
+    public void printGameBoard() {
+        System.out.println(Color.ANSI_GREEN + "ะ.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸⊹\n" + Color.ANSI_RESET);
+        System.out.println("╔════ஓ๑♡๑ஓ═══╗                         " + Color.ANSI_YELLOW +  "⟡ INSTRUCTIONS ⟡" + Color.ANSI_RESET);
+        for (int i = 0; i < field.getBoardSize(); i++) {
+            System.out.print("| ");
+            for (int j = 0; j < field.getBoardSize(); j++) {
+                System.out.print(field.gameBoard[i][j].dot + " ");
+            }
+            System.out.print("|      ");
+            System.out.println(addition[i]);
+        }
+        System.out.println("╚════ஓ๑♡๑ஓ═══╝");
+    }
+    private void updateScores() {
+        addition[2] = "SCORES: " + scores + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET;
+    }
+    private void updateMoves() {
+        addition[3] = "MOVES: " + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        if(moves == 5 || moves == 4){
+            addition[3] = "MOVES: " + Color.ANSI_YELLOW + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        } else if (moves <= 3) {
+            addition[3] = "MOVES: " + Color.ANSI_RED + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        }
+    }
+    private boolean isValidInput(String input) {
+        return input.equals("m") || input.equals("u") || input.equals("d") || input.equals("r") ||
+                input.equals("l") || input.equals("") || input.equals("e");
     }
 }
