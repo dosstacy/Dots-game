@@ -42,21 +42,13 @@ public class Selection implements DotsAction {
         }
 
         field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-        System.out.println("перед if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
         if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX-1][posY].dot)){
-            System.out.println("після першого if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-            System.out.println("перевіряю умову " + field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX-1][posY].dot) + " " + field.gameBoard[posX][posY].dot + " " + field.gameBoard[posX-1][posY].dot);
             if(field.gameBoard[posX-1][posY].getState() == DotState.NOT_SELECTED){
-                System.out.println("після if getsState " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
                 posX--;
                 field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
             }else{
-                System.out.println("you have already chose this color");
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-                System.out.println(field.gameBoard[posX-1][posY].dot + " " + (posX-1) + " " + posY + " " + field.gameBoard[posX-1][posY].getState());
                 field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
                 field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
                 field.selectedDots[posX][posY].dot = "0";
@@ -75,21 +67,13 @@ public class Selection implements DotsAction {
         }
 
         field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-        System.out.println("перед if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
         if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX+1][posY].dot)){
-            System.out.println("після першого if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-            System.out.println("перевіряю умову " + field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX+1][posY].dot) + " " + field.gameBoard[posX][posY].dot + " " + field.gameBoard[posX+1][posY].dot);
             if(field.gameBoard[posX+1][posY].getState() == DotState.NOT_SELECTED) {
-                System.out.println("після if getsState " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
                 posX++;
                 field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
             }else{
-                System.out.println("you have already chose this color");
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-                System.out.println(field.gameBoard[posX+1][posY].dot + " " + (posX+1) + " " + posY + " " + field.gameBoard[posX+1][posY].getState());
                 field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
                 field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
                 field.selectedDots[posX][posY].dot = "0";
@@ -108,21 +92,13 @@ public class Selection implements DotsAction {
         }
 
         field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-        System.out.println("перед if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
         if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX][posY+1].dot)){
-            System.out.println("після першого if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-            System.out.println("перевіряю умову " + field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX][posY+1].dot) + " " + field.gameBoard[posX][posY].dot + " " + field.gameBoard[posX][posY+1].dot);
             if(field.gameBoard[posX][posY+1].getState() == DotState.NOT_SELECTED) {
-                System.out.println("після if getsState " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
                 posY++;
                 field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
             }else{
-                System.out.println("you have already chose this color");
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-                System.out.println(field.gameBoard[posX][posY+1].dot + " " + posX + " " + (posY+1) + " " + field.gameBoard[posX][posY+1].getState());
                 field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
                 field.selectedDots[posX][posY].dot = "0";
                 posY++;
@@ -140,21 +116,13 @@ public class Selection implements DotsAction {
         }
 
         field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-        System.out.println("перед if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
         if(field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX][posY-1].dot)){
-            System.out.println("після першого if " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-            System.out.println("перевіряю умову " + field.gameBoard[posX][posY].dot.contains(field.gameBoard[posX][posY-1].dot) + " " + field.gameBoard[posX][posY].dot + " " + field.gameBoard[posX][posY-1].dot);
             if(field.gameBoard[posX][posY-1].getState() == DotState.NOT_SELECTED) {
-                System.out.println("після if getsState " + field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
                 posY--;
                 field.gameBoard[posX][posY].dot = selectDot(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
             }else{
-                System.out.println("you have already chose this color");
-                System.out.println(field.gameBoard[posX][posY].dot + " " + posX + " " + posY);
-                System.out.println(field.gameBoard[posX][posY-1].dot + " " + posX + " " + (posY-1) + " " + field.gameBoard[posX][posY-1].getState());
                 field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
                 field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
                 field.selectedDots[posX][posY].dot = "0";

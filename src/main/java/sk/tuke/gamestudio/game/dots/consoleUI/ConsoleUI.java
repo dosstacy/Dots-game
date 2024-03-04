@@ -1,10 +1,7 @@
 package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
 import main.java.sk.tuke.gamestudio.game.dots.core.*;
-import main.java.sk.tuke.gamestudio.game.dots.features.Color;
-import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
-import main.java.sk.tuke.gamestudio.game.dots.features.GameMode;
-import main.java.sk.tuke.gamestudio.game.dots.features.PlayingMode;
+import main.java.sk.tuke.gamestudio.game.dots.features.*;
 
 import java.util.Scanner;
 
@@ -15,7 +12,7 @@ public class ConsoleUI {
     private final Selection selection;
     private final String[] addition;
     private int scores = 0;
-    private int moves = 3;
+    private int moves = 6;
     private PlayingMode playingMode;
 
     public ConsoleUI() {
@@ -29,6 +26,7 @@ public class ConsoleUI {
                 Color.ANSI_YELLOW + "                -\"u\" for moving up;" + Color.ANSI_RESET,
                 "SCORES: " + scores + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"l\" for moving left;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"m\" for change mode(selection or cursor);" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"e\" to exit;" + Color.ANSI_RESET
         };
@@ -44,13 +42,8 @@ public class ConsoleUI {
             switch (input) {
                 case "timed":
                     playingMode = PlayingMode.TIMED;
-                    TimeModeThread timeModeThread = new TimeModeThread();
-                    GameThread gameThread = new GameThread();
-                    timeModeThread.start();
-                    if(timeModeThread.getState() == Thread.State.RUNNABLE){
-                        gameThread.sleep(5000);
-                        gameThread.start();
-                    }
+                    play();
+                    break;
                 case "moves":
                     playingMode = PlayingMode.MOVES;
                     if (moves == 5 || moves == 4) {
@@ -71,7 +64,7 @@ public class ConsoleUI {
                     break;
                 default:
                     System.out.println("Invalid input");
-                    break;
+                    //break;
             }
         }while(!isValidInput(input));
     }
@@ -83,9 +76,17 @@ public class ConsoleUI {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             printGameBoard();
-            System.out.println("Enter a letter (u, d, r, l), 'ok' or 'exit':");
-            String input = scanner.nextLine().trim().toLowerCase();
+            if(playingMode == PlayingMode.TIMED){
+                TimeModeThread timeModeThread = new TimeModeThread();
+                timeModeThread.start();
+            }
+            /*InputThread inputThread = new InputThread();
+            inputThread.start();
+            String input = inputThread.getInput();*/
+            //Thread.sleep(3000);
 
+            System.out.print("Enter a letter (u, d, r, l, m, e) or 'ENTER': ");
+            String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
                 case "m": switchMode(); break;
                 case "u": moveUp(); break;
@@ -193,7 +194,7 @@ public class ConsoleUI {
         }
     }
 
-    public void createButtonsWindow() {
+    private void createButtonsWindow() {
         System.out.println("\n             ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂Welcome to the game \"Dots\"!⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");
         System.out.println("                            Please choose the mode you want to play:");
         System.out.println(Color.ANSI_YELLOW + "                                ⏱⭑⟡༄⏱⭑⟡༄. Timed .⏱⭑⟡༄⏱⭑⟡༄\n" + Color.ANSI_RESET);
@@ -201,7 +202,7 @@ public class ConsoleUI {
         System.out.println(Color.ANSI_BLUE + "                                ⁺˚⋆｡°✩₊⋆ထ Endless ထ⁺˚⋆｡°✩₊⋆\n" + Color.ANSI_RESET);
     }
 
-    public void printGameBoard() {
+    private void printGameBoard() {
         System.out.println(Color.ANSI_GREEN + "ะ.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸⊹\n" + Color.ANSI_RESET);
         System.out.println("╔════ஓ๑♡๑ஓ═══╗                         " + Color.ANSI_YELLOW +  "⟡ INSTRUCTIONS ⟡" + Color.ANSI_RESET);
         for (int i = 0; i < field.getBoardSize(); i++) {
