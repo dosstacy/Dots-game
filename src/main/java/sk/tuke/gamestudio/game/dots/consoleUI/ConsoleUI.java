@@ -2,10 +2,13 @@ package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
 import main.java.sk.tuke.gamestudio.game.dots.core.*;
 import main.java.sk.tuke.gamestudio.game.dots.entity.Comment;
+import main.java.sk.tuke.gamestudio.game.dots.entity.Rating;
+import main.java.sk.tuke.gamestudio.game.dots.entity.Score;
 import main.java.sk.tuke.gamestudio.game.dots.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.features.*;
 import main.java.sk.tuke.gamestudio.game.dots.services.CommentServiceJDBC;
-import main.java.sk.tuke.gamestudio.game.dots.services.UserService;
+import main.java.sk.tuke.gamestudio.game.dots.services.RatingServiceJDBC;
+import main.java.sk.tuke.gamestudio.game.dots.services.ScoreServiceJDBC;
 import main.java.sk.tuke.gamestudio.game.dots.services.UserServiceJDBC;
 
 import java.util.Scanner;
@@ -20,7 +23,7 @@ public class ConsoleUI {
     private int moves = 6;
     private PlayingMode playingMode;
     private User user;
-    private UserServiceJDBC userService;
+    private int option;
     public ConsoleUI() {
         field = new GameBoard();
         field.createGameBoard();
@@ -34,41 +37,18 @@ public class ConsoleUI {
                 Color.ANSI_YELLOW + "                -\"l\" for moving left;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"m\" for change mode(selection or cursor);" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
-                Color.ANSI_YELLOW + "                -\"e\" to exit;" + Color.ANSI_RESET
         };
     }
 
     public void gameStart() {
-        System.out.println("please choose the option: 1 log in 2 sign up");
-        int option = new Scanner(System.in).nextInt();
-        String username;
-        String password;
+        /*System.out.println(Color.ANSI_PURPLE +  "========= Please choose the option (1 or 2) =========\n" + Color.ANSI_RESET +
+                           "                    1. Log In\n" + "                    2. Sign Up\n" +
+                Color.ANSI_PURPLE + "=====================================================" + Color.ANSI_RESET);
+        System.out.print("Enter the option: ");
+        option = new Scanner(System.in).nextInt();*/
 
-        do {
-            if(option == 1) {
-                System.out.print("Hello back, please enter your username: ");
-                username = new Scanner(System.in).nextLine().trim();
-                System.out.print("Enter password: ");
-                password = new Scanner(System.in).nextLine().trim();
-                userService = new UserServiceJDBC();
-                user = new User(username, password);
-                userService.loginUser(user.getUsername(), user.getPassword());
-                break;
-            } else if (option == 2) {
-                System.out.print("Hello, please enter your username: ");
-                username = new Scanner(System.in).nextLine().trim();
-                System.out.print("Enter password: ");
-                password = new Scanner(System.in).nextLine().trim();
-                userService = new UserServiceJDBC();
-                user = new User(username, password);
-                userService.addUser(user);
-                break;
-            }else{
-                System.out.println("invalid input");
-            }
-        }while(true);
-
-        System.out.println("Hello, " + user.getUsername());
+        //userRegistration();
+        //System.out.println(Color.ANSI_PURPLE + "                                   Hello, " + user.getUsername() + Color.ANSI_RESET);
 
         Scanner scanner = new Scanner(System.in);
         String input;
@@ -84,6 +64,7 @@ public class ConsoleUI {
             switch (input) {
                 case "timed":
                     timeMode();
+                    writeScoreToDatabase("timed");
                     endMenu();
                     break;
                 case "moves":
@@ -95,7 +76,8 @@ public class ConsoleUI {
                         play();
                     }
                 case "account":
-
+                    System.out.println(); //тільки коменти, зірочки та останні 5 результатів користувача
+                    break;
                 case "e":
                     endMenu();
                     break;
@@ -131,6 +113,13 @@ public class ConsoleUI {
                 connectionButton();
                 break;
             case "e":
+                if(playingMode == PlayingMode.TIMED){
+                    writeScoreToDatabase("timed");
+                } else if (playingMode == PlayingMode.MOVES) {
+                    writeScoreToDatabase("moves");
+                }else {
+                    writeScoreToDatabase("endless");
+                }
                 endMenu();
                 break;
             default:
@@ -211,6 +200,7 @@ public class ConsoleUI {
                         gameMode = GameMode.CURSOR;
                         selection.resetAllSelection(field);
                         printGameBoard();
+                        writeScoreToDatabase("moves");
                         endMenu();
                     }
                 }
@@ -230,8 +220,15 @@ public class ConsoleUI {
     }
 
     private void createButtonsWindow() {
-        System.out.println("\n             ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂Welcome to the game \"Dots\"!⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");
-        System.out.println("                            Please choose the mode you want to play:");
+        System.out.println("\n               ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂ Welcome to the game ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");
+        System.out.println(Color.ANSI_PURPLE +  "                       ::::::         :::::     :::::::::::  ::::::  \n" + Color.ANSI_RESET +
+                Color.ANSI_PURPLE +"                       :::   :::    :::    :::       :::    :::    :::\n"+ Color.ANSI_RESET +
+                Color.ANSI_PURPLE +"                       :::    ::: :::        :::     :::     :::      \n"+ Color.ANSI_RESET +
+                Color.ANSI_PURPLE +"                       :::    ::: :::        :::     :::       :::    \n"+ Color.ANSI_RESET +
+                Color.ANSI_PURPLE +"                       :::    ::: :::        :::     :::          ::: \n"+ Color.ANSI_RESET +
+                Color.ANSI_PURPLE +"                       :::   :::    :::     :::      :::    :::    :::\n"+ Color.ANSI_RESET +
+                Color.ANSI_PURPLE +"                       ::::::         :::::          :::      ::::::\n" + Color.ANSI_RESET);
+        System.out.println("              Please choose the mode you want to play or account to see your info:");
         System.out.println(Color.ANSI_YELLOW + "                                ⏱⭑⟡༄⏱⭑⟡༄. Timed .⏱⭑⟡༄⏱⭑⟡༄\n" + Color.ANSI_RESET);
         System.out.println(Color.ANSI_RED + "                                ˖°༄˖°༄˖°༄˖° Moves ˖°༄˖°༄˖˖°༄\n" + Color.ANSI_RESET);
         System.out.println(Color.ANSI_BLUE + "                                ⁺˚⋆｡°✩₊⋆ထ Endless ထ⁺˚⋆｡°✩₊⋆\n" + Color.ANSI_RESET);
@@ -249,7 +246,7 @@ public class ConsoleUI {
             System.out.print("|      ");
             System.out.println(addition[i]);
         }
-        System.out.println("╚════ஓ๑♡๑ஓ═══╝");
+        System.out.println("╚════ஓ๑♡๑ஓ═══╝                      " + Color.ANSI_YELLOW + "-\"e\" to exit;" + Color.ANSI_RESET);
     }
 
     private void updateScores() {
@@ -306,6 +303,7 @@ public class ConsoleUI {
             answer = scanner.nextLine();
             if (answer.equals("y")) {
                 leaveComment();
+                rateUs();
                 System.exit(0);
             } else if (answer.equals("n")) {
                 System.out.println("We are sorry that you do not leave feedback, " +
@@ -337,27 +335,81 @@ public class ConsoleUI {
         } while (true);
     }
     private void rateUs(){
-        System.out.println("Please rate us from 1 to 5: ");
-        Scanner scanner = new Scanner(System.in);
         int answer;
 
-        CommentServiceJDBC commentService;
-        Comment comment;
+        RatingServiceJDBC ratingService;
+        Rating rating;
 
         do {
-            System.out.print("Comment (only 100 symbols!):  ");
-            String text = new Scanner(System.in).nextLine().toLowerCase();
+            System.out.println("Please rate us from 1 to 5: ");
+            answer = new Scanner(System.in).nextInt();
 
-            if(text.length() > 100){
-                System.out.println("The comment should not exceed 100 symbols. Please try again.");
+            if(answer <= 0 || answer > 5){
+                System.out.println("The rating must be only from 1 to 5. Please try again.");
             } else {
-                commentService = new CommentServiceJDBC();
-                comment = new Comment(text);
-                commentService.addComment(comment, user.getUsername());
-                System.out.println("Your comment successfully added. Thanks!");
+                ratingService = new RatingServiceJDBC();
+                rating = new Rating(answer);
+                ratingService.addRating(rating, user.getUsername());
+                System.out.println("Your rate successfully added. Thanks!");
                 break;
             }
 
         } while (true);
+    }
+    private void writeScoreToDatabase(String mode){
+        ScoreServiceJDBC scoreService = new ScoreServiceJDBC();
+        Score score = new Score(scores);
+        scoreService.addResult(score, user.getUsername(), mode);
+    }
+    private void userRegistration(){
+        String username;
+        String password;
+
+        boolean isValidInput = false;
+        do {
+            UserServiceJDBC userService;
+            if(option == 1) {
+                System.out.println();
+                System.out.println(Color.ANSI_PURPLE + "Welcome back!" + Color.ANSI_RESET);
+                do {
+                    System.out.print("Please enter your username: ");
+                    username = new Scanner(System.in).nextLine().trim();
+                    System.out.print("Enter your password: ");
+                    password = new Scanner(System.in).nextLine().trim();
+                    userService = new UserServiceJDBC();
+                    user = new User(username, password);
+                    userService.loginUser(user.getUsername(), user.getPassword());
+                    isValidInput = true;
+                }while(!userService.loginCheck);
+            } else if (option == 2) {
+                System.out.println();
+                System.out.println(Color.ANSI_PURPLE + "Hello, nice to meet you!" + Color.ANSI_RESET);
+                do {
+                    do {
+                        System.out.print("Please enter your username: ");
+                        username = new Scanner(System.in).nextLine().trim();
+                        if (username.length() < 4) {
+                            System.out.println(Color.ANSI_RED + "Username length must be longer than 4!" + Color.ANSI_RESET);
+                        }
+                    }while(username.length() < 4);
+                    do {
+                        System.out.print("Enter your password: ");
+                        password = new Scanner(System.in).nextLine().trim();
+                        if (password.length() < 8) {
+                            System.out.println(Color.ANSI_RED + "Username length must be longer than 4!" + Color.ANSI_RESET);
+                        }
+                    }while(password.length() < 8);
+                    userService = new UserServiceJDBC();
+                    user = new User(username, password);
+                    userService.addUser(user);
+                    isValidInput = true;
+                }while(!userService.signUpCheck);
+            }else{
+                System.out.println(Color.ANSI_RED + "Invalid input. Please try again." +Color.ANSI_RESET); //безкінечно виводить
+            }
+        }while(!isValidInput);
+    }
+    private void accountButton(){
+
     }
 }

@@ -1,32 +1,38 @@
 package main.java.sk.tuke.gamestudio.game.dots.services;
 import main.java.sk.tuke.gamestudio.game.dots.entity.User;
+import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 
 import java.sql.*;
 
 public class UserServiceJDBC implements UserService{
     private static final String ADD_USER = "INSERT INTO user_data(username, user_password) VALUES (?, ?);";
     private static final String URL = "jdbc:postgresql://localhost:5432/gamestudio";
-    public boolean loginCheck;
+    private final String username = "postgres";
+    private final String password = "dosstpostgre";
+    public boolean loginCheck = false;
+    public boolean signUpCheck = false;
 
     @Override
     public void addUser(User user) {
-        try(Connection connection = DriverManager.getConnection(URL, "postgres", "dosstpostgre");
+        try(Connection connection = DriverManager.getConnection(URL, this.username, this.password);
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER))
         {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.executeUpdate();
-            loginCheck = true;
+            signUpCheck = true;
+            System.out.println();
+            System.out.println(Color.ANSI_GREEN + "Successful sign up!" + Color.ANSI_RESET);
         }catch (Exception e){
-            e.printStackTrace();
-            loginCheck = false;
-            System.out.println("This login is already in use! Please enter another login.\n");
+            //e.printStackTrace();
+            signUpCheck = false;
+            System.out.println(Color.ANSI_RED + "This login is already in use! Please enter another login." + Color.ANSI_RESET);
         }
     }
 
     public void loginUser(String username, String password) {
-        try (Connection connection = DriverManager.getConnection(URL, "postgres", "dosstpostgre")) {
-            String query = "SELECT COUNT(*) FROM user_data WHERE username = ?"; //рахує к-сть username
+        try (Connection connection = DriverManager.getConnection(URL, this.username, this.password)) {
+            String query = "SELECT COUNT(*) FROM user_data WHERE username = ?";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
@@ -35,7 +41,7 @@ public class UserServiceJDBC implements UserService{
                 int count = resultSet.getInt(1);
 
                 if (count == 0) {
-                    System.out.println("user doesnt exist.");
+                    System.out.println(Color.ANSI_RED + "User doesn't exist. Please try again." + Color.ANSI_RESET);
                     return;
                 }
             }
@@ -44,18 +50,22 @@ public class UserServiceJDBC implements UserService{
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                String dbPassword = resultSet.getString("user_password");
+                String dbPassword = null;
+                while (resultSet.next()) {
+                    dbPassword = resultSet.getString("user_password");
+                }
 
                 if (!password.equals(dbPassword)) {
-                    System.out.println("incorrect password.");
+                    System.out.println(Color.ANSI_RED + "Incorrect password." + Color.ANSI_RESET);
                     return;
                 }
             }
-
-            System.out.println("successful sign up!");
+            System.out.println();
+            System.out.println(Color.ANSI_GREEN + "Successful log in!" + Color.ANSI_RESET);
+            loginCheck = true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println(Color.ANSI_RED + "Something went wrong... Please wait an administrator :/ " + Color.ANSI_RESET);
         }
     }
 }

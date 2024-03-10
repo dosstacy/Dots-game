@@ -1,22 +1,14 @@
 package main.java.sk.tuke.gamestudio.game.dots.services;
 
+import main.java.sk.tuke.gamestudio.game.dots.entity.Score;
+import main.java.sk.tuke.gamestudio.game.dots.entity.User;
+import main.java.sk.tuke.gamestudio.game.dots.features.PlayingMode;
+
+import java.util.List;
+import java.util.Map;
+
 public interface ScoreService {
-    /**
-     * adds a new score to storage
-     * @param score score object to be added
-     */
-    //void addScore(Score score);
-
-    /**
-     * Get 5 best (highest) scores from the storage for the game named <code>game</code>
-     * @param game name of the game
-     * @return list of the (at most) 5 best scores
-     */
-    //List<Score> getTopScores(String game);
-
-    /**
-     * deletes all scores in the storage (for all games)
-     */
-    void reset();
-
+    void addResult(Score score, String username, String mode);
+    Map<String, Integer> getTopScores(PlayingMode playingMode);
+    Map<String, Integer> getTopUserScores(PlayingMode playingMode, User username);
 }
