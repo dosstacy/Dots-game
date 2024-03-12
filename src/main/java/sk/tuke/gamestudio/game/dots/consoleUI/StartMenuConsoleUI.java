@@ -4,7 +4,7 @@ import main.java.sk.tuke.gamestudio.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.services.UserServiceJDBC;
 
-import java.util.Scanner;
+import java.util.Scanner;//
 //TODO fix user null pointer exception
 public class StartMenuConsoleUI {
     private User user;
