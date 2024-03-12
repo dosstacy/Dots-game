@@ -1,4 +1,4 @@
-package main.java.sk.tuke.gamestudio.game.dots.entity;
+package main.java.sk.tuke.gamestudio.entity;
 
 public class Rating {
     private int rating;

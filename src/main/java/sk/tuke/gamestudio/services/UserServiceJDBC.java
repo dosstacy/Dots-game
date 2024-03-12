@@ -1,5 +1,5 @@
-package main.java.sk.tuke.gamestudio.game.dots.services;
-import main.java.sk.tuke.gamestudio.game.dots.entity.User;
+package main.java.sk.tuke.gamestudio.services;
+import main.java.sk.tuke.gamestudio.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 
 import java.sql.*;
@@ -7,14 +7,14 @@ import java.sql.*;
 public class UserServiceJDBC implements UserService{
     private static final String ADD_USER = "INSERT INTO user_data(username, user_password) VALUES (?, ?);";
     private static final String URL = "jdbc:postgresql://localhost:5432/gamestudio";
-    private final String username = "postgres";
-    private final String password = "dosstpostgre";
+    private final String USERNAME = "postgres";
+    private final String PASSWORD = "dosstpostgre";
     public boolean loginCheck = false;
     public boolean signUpCheck = false;
 
     @Override
     public void addUser(User user) {
-        try(Connection connection = DriverManager.getConnection(URL, this.username, this.password);
+        try(Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER))
         {
             preparedStatement.setString(1, user.getUsername());
@@ -31,7 +31,7 @@ public class UserServiceJDBC implements UserService{
     }
 
     public void loginUser(String username, String password) {
-        try (Connection connection = DriverManager.getConnection(URL, this.username, this.password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             String query = "SELECT COUNT(*) FROM user_data WHERE username = ?";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
