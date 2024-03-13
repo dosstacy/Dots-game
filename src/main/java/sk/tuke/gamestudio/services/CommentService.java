@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface CommentService {
     void addComment(Comment comment, String username);
-    void deleteComment(Comment comment);
-    List<String> getAllComments(String username);
+    List<Comment> getUserComments(String username);
+    List<String> getAllComments();
+    void reset();
 }

@@ -3,7 +3,7 @@ package main.java.sk.tuke.gamestudio.entity;
 public class Comment{
     private String comment;
     public Comment(String comment) {
-        this.comment = comment;
+        setComment(comment);
     }
 
     public String getComment() {

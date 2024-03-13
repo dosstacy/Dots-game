@@ -2,6 +2,7 @@ package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
 import main.java.sk.tuke.gamestudio.entity.Comment;
 import main.java.sk.tuke.gamestudio.entity.Rating;
+import main.java.sk.tuke.gamestudio.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.services.CommentServiceJDBC;
 import main.java.sk.tuke.gamestudio.services.RatingServiceJDBC;
@@ -9,30 +10,40 @@ import main.java.sk.tuke.gamestudio.services.RatingServiceJDBC;
 import java.util.Scanner;
 
 public class EndMenuConsoleUI {
-    private final StartMenuConsoleUI startMenu;
-    public EndMenuConsoleUI() {
-        startMenu = new StartMenuConsoleUI();
+    User user;
+    public EndMenuConsoleUI(User user) {
+        this.user = user;
     }
 
     public void displayEndMenu() {
         Scanner scanner = new Scanner(System.in);
         String answer;
-        System.out.println(Color.ANSI_PURPLE + "\nAre you already leaving us? We are glad that you played our game. " +
-                "Would you like to rate us? [Y/N]" + Color.ANSI_RESET);
-        answer = scanner.nextLine();
-        if (answer.equalsIgnoreCase("y")) {
-            rateUs();
-            System.out.println(Color.ANSI_PURPLE + "Would you like to leave a comment? [Y/N]" + Color.ANSI_RESET);
+        do {
+            System.out.println(Color.ANSI_PURPLE + "\nAre you already leaving us? We are glad that you played our game. " +
+                    "Would you like to rate us? [Y/N]" + Color.ANSI_RESET);
             answer = scanner.nextLine();
             if (answer.equalsIgnoreCase("y")) {
-                leaveComment();
+                rateUs();
+                do {
+                    System.out.println(Color.ANSI_PURPLE + "Would you like to leave a comment? [Y/N]" + Color.ANSI_RESET);
+                    answer = scanner.nextLine();
+                    if (answer.equalsIgnoreCase("y")) {
+                        leaveComment();
+                        System.exit(0);
+                    } else if (answer.equalsIgnoreCase("n")) {
+                        System.out.println(Color.ANSI_PURPLE + "We hope you enjoyed our game :)" + Color.ANSI_RESET);
+                        System.exit(0);
+                    } else {
+                        System.out.println(Color.ANSI_RED + "Incorrect answer. Please enter Y or N." + Color.ANSI_RESET);
+                    }
+                }while(true);
+            } else if (answer.equalsIgnoreCase("n")) {
+                System.out.println(Color.ANSI_PURPLE + "We hope you enjoyed our game :)" + Color.ANSI_RESET);
+                System.exit(0);
+            } else {
+                System.out.println(Color.ANSI_RED + "Incorrect answer. Please enter Y or N." + Color.ANSI_RESET);
             }
-        } else if (answer.equalsIgnoreCase("n")) {
-            System.out.println(Color.ANSI_PURPLE + "We hope you enjoyed our game :)" + Color.ANSI_RESET);
-            System.exit(0);
-        } else {
-            System.out.println(Color.ANSI_RED + "Incorrect answer. Please enter Y or N." + Color.ANSI_RESET);
-        }
+        }while(true);
     }
     private void leaveComment(){
         CommentServiceJDBC commentService;
@@ -47,8 +58,8 @@ public class EndMenuConsoleUI {
             } else {
                 commentService = new CommentServiceJDBC();
                 comment = new Comment(text);
-                commentService.addComment(comment, startMenu.getUser().getUsername());
-                System.out.println("Your comment successfully added. Thanks!");
+                commentService.addComment(comment, user.getUsername());
+                System.out.println(Color.ANSI_GREEN + "Your comment successfully added. Thanks!" + Color.ANSI_RESET);
                 break;
             }
 
@@ -69,8 +80,8 @@ public class EndMenuConsoleUI {
             } else {
                 ratingService = new RatingServiceJDBC();
                 rating = new Rating(answer);
-                ratingService.addRating(rating, startMenu.getUser().getUsername());
-                System.out.println("Your rate successfully added. Thanks!");
+                ratingService.setRating(rating, user.getUsername());
+                System.out.println(Color.ANSI_GREEN + "Your rate successfully added. Thanks!" + Color.ANSI_RESET);
                 break;
             }
 

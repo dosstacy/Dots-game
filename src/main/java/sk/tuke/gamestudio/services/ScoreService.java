@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ScoreService {
-    void addResult(Score score);
+    void addScore(Score score);
     Map<String, Integer> getTopScores(PlayingMode playingMode);
     List<Integer> getTopUserScores(PlayingMode playingMode, User username);
     List<String> getDataForAccount(String username);

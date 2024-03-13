@@ -39,7 +39,7 @@ public class ScoreServiceJDBC implements ScoreService {
     private static final String PASSWORD = "dosstpostgre";
 
     @Override
-    public void addResult(Score score) {
+    public void addScore(Score score) {
         String ADD_SCORE = "INSERT INTO score (score, username, gamemode, date) VALUES (?, ?, ?, ?);";
 
         try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);

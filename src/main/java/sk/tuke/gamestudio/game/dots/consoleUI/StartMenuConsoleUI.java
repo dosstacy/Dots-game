@@ -89,8 +89,6 @@ public class StartMenuConsoleUI {
     }
 
     public User getUser() {
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
         return user;
     }
 }

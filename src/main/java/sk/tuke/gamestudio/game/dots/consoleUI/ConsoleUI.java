@@ -1,5 +1,6 @@
 package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
+import main.java.sk.tuke.gamestudio.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.core.*;
 import main.java.sk.tuke.gamestudio.entity.Score;
 import main.java.sk.tuke.gamestudio.game.dots.features.*;
@@ -20,14 +21,16 @@ public class ConsoleUI {
     private PlayingMode playingMode;
     private final StartMenuConsoleUI startMenu;
     private final EndMenuConsoleUI endMenu;
-    public ConsoleUI() {
+    private final User user;
+    public ConsoleUI(User user) {
         field = new GameBoard();
         field.createGameBoard();
         cursor = new Cursor(field);
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);
         startMenu = new StartMenuConsoleUI();
-        endMenu = new EndMenuConsoleUI();
+        this.user = user;
+        endMenu = new EndMenuConsoleUI(user);
         addition = new String[]{
                 Color.ANSI_YELLOW + "                -\"d\" for moving down;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"u\" for moving up;" + Color.ANSI_RESET,
@@ -268,8 +271,8 @@ public class ConsoleUI {
     }
     private void writeScoreToDatabase(String mode){
         ScoreServiceJDBC scoreService = new ScoreServiceJDBC();
-        Score score = new Score(scores, startMenu.getUser().getUsername(), mode);
-        scoreService.addResult(score);
+        Score score = new Score(scores, user.getUsername(), mode);
+        scoreService.addScore(score);
     }
     private void statisticInAccount(){
         System.out.println("Your recent activities displayed here...\n");
@@ -281,10 +284,9 @@ public class ConsoleUI {
         ScoreServiceJDBC scoreServiceJDBC = new ScoreServiceJDBC();
         RatingServiceJDBC ratingServiceJDBC = new RatingServiceJDBC();
         CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
-        System.out.println(startMenu.getUser().getUsername());
-        System.out.println(scoreServiceJDBC.getDataForAccount(startMenu.getUser().getUsername()));
-        System.out.println(ratingServiceJDBC.getAllRatings(startMenu.getUser().getUsername()));
-        System.out.println(commentServiceJDBC.getAllComments(startMenu.getUser().getUsername()));
+        System.out.println(user.getUsername());
+        System.out.println(scoreServiceJDBC.getDataForAccount(user.getUsername()));
+        //System.out.println(commentServiceJDBC.getAllComments(user.getUsername()));
 
         String answer;
         do {
