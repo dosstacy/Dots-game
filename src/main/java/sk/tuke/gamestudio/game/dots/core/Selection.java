@@ -7,7 +7,6 @@ public class Selection implements DotsAction {
     private int posX;
     private int posY;
     private final GameBoard field;
-    int dotsCount = 0;
     public Selection(GameBoard field) {
         this.field = field;
         posX = 0;
@@ -55,7 +54,7 @@ public class Selection implements DotsAction {
                 posX--;
             }
         }else{
-            System.out.println("Not the same color!");
+            System.out.println(Color.ANSI_RED + "Not the same color!" + Color.ANSI_RESET);
         }
     }
 
@@ -80,7 +79,7 @@ public class Selection implements DotsAction {
                 posX++;
             }
         }else{
-            System.out.println("Not the same color!");
+            System.out.println(Color.ANSI_RED + "Not the same color!" + Color.ANSI_RESET);
         }
     }
 
@@ -104,7 +103,7 @@ public class Selection implements DotsAction {
                 posY++;
             }
         }else{
-            System.out.println("Not the same color!");
+            System.out.println(Color.ANSI_RED + "Not the same color!" + Color.ANSI_RESET);
         }
     }
 
@@ -129,7 +128,7 @@ public class Selection implements DotsAction {
                 posY--;
             }
         }else{
-            System.out.println("Not the same color!");
+            System.out.println(Color.ANSI_RED + "Not the same color!" + Color.ANSI_RESET);
         }
     }
 

@@ -1,6 +1,5 @@
 package main.java.sk.tuke.gamestudio.game.dots.core;
 
-import main.java.sk.tuke.gamestudio.game.dots.consoleUI.ConsoleUI;
 import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.game.dots.features.DotState;
 
@@ -43,7 +42,6 @@ public class GameBoard {
                 }
             }
         }
-        //new ConsoleUI().printGameBoard();
         cleanArray();
     }
     public void shiftDotsDown() {
@@ -66,9 +64,9 @@ public class GameBoard {
     }
 
     public void cleanArray(){
-        for(int i = 0; i < selectedDots.length; i++){
-            for(int j = 0; j < selectedDots.length; j++){
-                selectedDots[i][j].dot = "0";
+        for (Dot[] selectedDot : selectedDots) {
+            for (int j = 0; j < selectedDots.length; j++) {
+                selectedDot[j].dot = "0";
             }
         }
     }

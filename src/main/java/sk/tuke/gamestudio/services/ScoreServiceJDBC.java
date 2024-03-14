@@ -18,6 +18,12 @@ public class ScoreServiceJDBC implements ScoreService {
             WHERE gamemode = ?
             GROUP BY username
             ORDER BY max_result DESC
+            LIMIT 5;""";
+    private static final String GET_TOP_10 = """
+            SELECT MAX(score) as max_result, gamemode, date, username
+            FROM score
+            GROUP BY date, gamemode, username
+            ORDER BY max_result DESC
             LIMIT 10;""";
     private static final String GET_BEST_SCORES = """
             SELECT username, MAX(score) as max_result
@@ -25,7 +31,7 @@ public class ScoreServiceJDBC implements ScoreService {
             WHERE gamemode = ? AND usename = ?
             GROUP BY username
             ORDER BY max_result DESC
-            LIMIT 10;""";
+            LIMIT 5;""";
 
     private static final String GET_ALL_DATA = """
             SELECT MAX(score) as max_result, gamemode, date
@@ -55,7 +61,6 @@ public class ScoreServiceJDBC implements ScoreService {
             System.out.println(Color.ANSI_RED + "Please try again.\n" + Color.ANSI_RESET);
         }
     }
-
     @Override
     public Map<String, Integer> getTopScores(PlayingMode playingMode) {
         Map<String, Integer> usersScores = new HashMap<>();
@@ -103,7 +108,7 @@ public class ScoreServiceJDBC implements ScoreService {
         return userScores;
     } //найкращі 10 під час кожної гри
     @Override
-    public List<String> getDataForAccount(String username){ //найкращі 10 в account
+    public List<String> getDataForAccount(String username){
         List<String> scores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_ALL_DATA)) {
@@ -112,8 +117,24 @@ public class ScoreServiceJDBC implements ScoreService {
             while (resultSet.next()){
                 scores.add(String.valueOf(resultSet.getInt("max_result")));
                 scores.add(resultSet.getString("gamemode"));
-                String dateTime = String.valueOf(resultSet.getTimestamp("date"));
                 scores.add(String.valueOf(resultSet.getTimestamp("date")));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return scores;
+    }
+
+    public List<Score> getTop10(){
+        List<Score> scores = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(GET_TOP_10)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                scores.add(new Score(resultSet.getString("username"),
+                                     resultSet.getInt("max_result"),
+                                     resultSet.getString("gamemode"),
+                                     resultSet.getTimestamp("date")));
             }
         }catch (Exception e){
             e.printStackTrace();

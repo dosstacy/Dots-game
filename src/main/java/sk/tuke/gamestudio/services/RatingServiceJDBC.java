@@ -44,8 +44,19 @@ public class RatingServiceJDBC implements RatingService{
         }
     }
     @Override
-    public int getAverageRating(String game) {
-        return 0;
+    public int getAverageRating() {
+        String GET_AVERAGE_RATING = "SELECT ROUND(AVG(rating)) AS average_rating FROM rating;";
+        int avgRating = 0;
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(GET_AVERAGE_RATING)) {
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            avgRating = resultSet.getInt("average_rating");
+        } catch (Exception e) {
+            e.printStackTrace();
+            //System.out.println(Color.ANSI_RED +  "You haven't rated the game yet" + Color.ANSI_RESET);
+        }
+        return avgRating;
     }
     public List<Rating> getAllRatings(){
         String GET_ALL_COMMENTS = "SELECT username, rating, rated_on FROM rating ORDER BY rated_on DESC;";

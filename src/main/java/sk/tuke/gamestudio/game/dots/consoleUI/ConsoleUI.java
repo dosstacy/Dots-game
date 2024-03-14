@@ -1,31 +1,22 @@
 package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
-import main.java.sk.tuke.gamestudio.entity.Comment;
-import main.java.sk.tuke.gamestudio.entity.Rating;
 import main.java.sk.tuke.gamestudio.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.core.*;
-import main.java.sk.tuke.gamestudio.entity.Score;
 import main.java.sk.tuke.gamestudio.game.dots.features.*;
-import main.java.sk.tuke.gamestudio.services.CommentServiceJDBC;
-import main.java.sk.tuke.gamestudio.services.RatingServiceJDBC;
-import main.java.sk.tuke.gamestudio.services.ScoreServiceJDBC;
 
-//TODO після того, як я в головному меню вибираю щось інше, ніж мод, то курсор не зникає; після кожної гри зробити ретурн кнопку
-
-import java.util.List;
 import java.util.Scanner;
 public class ConsoleUI {
     private final GameBoard field;
     private final Cursor cursor;
     private GameMode gameMode;
     private final Selection selection;
-    private final String[] addition;
-    private int scores = 0;
+    private String[] addition;
     private int moves = 6;
     private PlayingMode playingMode;
     private final StartMenuConsoleUI startMenu;
     private final EndMenuConsoleUI endMenu;
-    private final User user;
+    JDBCConsoleUI jdbcConsoleUI;
+
     public ConsoleUI(User user) {
         field = new GameBoard();
         field.createGameBoard();
@@ -33,24 +24,17 @@ public class ConsoleUI {
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);
         startMenu = new StartMenuConsoleUI();
-        this.user = user;
         endMenu = new EndMenuConsoleUI(user);
-        addition = new String[]{
-                Color.ANSI_YELLOW + "                -\"d\" for moving down;" + Color.ANSI_RESET,
-                Color.ANSI_YELLOW + "                -\"u\" for moving up;" + Color.ANSI_RESET,
-                "SCORES: " + scores + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET,
-                Color.ANSI_YELLOW + "                -\"l\" for moving left;" + Color.ANSI_RESET,
-                Color.ANSI_YELLOW + "                -\"m\" for change mode(selection or cursor);" + Color.ANSI_RESET,
-                Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
-        };
+        jdbcConsoleUI = new JDBCConsoleUI(user);
+
         cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
         field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
-
     }
 
     public void startGame() {
         Scanner scanner = new Scanner(System.in);
         String input;
+        initializeAddition();
 
         do {
             startMenu.displayStartMenu();
@@ -60,7 +44,7 @@ public class ConsoleUI {
             switch (input) {
                 case "timed":
                     timeMode();
-                    writeScoreToDatabase("timed");
+                    jdbcConsoleUI.writeScoreToDatabase("timed");
                     endMenu.displayEndMenu();
                     break;
                 case "moves":
@@ -72,10 +56,12 @@ public class ConsoleUI {
                         play();
                     }
                 case "account":
-                    dataInAccountButton();
+                    jdbcConsoleUI.dataInAccountButton();
+                    returnQuestion();
                     break;
                 case "community":
-                    communityButton();
+                    jdbcConsoleUI.communityButton();
+                    returnQuestion();
                     break;
                 case "e":
                     endMenu.displayEndMenu();
@@ -113,11 +99,11 @@ public class ConsoleUI {
                 break;
             case "e":
                 if(playingMode == PlayingMode.TIMED){
-                    writeScoreToDatabase("timed");
+                   jdbcConsoleUI.writeScoreToDatabase("timed");
                 } else if (playingMode == PlayingMode.MOVES) {
-                    writeScoreToDatabase("moves");
+                   jdbcConsoleUI.writeScoreToDatabase("moves");
                 }else {
-                    writeScoreToDatabase("endless");
+                   jdbcConsoleUI.writeScoreToDatabase("endless");
                 }
                 endMenu.displayEndMenu();
                 break;
@@ -187,7 +173,7 @@ public class ConsoleUI {
                 }
             }
             if (countDots > 1) {
-                scores += countDots;
+                jdbcConsoleUI.setScores(jdbcConsoleUI.getScores() + countDots);
                 updateScores();
                 if (playingMode == PlayingMode.MOVES) {
                     moves -= 1;
@@ -198,7 +184,7 @@ public class ConsoleUI {
                         gameMode = GameMode.CURSOR;
                         selection.resetAllSelection(field);
                         printGameBoard();
-                        writeScoreToDatabase("moves");
+                        jdbcConsoleUI.writeScoreToDatabase("moves");
                         System.out.println(Color.ANSI_RED + "The moves are over!" + Color.ANSI_RESET);
                         endMenu.displayEndMenu();
                     }
@@ -217,6 +203,16 @@ public class ConsoleUI {
             }
         }
     }
+    private void initializeAddition(){
+        addition = new String[]{
+                Color.ANSI_YELLOW + "                -\"d\" for moving down;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"u\" for moving up;" + Color.ANSI_RESET,
+                "SCORES: " + jdbcConsoleUI.getScores() + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"l\" for moving left;" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"m\" for change mode(selection or cursor);" + Color.ANSI_RESET,
+                Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
+        };
+    }
 
     private void printGameBoard() {
         System.out.println(Color.ANSI_GREEN + "ะ.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸⊹\n" + Color.ANSI_RESET);
@@ -233,7 +229,7 @@ public class ConsoleUI {
     }
 
     private void updateScores() {
-        addition[2] = "SCORES: " + scores + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET;
+        addition[2] = "SCORES: " + jdbcConsoleUI.getScores() + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET;
     }
 
     private void updateMoves() {
@@ -253,7 +249,7 @@ public class ConsoleUI {
     private void timeMode() {
         playingMode = PlayingMode.TIMED;
         long startTime = System.currentTimeMillis();
-        long duration = 10000;
+        long duration = 60000;
         long endTime = startTime + duration;
         while (((endTime - System.currentTimeMillis()) / 1000) > 0) {
             System.out.println(Color.ANSI_RED + "Seconds left: " +Color.ANSI_RESET + (endTime - System.currentTimeMillis()) / 1000);
@@ -275,41 +271,6 @@ public class ConsoleUI {
             play();
         }
     }
-    private void writeScoreToDatabase(String mode){
-        ScoreServiceJDBC scoreService = new ScoreServiceJDBC();
-        Score score = new Score(scores, user.getUsername(), mode);
-        scoreService.addScore(score);
-    }
-    private void dataInAccountButton(){
-        ScoreServiceJDBC scoreServiceJDBC = new ScoreServiceJDBC();
-        List<String> data;
-        data = scoreServiceJDBC.getDataForAccount(user.getUsername());
-
-        System.out.println(Color.ANSI_PURPLE + "Your recent activities displayed here...\n" + Color.ANSI_RESET);
-        System.out.format("%40s%n", Color.ANSI_PURPLE + "YOUR BEST SCORES" + Color.ANSI_RESET);
-        System.out.println("+------------+------------+---------------------------+");
-        System.out.format("| %-10s | %-10s | %-25s |%n", "SCORE", "MODE", "DATE");
-        System.out.println("+------------+------------+---------------------------+");
-        for (int i = 0; i < data.size()-1; i += 3) {
-            System.out.format("| %-10s | %-10s | %-25s |%n", data.get(i), data.get(i + 1), data.get(i + 2));
-        }
-        System.out.println("+------------+------------+---------------------------+");
-
-        System.out.print(Color.ANSI_PURPLE + "YOUR RECENT RATING: " + Color.ANSI_RESET);
-        RatingServiceJDBC ratingServiceJDBC = new RatingServiceJDBC();
-        System.out.println(new Rating().getRatingInStars(ratingServiceJDBC.getRating(user.getUsername())));
-
-        System.out.println(Color.ANSI_PURPLE + "YOUR RECENT COMMENTS: " + Color.ANSI_RESET);
-        CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
-        List<Comment> commentsList = commentServiceJDBC.getUserComments(user.getUsername());
-        for (Comment comment : commentsList) {
-            System.out.println(Color.ANSI_GREEN + comment.getCommentedOn() + Color.ANSI_RESET);
-            System.out.println(comment.getComment());
-            System.out.println();
-        }
-        returnQuestion();
-    }
-
     private void returnQuestion(){
         String answer;
         do {
@@ -325,19 +286,5 @@ public class ConsoleUI {
                 System.out.println(Color.ANSI_RED + "Bad input" + Color.ANSI_RESET);
             }
         }while(!(answer.equalsIgnoreCase("r") || answer.equalsIgnoreCase("e")));
-    }
-    private void communityButton(){
-        List<Rating> ratingsList = new RatingServiceJDBC().getAllRatings();
-        for(Rating rating : ratingsList){
-            System.out.println(rating.getUsername());
-            System.out.println(rating.getRatedOn());
-            System.out.println(rating.getRatingInStars(rating.getRating()));
-        }
-        /*List<Comment> commentsList = new CommentServiceJDBC().getAllComments();
-        for (Comment comment : commentsList) {
-            System.out.println(Color.ANSI_GREEN + comment.getUsername() + " on "
-                    + comment.getCommentedOn() + Color.ANSI_RESET);
-        }*/
-        returnQuestion();
     }
 }

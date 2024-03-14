@@ -8,12 +8,12 @@ public class Comment{
     private Timestamp commentedOn;
     public Comment(String comment, Timestamp commentedOn) {
         setComment(comment);
-        this.commentedOn = commentedOn;
+        setCommentedOn(commentedOn);
     }
-    public Comment(String username, String comment, Timestamp commentedOn) {
+    public Comment(String username, String comment, Timestamp commentedOn){
+        setUsername(username);
         setComment(comment);
         setCommentedOn(commentedOn);
-        setUser(username);
     }
     public String getComment() {
         return comment;
@@ -32,8 +32,7 @@ public class Comment{
     public String getUsername() {
         return username;
     }
-
-    public void setUser(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 }

@@ -86,7 +86,6 @@ public class StartMenuConsoleUI {
         System.out.println(Color.ANSI_GREEN + "                               ° ༘⋆\uD83D\uDD87₊˚ෆ \uD83D\uDD87 Community .° ༘⋆\uD83D\uDD87₊˚ෆ\n" + Color.ANSI_RESET);
         System.out.println(Color.ANSI_PURPLE + "                               ✧ ˚. ⿻⋆｡˚ Account ୭ ⿻˚.  ༘ ˚✧\n" + Color.ANSI_RESET);
     }
-
     public User getUser() {
         return user;
     }
