@@ -43,14 +43,14 @@ public class ConsoleUI {
                 Color.ANSI_YELLOW + "                -\"m\" for change mode(selection or cursor);" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
         };
+        cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
+        field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+
     }
 
     public void startGame() {
         Scanner scanner = new Scanner(System.in);
         String input;
-
-        cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
-        field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
 
         do {
             startMenu.displayStartMenu();
