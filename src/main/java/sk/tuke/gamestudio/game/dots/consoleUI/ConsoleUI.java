@@ -1,5 +1,7 @@
 package main.java.sk.tuke.gamestudio.game.dots.consoleUI;
 
+import main.java.sk.tuke.gamestudio.entity.Comment;
+import main.java.sk.tuke.gamestudio.entity.Rating;
 import main.java.sk.tuke.gamestudio.entity.User;
 import main.java.sk.tuke.gamestudio.game.dots.core.*;
 import main.java.sk.tuke.gamestudio.entity.Score;
@@ -8,8 +10,10 @@ import main.java.sk.tuke.gamestudio.services.CommentServiceJDBC;
 import main.java.sk.tuke.gamestudio.services.RatingServiceJDBC;
 import main.java.sk.tuke.gamestudio.services.ScoreServiceJDBC;
 
+//TODO після того, як я в головному меню вибираю щось інше, ніж мод, то курсор не зникає; після кожної гри зробити ретурн кнопку
+
+import java.util.List;
 import java.util.Scanner;
-//TODO end account
 public class ConsoleUI {
     private final GameBoard field;
     private final Cursor cursor;
@@ -45,13 +49,13 @@ public class ConsoleUI {
         Scanner scanner = new Scanner(System.in);
         String input;
 
+        cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
+        field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
+
         do {
             startMenu.displayStartMenu();
             System.out.println("Please write the mode you want to play or \"e\" to exit: ");
             input = scanner.nextLine().trim().toLowerCase();
-
-            cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
-            field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
 
             switch (input) {
                 case "timed":
@@ -68,7 +72,10 @@ public class ConsoleUI {
                         play();
                     }
                 case "account":
-                    statisticInAccount();
+                    dataInAccountButton();
+                    break;
+                case "community":
+                    communityButton();
                     break;
                 case "e":
                     endMenu.displayEndMenu();
@@ -81,8 +88,8 @@ public class ConsoleUI {
 
     public void play() {
         Scanner scanner = new Scanner(System.in);
+
         printGameBoard();
-        //доробити колір для помилок і рестарт меню
         System.out.print("Enter a letter (u, d, r, l, m, e) or 'ENTER': ");
         String input = scanner.nextLine().trim().toLowerCase();
         switch (input) {
@@ -249,11 +256,10 @@ public class ConsoleUI {
         long duration = 10000;
         long endTime = startTime + duration;
         while (((endTime - System.currentTimeMillis()) / 1000) > 0) {
-            System.out.println("Seconds left: " + (endTime - System.currentTimeMillis()) / 1000);
+            System.out.println(Color.ANSI_RED + "Seconds left: " +Color.ANSI_RESET + (endTime - System.currentTimeMillis()) / 1000);
             play();
         }
-        boolean timeIsEnd = true;
-        System.out.println("Time id up!");
+        System.out.println(Color.ANSI_RED + "Time is up!" + Color.ANSI_RESET);
     }
 
     private void moveMode() {
@@ -274,20 +280,37 @@ public class ConsoleUI {
         Score score = new Score(scores, user.getUsername(), mode);
         scoreService.addScore(score);
     }
-    private void statisticInAccount(){
-        System.out.println("Your recent activities displayed here...\n");
-        System.out.println();
-        System.out.println(Color.ANSI_PURPLE
-                + "=========================================================================================================="
-                + Color.ANSI_RESET);
-        System.out.println(Color.ANSI_GREEN + "" + Color.ANSI_RESET);
+    private void dataInAccountButton(){
         ScoreServiceJDBC scoreServiceJDBC = new ScoreServiceJDBC();
-        RatingServiceJDBC ratingServiceJDBC = new RatingServiceJDBC();
-        CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
-        System.out.println(user.getUsername());
-        System.out.println(scoreServiceJDBC.getDataForAccount(user.getUsername()));
-        //System.out.println(commentServiceJDBC.getAllComments(user.getUsername()));
+        List<String> data;
+        data = scoreServiceJDBC.getDataForAccount(user.getUsername());
 
+        System.out.println(Color.ANSI_PURPLE + "Your recent activities displayed here...\n" + Color.ANSI_RESET);
+        System.out.format("%40s%n", Color.ANSI_PURPLE + "YOUR BEST SCORES" + Color.ANSI_RESET);
+        System.out.println("+------------+------------+---------------------------+");
+        System.out.format("| %-10s | %-10s | %-25s |%n", "SCORE", "MODE", "DATE");
+        System.out.println("+------------+------------+---------------------------+");
+        for (int i = 0; i < data.size()-1; i += 3) {
+            System.out.format("| %-10s | %-10s | %-25s |%n", data.get(i), data.get(i + 1), data.get(i + 2));
+        }
+        System.out.println("+------------+------------+---------------------------+");
+
+        System.out.print(Color.ANSI_PURPLE + "YOUR RECENT RATING: " + Color.ANSI_RESET);
+        RatingServiceJDBC ratingServiceJDBC = new RatingServiceJDBC();
+        System.out.println(new Rating().getRatingInStars(ratingServiceJDBC.getRating(user.getUsername())));
+
+        System.out.println(Color.ANSI_PURPLE + "YOUR RECENT COMMENTS: " + Color.ANSI_RESET);
+        CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
+        List<Comment> commentsList = commentServiceJDBC.getUserComments(user.getUsername());
+        for (Comment comment : commentsList) {
+            System.out.println(Color.ANSI_GREEN + comment.getCommentedOn() + Color.ANSI_RESET);
+            System.out.println(comment.getComment());
+            System.out.println();
+        }
+        returnQuestion();
+    }
+
+    private void returnQuestion(){
         String answer;
         do {
             System.out.print(Color.ANSI_PURPLE +
@@ -302,5 +325,19 @@ public class ConsoleUI {
                 System.out.println(Color.ANSI_RED + "Bad input" + Color.ANSI_RESET);
             }
         }while(!(answer.equalsIgnoreCase("r") || answer.equalsIgnoreCase("e")));
+    }
+    private void communityButton(){
+        List<Rating> ratingsList = new RatingServiceJDBC().getAllRatings();
+        for(Rating rating : ratingsList){
+            System.out.println(rating.getUsername());
+            System.out.println(rating.getRatedOn());
+            System.out.println(rating.getRatingInStars(rating.getRating()));
+        }
+        /*List<Comment> commentsList = new CommentServiceJDBC().getAllComments();
+        for (Comment comment : commentsList) {
+            System.out.println(Color.ANSI_GREEN + comment.getUsername() + " on "
+                    + comment.getCommentedOn() + Color.ANSI_RESET);
+        }*/
+        returnQuestion();
     }
 }

@@ -12,7 +12,6 @@ public class CommentServiceJDBC implements CommentService{
     private static final String USER = "postgres";
     private static final String PASSWORD = "dosstpostgre";
 
-    //з базиданих теж тоді видалити колонку
     @Override
     public void addComment(Comment comment, String username) {
         String ADD_COMMENT = "INSERT INTO comment (text, username, date) VALUES (?, ?, ?);";
@@ -20,7 +19,7 @@ public class CommentServiceJDBC implements CommentService{
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_COMMENT)){
             preparedStatement.setString(1, comment.getComment());
             preparedStatement.setString(2, username);
-            preparedStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setTimestamp(3, comment.getCommentedOn());
             preparedStatement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
@@ -30,39 +29,41 @@ public class CommentServiceJDBC implements CommentService{
 
     @Override
     public List<Comment> getUserComments(String username){
-        String GET_COMMENT = "SELECT text FROM comment WHERE username = ?;";
+        String GET_COMMENT = "SELECT text, date FROM comment WHERE username = ?;";
         List<Comment> comments = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_COMMENT)) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                comments.add(new Comment(resultSet.getString("text")));
+                comments.add(new Comment(resultSet.getString("text"),
+                                         resultSet.getTimestamp("date")));
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         return comments;
     }
-
     @Override
-    public List<String> getAllComments() {
+    public List<Comment> getAllComments() {
+        //SELECT username, text, date FROM comment  WHERE username = ? AND date = ? ORDER BY date DESC;
         String GET_ALL_COMMENTS = "SELECT username, text, date FROM comment ORDER BY date DESC;";
-        List<String> comments = new ArrayList<>();
+        List<Comment> comments = new ArrayList<>();
+        Comment comment;
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_ALL_COMMENTS)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                comments.add(resultSet.getString("username"));
-                comments.add(resultSet.getString("text"));
-                comments.add(String.valueOf(resultSet.getTimestamp("date")));
+                comment = new Comment(resultSet.getString("username"),
+                                      resultSet.getString("text"),
+                                      resultSet.getTimestamp("date"));
+                comments.add(comment);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         return comments;
     }
-
     @Override
     public void reset() {
 

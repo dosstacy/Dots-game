@@ -7,10 +7,12 @@ import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.services.CommentServiceJDBC;
 import main.java.sk.tuke.gamestudio.services.RatingServiceJDBC;
 
+import java.sql.Timestamp;
 import java.util.Scanner;
 
 public class EndMenuConsoleUI {
-    User user;
+    public User user;
+
     public EndMenuConsoleUI(User user) {
         this.user = user;
     }
@@ -46,18 +48,15 @@ public class EndMenuConsoleUI {
         }while(true);
     }
     private void leaveComment(){
-        CommentServiceJDBC commentService;
-        Comment comment;
-
-        do {
+       do {
             System.out.print("Comment (only 100 symbols!):  ");
             String text = new Scanner(System.in).nextLine().toLowerCase();
 
             if(text.length() > 100){
                 System.out.println("The comment should not exceed 100 symbols. Please try again.");
             } else {
-                commentService = new CommentServiceJDBC();
-                comment = new Comment(text);
+                CommentServiceJDBC commentService = new CommentServiceJDBC();
+                Comment comment = new Comment(text, new Timestamp(System.currentTimeMillis()));
                 commentService.addComment(comment, user.getUsername());
                 System.out.println(Color.ANSI_GREEN + "Your comment successfully added. Thanks!" + Color.ANSI_RESET);
                 break;

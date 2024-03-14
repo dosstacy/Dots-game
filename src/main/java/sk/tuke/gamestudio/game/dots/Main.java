@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         StartMenuConsoleUI startMenuConsoleUI = new StartMenuConsoleUI();
-        startMenuConsoleUI.displayRegistationMenu();
+        startMenuConsoleUI.displayRegistrationMenu();
         ConsoleUI consoleUI = new ConsoleUI(startMenuConsoleUI.getUser());
         consoleUI.startGame();
         }

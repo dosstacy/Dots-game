@@ -14,16 +14,17 @@ public class RatingServiceJDBC implements RatingService{
 
     @Override
     public int getRating(String username) {
-        String GET_RATING = "SELECT rating_value FROM rating WHERE username = ?;";
+        String GET_RATING = "SELECT rating FROM rating WHERE username = ?;";
         int rating = 0;
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_RATING)) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            rating = resultSet.getInt("rating_value");
+            rating = resultSet.getInt("rating");
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println(Color.ANSI_RED +  "You haven't rated the game yet" + Color.ANSI_RESET);
         }
         return rating;
     }
@@ -45,6 +46,24 @@ public class RatingServiceJDBC implements RatingService{
     @Override
     public int getAverageRating(String game) {
         return 0;
+    }
+    public List<Rating> getAllRatings(){
+        String GET_ALL_COMMENTS = "SELECT username, rating, rated_on FROM rating ORDER BY rated_on DESC;";
+        List<Rating> ratings = new ArrayList<>();
+        Rating rating;
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(GET_ALL_COMMENTS)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                rating = new Rating(resultSet.getString("username"),
+                        resultSet.getInt("rating"),
+                        resultSet.getTimestamp("rated_on"));
+                ratings.add(rating);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ratings;
     }
     @Override
     public void reset() {
