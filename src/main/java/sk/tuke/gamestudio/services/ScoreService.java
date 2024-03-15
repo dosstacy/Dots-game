@@ -12,4 +12,5 @@ public interface ScoreService {
     Map<String, Integer> getTopScores(PlayingMode playingMode);
     List<Integer> getTopUserScores(PlayingMode playingMode, User username);
     List<String> getDataForAccount(String username);
+    void reset();
 }

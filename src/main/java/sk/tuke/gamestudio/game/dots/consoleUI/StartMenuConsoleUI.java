@@ -54,10 +54,10 @@ public class StartMenuConsoleUI {
                     do {
                         System.out.print("Enter your password: ");
                         password = new Scanner(System.in).nextLine().trim();
-                        if (password.length() < 8) {
-                            System.out.println(Color.ANSI_RED + "Password length must be longer than 8!" + Color.ANSI_RESET);
+                        if (password.length() < 6) {
+                            System.out.println(Color.ANSI_RED + "Password length must be longer than 6!" + Color.ANSI_RESET);
                         }
-                    }while(password.length() < 8);
+                    }while(password.length() < 6);
                     userService = new UserServiceJDBC();
                     user = new User(username, password);
                     userService.addUser(user);

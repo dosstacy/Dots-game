@@ -4,7 +4,7 @@ import main.java.sk.tuke.gamestudio.entity.Rating;
 
 public interface RatingService {
     void setRating(Rating rating, String username);
-    int getAverageRating();
+    String getAverageRating();
     int getRating(String username);
     void reset();
 }

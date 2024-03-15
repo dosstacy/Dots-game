@@ -2,7 +2,6 @@ package main.java.sk.tuke.gamestudio.services;
 
 import main.java.sk.tuke.gamestudio.entity.Score;
 import main.java.sk.tuke.gamestudio.entity.User;
-import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 import main.java.sk.tuke.gamestudio.game.dots.features.PlayingMode;
 
 import java.sql.*;
@@ -56,16 +55,17 @@ public class ScoreServiceJDBC implements ScoreService {
             preparedStatement.setString(3, score.getGameMode());
             preparedStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             preparedStatement.executeUpdate();
-        }catch (Exception e){
-            //e.printStackTrace();
-            System.out.println(Color.ANSI_RED + "Please try again.\n" + Color.ANSI_RESET);
+        }catch (SQLException e){
+            throw new GameStudioException(e);
         }
     }
+
     @Override
     public Map<String, Integer> getTopScores(PlayingMode playingMode) {
         Map<String, Integer> usersScores = new HashMap<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(GET_BEST_USERS_SCORES)) {
+             PreparedStatement statement = connection.prepareStatement(GET_BEST_USERS_SCORES))
+        {
             if(playingMode == PlayingMode.TIMED){
                 statement.setString(1, "timed");
             }else if(playingMode == PlayingMode.MOVES){
@@ -80,15 +80,16 @@ public class ScoreServiceJDBC implements ScoreService {
                 usersScores.put(usernames, scores);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GameStudioException(e);
         }
         return usersScores;
-    } //для всіх юзерів після кожної гри
+    } //for all users after every game
     @Override
     public List<Integer> getTopUserScores(PlayingMode playingMode, User username){ //найкращі після кожної гри
         List<Integer> userScores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(GET_BEST_SCORES)) {
+             PreparedStatement statement = connection.prepareStatement(GET_BEST_SCORES))
+        {
             statement.setString(2, username.getUsername());
             if(playingMode == PlayingMode.TIMED){
                 statement.setString(1, "timed");
@@ -103,15 +104,17 @@ public class ScoreServiceJDBC implements ScoreService {
                 userScores.add(scores);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GameStudioException(e);
         }
         return userScores;
-    } //найкращі 10 під час кожної гри
+    } //top 10 during every game
+
     @Override
     public List<String> getDataForAccount(String username){
         List<String> scores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(GET_ALL_DATA)) {
+             PreparedStatement statement = connection.prepareStatement(GET_ALL_DATA))
+        {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -119,8 +122,8 @@ public class ScoreServiceJDBC implements ScoreService {
                 scores.add(resultSet.getString("gamemode"));
                 scores.add(String.valueOf(resultSet.getTimestamp("date")));
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (SQLException e){
+            throw new GameStudioException(e);
         }
         return scores;
     }
@@ -136,9 +139,21 @@ public class ScoreServiceJDBC implements ScoreService {
                                      resultSet.getString("gamemode"),
                                      resultSet.getTimestamp("date")));
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (SQLException e){
+            throw new GameStudioException(e);
         }
         return scores;
+    }
+
+    @Override
+    public void reset() {
+        String DELETE_SCORES = "TRUNCATE TABLE score";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(DELETE_SCORES))
+        {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new GameStudioException(e);
+        }
     }
 }

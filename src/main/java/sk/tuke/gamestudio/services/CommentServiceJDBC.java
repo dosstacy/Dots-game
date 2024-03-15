@@ -1,7 +1,6 @@
 package main.java.sk.tuke.gamestudio.services;
 
 import main.java.sk.tuke.gamestudio.entity.Comment;
-import main.java.sk.tuke.gamestudio.game.dots.features.Color;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,9 +19,8 @@ public class CommentServiceJDBC implements CommentService {
             preparedStatement.setString(2, username);
             preparedStatement.setTimestamp(3, comment.getCommentedOn());
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(Color.ANSI_RED + "Please try again.\n" + Color.ANSI_RESET);
+        }catch (SQLException e){
+            throw new GameStudioException(e);
         }
     }
 
@@ -38,8 +36,8 @@ public class CommentServiceJDBC implements CommentService {
                 comments.add(new Comment(resultSet.getString("text"),
                         resultSet.getTimestamp("date")));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new GameStudioException(e);
         }
         return comments;
     }
@@ -56,16 +54,22 @@ public class CommentServiceJDBC implements CommentService {
                         resultSet.getString("text"),
                         resultSet.getTimestamp("date")));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new GameStudioException(e);
         }
         return comments;
     }
 
-
     @Override
     public void reset() {
-
+        String DELETE_COMMENT = "TRUNCATE TABLE comment";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(DELETE_COMMENT))
+        {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new GameStudioException(e);
+        }
     }
 }
 

@@ -65,14 +65,18 @@ public class EndMenuConsoleUI {
         } while (true);
     }
     private void rateUs(){
-        int answer;
+        int answer = 0;
 
         RatingServiceJDBC ratingService;
         Rating rating;
 
         do {
             System.out.println("Please rate us from 1 to 5: ");
-            answer = new Scanner(System.in).nextInt();
+            try {
+                answer = new Scanner(System.in).nextInt();
+            }catch (Exception e){
+                System.out.println(Color.ANSI_RED + "Bad input" + Color.ANSI_RESET);
+            }
 
             if(answer <= 0 || answer > 5){
                 System.out.println("The rating must be only from 1 to 5. Please try again.");
@@ -86,5 +90,4 @@ public class EndMenuConsoleUI {
 
         } while (true);
     }
-    //TODO fix this
 }
