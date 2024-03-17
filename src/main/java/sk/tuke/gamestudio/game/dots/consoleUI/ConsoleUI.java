@@ -11,7 +11,7 @@ public class ConsoleUI {
     private GameMode gameMode;
     private final Selection selection;
     private String[] addition;
-    private int moves = 6;
+    private int moves = 20;
     private PlayingMode playingMode;
     private final StartMenuConsoleUI startMenu;
     private final EndMenuConsoleUI endMenu;
