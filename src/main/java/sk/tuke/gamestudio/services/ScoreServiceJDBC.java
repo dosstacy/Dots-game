@@ -45,7 +45,11 @@ public class ScoreServiceJDBC implements ScoreService {
 
     @Override
     public void addScore(Score score) {
-        String ADD_SCORE = "INSERT INTO score (score, username, gamemode, date) VALUES (?, ?, ?, ?);";
+        if(score.getScore() == 0){
+            return;
+        }
+        String ADD_SCORE = "INSERT INTO score (score, username, gamemode, date) VALUES (?, ?, ?, ?) ON CONFLICT (username, gamemode)\n" +
+                "DO UPDATE SET score = EXCLUDED.score, date = EXCLUDED.date WHERE EXCLUDED.score > score.score;";
 
         try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SCORE))

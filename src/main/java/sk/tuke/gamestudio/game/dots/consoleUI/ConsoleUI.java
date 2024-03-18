@@ -11,11 +11,11 @@ public class ConsoleUI {
     private GameMode gameMode;
     private final Selection selection;
     private String[] addition;
-    private int moves = 20;
+    private int moves = 10;
     private PlayingMode playingMode;
     private final StartMenuConsoleUI startMenu;
     private final EndMenuConsoleUI endMenu;
-    JDBCConsoleUI jdbcConsoleUI;
+    private final JDBCConsoleUI jdbcConsoleUI;
 
     public ConsoleUI(User user) {
         field = new GameBoard();
