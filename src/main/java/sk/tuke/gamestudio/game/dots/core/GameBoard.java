@@ -12,9 +12,9 @@ public class GameBoard {
     public GameBoard() {
         gameBoard = new Dot[boardSize][boardSize];
         selectedDots = new Dot[boardSize][boardSize];
-        for (int i = 0; i < selectedDots.length; i++) {
-            for (int j = 0; j < selectedDots.length; j++) {
-                selectedDots[i][j] = new Dot("0");
+        for (int row = 0; row < selectedDots.length; row++) {
+            for (int col = 0; col < selectedDots.length; col++) {
+                selectedDots[row][col] = new Dot("0");
             }
         }
         selection = new Selection();
@@ -25,38 +25,38 @@ public class GameBoard {
     }
 
     public void createGameBoard(){
-        for(int i = 0; i < boardSize; i++){
-            for(int j = 0; j < boardSize; j++){
-                gameBoard[i][j] = new Dot(Color.randomColor() + "◯" + Color.ANSI_RESET);
+        for(int row = 0; row < boardSize; row++){
+            for(int col = 0; col < boardSize; col++){
+                gameBoard[row][col] = new Dot(Color.randomColor() + "◯" + Color.ANSI_RESET);
             }
         }
     }
 
     public void missingAnimation() {
-        for (int i = 0; i < selectedDots.length; i++) {
-            for (int j = 0; j < selectedDots.length; j++) {
-                if (selectedDots[i][j].dot.contains("◯")) {
-                    selection.resetSelection(gameBoard[i][j].dot);
-                    gameBoard[i][j].setState(DotState.NOT_SELECTED);
-                    gameBoard[i][j].dot = "*";
+        for (int row = 0; row < selectedDots.length; row++) {
+            for (int col = 0; col < selectedDots.length; col++) {
+                if (selectedDots[row][col].dot.contains("◯")) {
+                    selection.resetSelection(gameBoard[row][col].dot);
+                    gameBoard[row][col].setState(DotState.NOT_SELECTED);
+                    gameBoard[row][col].dot = "*";
                 }
             }
         }
         cleanArray();
     }
     public void shiftDotsDown() {
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = boardSize - 1; j >= 0; j--) {
-                if (gameBoard[j][i].dot.equals("*")) {
-                    int k = j - 1;
-                    while (k >= 0 && gameBoard[k][i].dot.equals("*")) {
-                        k--;
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = boardSize - 1; col >= 0; col--) {
+                if (gameBoard[col][row].dot.equals("*")) {
+                    int newRowIndex = col - 1;
+                    while (newRowIndex >= 0 && gameBoard[newRowIndex][row].dot.equals("*")) {
+                        newRowIndex--;
                     }
-                    if (k >= 0) {
-                        gameBoard[j][i].dot = gameBoard[k][i].dot;
-                        gameBoard[k][i].dot = "*";
+                    if (newRowIndex >= 0) {
+                        gameBoard[col][row].dot = gameBoard[newRowIndex][row].dot;
+                        gameBoard[newRowIndex][row].dot = "*";
                     }else {
-                        gameBoard[j][i].dot = Color.randomColor() + "◯" + Color.ANSI_RESET;
+                        gameBoard[col][row].dot = Color.randomColor() + "◯" + Color.ANSI_RESET;
                     }
                 }
             }

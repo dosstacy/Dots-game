@@ -11,7 +11,7 @@ public class ConsoleUI {
     private GameMode gameMode;
     private final Selection selection;
     private String[] addition;
-    private int moves = 10;
+    private int moves = 6;
     private PlayingMode playingMode;
     private final StartMenuConsoleUI startMenu;
     private final EndMenuConsoleUI endMenu;
@@ -165,9 +165,9 @@ public class ConsoleUI {
     private void connectionButton() {
         if (gameMode == GameMode.SELECTION) {
             int countDots = 0;
-            for (int i = 0; i < field.selectedDots.length; i++) {
-                for (int j = 0; j < field.selectedDots.length; j++) {
-                    if (!field.selectedDots[i][j].dot.equals("0")) {
+            for (int row = 0; row < field.selectedDots.length; row++) {
+                for (int col = 0; col < field.selectedDots.length; col++) {
+                    if (!field.selectedDots[row][col].dot.equals("0")) {
                         countDots++;
                     }
                 }
@@ -217,13 +217,13 @@ public class ConsoleUI {
     private void printGameBoard() {
         System.out.println(Color.ANSI_GREEN + "ะ.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸.⋆⸙͎۪⋆༶⋆⸙͎۪˙კ¸⊹\n" + Color.ANSI_RESET);
         System.out.println("╔════ஓ๑♡๑ஓ═══╗                         " + Color.ANSI_YELLOW + "⟡ INSTRUCTIONS ⟡" + Color.ANSI_RESET);
-        for (int i = 0; i < field.getBoardSize(); i++) {
+        for (int row = 0; row < field.getBoardSize(); row++) {
             System.out.print("| ");
-            for (int j = 0; j < field.getBoardSize(); j++) {
-                System.out.print(field.gameBoard[i][j].dot + " ");
+            for (int col = 0; col < field.getBoardSize(); col++) {
+                System.out.print(field.gameBoard[row][col].dot + " ");
             }
             System.out.print("|      ");
-            System.out.println(addition[i]);
+            System.out.println(addition[row]);
         }
         System.out.println("╚════ஓ๑♡๑ஓ═══╝                      " + Color.ANSI_YELLOW + "-\"e\" to exit;" + Color.ANSI_RESET);
     }
@@ -249,7 +249,7 @@ public class ConsoleUI {
     private void timeMode() {
         playingMode = PlayingMode.TIMED;
         long startTime = System.currentTimeMillis();
-        long duration = 60000;
+        long duration = 15000;
         long endTime = startTime + duration;
         while (((endTime - System.currentTimeMillis()) / 1000) > 0) {
             System.out.println(Color.ANSI_RED + "Seconds left: " +Color.ANSI_RESET + (endTime - System.currentTimeMillis()) / 1000);

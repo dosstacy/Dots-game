@@ -44,8 +44,8 @@ public class JDBCConsoleUI {
         System.out.println("+------------+------------+---------------------------+");
         System.out.format("| %-10s | %-10s | %-25s |%n", "SCORE", "MODE", "DATE");
         System.out.println("+------------+------------+---------------------------+");
-        for (int i = 0; i < data.size()-1; i += 3) {
-            System.out.format("| %-10s | %-10s | %-25s |%n", data.get(i), data.get(i + 1), data.get(i + 2));
+        for (int element = 0; element < data.size()-1; element += 3) {
+            System.out.format("| %-10s | %-10s | %-25s |%n", data.get(element), data.get(element + 1), data.get(element + 2));
         }
         System.out.println("+------------+------------+---------------------------+");
 

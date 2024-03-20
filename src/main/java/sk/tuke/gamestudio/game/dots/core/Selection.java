@@ -151,23 +151,23 @@ public class Selection implements DotsAction {
     }
 
     public void resetAllSelection(GameBoard board){
-        for(int i = 0; i < board.getBoardSize(); i++){
-            for(int j = 0; j < board.getBoardSize(); j++){
-                if(board.gameBoard[i][j].dot.contains(Color.RED_BACKGROUND)){
-                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.RED_BACKGROUND, "");
-                    board.gameBoard[i][j].setState(DotState.NOT_SELECTED);
-                } else if (board.gameBoard[i][j].dot.contains(Color.BLUE_BACKGROUND)) {
-                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.BLUE_BACKGROUND, "");
-                    board.gameBoard[i][j].setState(DotState.NOT_SELECTED);
-                } else if (board.gameBoard[i][j].dot.contains(Color.GREEN_BACKGROUND)) {
-                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.GREEN_BACKGROUND, "");
-                    board.gameBoard[i][j].setState(DotState.NOT_SELECTED);
-                } else if (board.gameBoard[i][j].dot.contains(Color.PURPLE_BACKGROUND)) {
-                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.PURPLE_BACKGROUND, "");
-                    board.gameBoard[i][j].setState(DotState.NOT_SELECTED);
-                } else if (board.gameBoard[i][j].dot.contains(Color.YELLOW_BACKGROUND)) {
-                    board.gameBoard[i][j].dot = board.gameBoard[i][j].dot.replace(Color.YELLOW_BACKGROUND, "");
-                    board.gameBoard[i][j].setState(DotState.NOT_SELECTED);
+        for(int row = 0; row < board.getBoardSize(); row++){
+            for(int col = 0; col < board.getBoardSize(); col++){
+                if(board.gameBoard[row][col].dot.contains(Color.RED_BACKGROUND)){
+                    board.gameBoard[row][col].dot = board.gameBoard[row][col].dot.replace(Color.RED_BACKGROUND, "");
+                    board.gameBoard[row][col].setState(DotState.NOT_SELECTED);
+                } else if (board.gameBoard[row][col].dot.contains(Color.BLUE_BACKGROUND)) {
+                    board.gameBoard[row][col].dot = board.gameBoard[row][col].dot.replace(Color.BLUE_BACKGROUND, "");
+                    board.gameBoard[row][col].setState(DotState.NOT_SELECTED);
+                } else if (board.gameBoard[row][col].dot.contains(Color.GREEN_BACKGROUND)) {
+                    board.gameBoard[row][col].dot = board.gameBoard[row][col].dot.replace(Color.GREEN_BACKGROUND, "");
+                    board.gameBoard[row][col].setState(DotState.NOT_SELECTED);
+                } else if (board.gameBoard[row][col].dot.contains(Color.PURPLE_BACKGROUND)) {
+                    board.gameBoard[row][col].dot = board.gameBoard[row][col].dot.replace(Color.PURPLE_BACKGROUND, "");
+                    board.gameBoard[row][col].setState(DotState.NOT_SELECTED);
+                } else if (board.gameBoard[row][col].dot.contains(Color.YELLOW_BACKGROUND)) {
+                    board.gameBoard[row][col].dot = board.gameBoard[row][col].dot.replace(Color.YELLOW_BACKGROUND, "");
+                    board.gameBoard[row][col].setState(DotState.NOT_SELECTED);
                 }
             }
         }
