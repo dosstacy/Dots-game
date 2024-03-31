@@ -80,7 +80,7 @@ public class JDBCConsoleUI {
             System.out.format("| %-15s | %-10s | %-10s | %-25s |%n",
                     score.getUsername(),
                     score.getScore(),
-                    score.getGameMode(),
+                    score.getGamemode(),
                     score.getDate());
         }
         System.out.println("+-----------------+------------+------------+---------------------------+\n");

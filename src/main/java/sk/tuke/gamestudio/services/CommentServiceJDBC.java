@@ -12,7 +12,7 @@ public class CommentServiceJDBC implements CommentService {
 
     @Override
     public void addComment(Comment comment, String username) {
-        String ADD_COMMENT = "INSERT INTO comment (text, username, date) VALUES (?, ?, ?);";
+        String ADD_COMMENT = "INSERT INTO comment (comment, username, commented_on) VALUES (?, ?, ?);";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_COMMENT)) {
             preparedStatement.setString(1, comment.getComment());
@@ -26,15 +26,15 @@ public class CommentServiceJDBC implements CommentService {
 
     @Override
     public List<Comment> getUserComments(String username) {
-        String GET_COMMENT = "SELECT text, date FROM comment WHERE username = ?;";
+        String GET_COMMENT = "SELECT comment, commented_on FROM comment WHERE username = ?;";
         List<Comment> comments = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_COMMENT)) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                comments.add(new Comment(resultSet.getString("text"),
-                        resultSet.getTimestamp("date")));
+                comments.add(new Comment(resultSet.getString("comment"),
+                        resultSet.getTimestamp("commented_on")));
             }
         } catch (SQLException e) {
             throw new GameStudioException(e);
@@ -44,15 +44,15 @@ public class CommentServiceJDBC implements CommentService {
 
     @Override
     public List<Comment> getCommentsForCommunity() {
-        String GET_COMMENT = "SELECT username, text, date FROM comment;";
+        String GET_COMMENT = "SELECT username, comment, date FROM comment;";
         List<Comment> comments = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_COMMENT)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 comments.add(new Comment(resultSet.getString("username"),
-                        resultSet.getString("text"),
-                        resultSet.getTimestamp("date")));
+                        resultSet.getString("comment"),
+                        resultSet.getTimestamp("commented_on")));
             }
         } catch (SQLException e) {
             throw new GameStudioException(e);

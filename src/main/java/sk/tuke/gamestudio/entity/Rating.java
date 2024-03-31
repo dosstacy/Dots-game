@@ -3,11 +3,26 @@ package sk.tuke.gamestudio.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
+
+@NamedQuery( name = "Rating.getRating",
+        query = "SELECT r.rating FROM Rating r WHERE r.username = :username")
+
+//окремий метод в RatingServiceJPA
+//@NamedQuery( name = "Rating.setRating",
+// query = "INSERT INTO rating (rating, username, rated_on) VALUES (?, ?, ?) ON CONFLICT (username) DO UPDATE SET rating = EXCLUDED.rating, rated_on = EXCLUDED.rated_on")
+
+@NamedQuery( name = "Rating.getAverageRating",
+        query = "SELECT AVG(r.rating) AS average_rating FROM Rating r")
+
+@NamedQuery( name = "Rating.reset",
+        query = "DELETE FROM Rating")
+
 public class Rating implements Serializable {
     @Id
     @GeneratedValue

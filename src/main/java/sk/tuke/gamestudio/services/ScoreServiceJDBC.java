@@ -56,7 +56,7 @@ public class ScoreServiceJDBC implements ScoreService {
         {
             preparedStatement.setInt(1, score.getScore());
             preparedStatement.setString(2, score.getUsername());
-            preparedStatement.setString(3, score.getGameMode());
+            preparedStatement.setString(3, score.getGamemode());
             preparedStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             preparedStatement.executeUpdate();
         }catch (SQLException e){

@@ -10,6 +10,15 @@ import java.sql.Timestamp;
 
 @Entity
 
+@NamedQuery( name = "Comment.getUserComments",
+        query = "SELECT c.comment, c.commented_on FROM Comment c WHERE c.username = :username")
+
+@NamedQuery( name = "Comment.getCommentsForCommunity",
+        query = "SELECT c.username, c.comment, c.commented_on FROM Comment c")
+
+@NamedQuery( name = "Comment.reset",
+        query = "DELETE FROM Comment")
+
 public class Comment implements Serializable {
     @Id
     @GeneratedValue

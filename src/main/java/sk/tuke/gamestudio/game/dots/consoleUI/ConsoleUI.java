@@ -12,6 +12,7 @@ public class ConsoleUI {
     private final Selection selection;
     private String[] addition;
     private int moves = 6;
+    private boolean isEndlessEnd = false;
     private PlayingMode playingMode;
     private final StartMenuConsoleUI startMenu;
     private final EndMenuConsoleUI endMenu;
@@ -52,7 +53,7 @@ public class ConsoleUI {
                     break;
                 case "endless":
                     playingMode = PlayingMode.ENDLESS;
-                    while (true) {
+                    while (!isEndlessEnd) {
                         play();
                     }
                 case "account":
@@ -105,6 +106,7 @@ public class ConsoleUI {
                 }else {
                    jdbcConsoleUI.writeScoreToDatabase("endless");
                 }
+                isEndlessEnd = true;
                 endMenu.displayEndMenu();
                 break;
             default:
