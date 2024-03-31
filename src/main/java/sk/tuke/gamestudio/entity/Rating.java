@@ -1,8 +1,17 @@
 package sk.tuke.gamestudio.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Rating {
+@Entity
+public class Rating implements Serializable {
+    @Id
+    @GeneratedValue
+    private int ident;
     private int rating;
     private Timestamp ratedOn;
     private String username;
@@ -54,5 +63,13 @@ public class Rating {
             return "★★★★★";
         }
         return "✩✩✩✩✩";
+    }
+
+    public int getIdent() {
+        return ident;
+    }
+
+    public void setIdent(int ident) {
+        this.ident = ident;
     }
 }

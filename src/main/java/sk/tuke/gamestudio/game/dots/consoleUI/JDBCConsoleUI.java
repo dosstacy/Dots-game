@@ -57,7 +57,7 @@ public class JDBCConsoleUI {
         CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
         List<Comment> commentsList = commentServiceJDBC.getUserComments(user.getUsername());
         for (Comment comment : commentsList) {
-            System.out.println(Color.ANSI_GREEN + comment.getCommentedOn() + Color.ANSI_RESET);
+            System.out.println(Color.ANSI_GREEN + comment.getCommented_on() + Color.ANSI_RESET);
             System.out.println(comment.getComment());
             System.out.println();
         }
@@ -89,7 +89,7 @@ public class JDBCConsoleUI {
         List<Comment> commentList = commentServiceJDBC.getCommentsForCommunity();
         System.out.println(Color.ANSI_PURPLE + "COMMENTS: " + Color.ANSI_RESET);
         for(Comment comment : commentList){
-            System.out.println(Color.ANSI_GREEN + comment.getUsername() + " on " + comment.getCommentedOn() + Color.ANSI_RESET);
+            System.out.println(Color.ANSI_GREEN + comment.getUsername() + " on " + comment.getCommented_on() + Color.ANSI_RESET);
             System.out.println(comment.getComment());
             System.out.println();
         }

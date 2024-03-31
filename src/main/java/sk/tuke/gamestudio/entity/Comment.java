@@ -1,19 +1,33 @@
 package sk.tuke.gamestudio.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Comment{
+@Entity
+
+public class Comment implements Serializable {
+    @Id
+    @GeneratedValue
+    private int ident;
     private String comment;
     private String username;
-    private Timestamp commentedOn;
-    public Comment(String comment, Timestamp commentedOn) {
+    private Timestamp commented_on;
+    public Comment(String comment, Timestamp commented_on) {
         setComment(comment);
-        setCommentedOn(commentedOn);
+        setCommented_on(commented_on);
     }
-    public Comment(String username, String comment, Timestamp commentedOn){
+    public Comment(String username, String comment, Timestamp commented_on){
         setUsername(username);
         setComment(comment);
-        setCommentedOn(commentedOn);
+        setCommented_on(commented_on);
+    }
+    public Comment(){
+
     }
     public String getComment() {
         return comment;
@@ -23,16 +37,24 @@ public class Comment{
         this.comment = comment;
     }
 
-    public Timestamp getCommentedOn() {
-        return commentedOn;
+    public Timestamp getCommented_on() {
+        return commented_on;
     }
-    public void setCommentedOn(Timestamp commentedOn){
-        this.commentedOn = commentedOn;
+    public void setCommented_on(Timestamp commentedOn){
+        this.commented_on = commentedOn;
     }
     public String getUsername() {
         return username;
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getIdent() {
+        return ident;
+    }
+
+    public void setIdent(int ident) {
+        this.ident = ident;
     }
 }

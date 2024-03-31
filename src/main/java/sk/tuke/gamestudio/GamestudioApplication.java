@@ -18,5 +18,4 @@ public class GamestudioApplication {
         ConsoleUI consoleUI = new ConsoleUI(startMenuConsoleUI.getUser());
         consoleUI.startGame();
     }
-
 }

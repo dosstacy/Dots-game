@@ -17,7 +17,7 @@ public class CommentServiceJDBC implements CommentService {
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_COMMENT)) {
             preparedStatement.setString(1, comment.getComment());
             preparedStatement.setString(2, username);
-            preparedStatement.setTimestamp(3, comment.getCommentedOn());
+            preparedStatement.setTimestamp(3, comment.getCommented_on());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new GameStudioException(e);
