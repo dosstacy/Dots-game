@@ -40,23 +40,23 @@ public class RatingServiceJDBC implements RatingService{
         }
     }
     @Override
-    public String getAverageRating() {
+    public int getAverageRating() {
         String GET_AVERAGE_RATING = "SELECT AVG(rating) AS average_rating FROM rating;";
         double avgRating;
-        String formattedRating = null;
+        int result = 0;
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_AVERAGE_RATING)) {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 avgRating = resultSet.getDouble("average_rating");
-                formattedRating = String.format("%.2f", avgRating);
+                result = (int) Math.round(avgRating);
             } else {
                 System.out.println(Color.ANSI_RED + "No one has rated the game yet" + Color.ANSI_RESET);
             }
         } catch (SQLException e) {
             throw new GameStudioException(e);
         }
-        return formattedRating;
+        return result;
     }
     @Override
     public void reset() {

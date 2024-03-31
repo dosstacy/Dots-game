@@ -13,10 +13,6 @@ import java.sql.Timestamp;
 @NamedQuery( name = "Rating.getRating",
         query = "SELECT r.rating FROM Rating r WHERE r.username = :username")
 
-//окремий метод в RatingServiceJPA
-//@NamedQuery( name = "Rating.setRating",
-// query = "INSERT INTO rating (rating, username, rated_on) VALUES (?, ?, ?) ON CONFLICT (username) DO UPDATE SET rating = EXCLUDED.rating, rated_on = EXCLUDED.rated_on")
-
 @NamedQuery( name = "Rating.getAverageRating",
         query = "SELECT AVG(r.rating) AS average_rating FROM Rating r")
 
