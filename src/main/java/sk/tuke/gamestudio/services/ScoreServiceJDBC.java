@@ -1,7 +1,7 @@
 package sk.tuke.gamestudio.services;
 
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.entity.User;
+import sk.tuke.gamestudio.entity.Users;
 import sk.tuke.gamestudio.game.dots.features.PlayingMode;
 
 import java.sql.*;
@@ -64,7 +64,6 @@ public class ScoreServiceJDBC implements ScoreService {
         }
     }
 
-    @Override
     public Map<String, Integer> getTopScores(PlayingMode playingMode) {
         Map<String, Integer> usersScores = new HashMap<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -88,8 +87,7 @@ public class ScoreServiceJDBC implements ScoreService {
         }
         return usersScores;
     } //for all users after every game
-    @Override
-    public List<Integer> getTopUserScores(PlayingMode playingMode, User username){ //найкращі після кожної гри
+    public List<Integer> getTopUserScores(PlayingMode playingMode, Users username){ //найкращі після кожної гри
         List<Integer> userScores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_BEST_SCORES))
@@ -131,7 +129,7 @@ public class ScoreServiceJDBC implements ScoreService {
         }
         return scores;
     }
-
+    @Override
     public List<Score> getTop10(){
         List<Score> scores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);

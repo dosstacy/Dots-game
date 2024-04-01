@@ -1,10 +1,12 @@
 package sk.tuke.gamestudio.game.dots.consoleUI;
 
-import sk.tuke.gamestudio.entity.User;
+import org.springframework.stereotype.Component;
+import sk.tuke.gamestudio.entity.Users;
 import sk.tuke.gamestudio.game.dots.core.*;
 import sk.tuke.gamestudio.game.dots.features.*;
 
 import java.util.Scanner;
+@Component
 public class ConsoleUI {
     private final GameBoard field;
     private final Cursor cursor;
@@ -18,15 +20,15 @@ public class ConsoleUI {
     private final EndMenuConsoleUI endMenu;
     private final JDBCConsoleUI jdbcConsoleUI;
 
-    public ConsoleUI(User user) {
+    public ConsoleUI(Users users) {
         field = new GameBoard();
         field.createGameBoard();
         cursor = new Cursor(field);
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);
         startMenu = new StartMenuConsoleUI();
-        endMenu = new EndMenuConsoleUI(user);
-        jdbcConsoleUI = new JDBCConsoleUI(user);
+        endMenu = new EndMenuConsoleUI(users);
+        jdbcConsoleUI = new JDBCConsoleUI(users);
 
         cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
         field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
@@ -273,7 +275,7 @@ public class ConsoleUI {
             play();
         }
     }
-    private void returnQuestion(){
+    private void returnQuestion() {
         String answer;
         do {
             System.out.print(Color.ANSI_PURPLE +
@@ -287,6 +289,6 @@ public class ConsoleUI {
             } else {
                 System.out.println(Color.ANSI_RED + "Bad input" + Color.ANSI_RESET);
             }
-        }while(!(answer.equalsIgnoreCase("r") || answer.equalsIgnoreCase("e")));
+        } while (!(answer.equalsIgnoreCase("r") || answer.equalsIgnoreCase("e")));
     }
 }

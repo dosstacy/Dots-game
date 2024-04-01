@@ -1,20 +1,27 @@
 package sk.tuke.gamestudio.game.dots.consoleUI;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.entity.User;
+import sk.tuke.gamestudio.entity.Users;
 import sk.tuke.gamestudio.game.dots.features.Color;
-import sk.tuke.gamestudio.services.CommentServiceJDBC;
-import sk.tuke.gamestudio.services.RatingServiceJDBC;
+import sk.tuke.gamestudio.services.CommentService;
+import sk.tuke.gamestudio.services.RatingService;
 
 import java.sql.Timestamp;
 import java.util.Scanner;
 
+@Component
 public class EndMenuConsoleUI {
-    public User user;
+    public Users users;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
 
-    public EndMenuConsoleUI(User user) {
-        this.user = user;
+    public EndMenuConsoleUI(Users users) {
+        this.users = users;
     }
 
     public void displayEndMenu() {
@@ -55,9 +62,8 @@ public class EndMenuConsoleUI {
             if(text.length() > 100){
                 System.out.println("The comment should not exceed 100 symbols. Please try again.");
             } else {
-                CommentServiceJDBC commentService = new CommentServiceJDBC();
                 Comment comment = new Comment(text, new Timestamp(System.currentTimeMillis()));
-                commentService.addComment(comment, user.getUsername());
+                commentService.addComment(comment, users.getUsername());
                 System.out.println(Color.ANSI_GREEN + "Your comment successfully added. Thanks!" + Color.ANSI_RESET);
                 break;
             }
@@ -66,8 +72,6 @@ public class EndMenuConsoleUI {
     }
     private void rateUs(){
         int answer = 0;
-
-        RatingServiceJDBC ratingService;
         Rating rating;
 
         do {
@@ -81,9 +85,8 @@ public class EndMenuConsoleUI {
             if(answer <= 0 || answer > 5){
                 System.out.println("The rating must be only from 1 to 5. Please try again.");
             } else {
-                ratingService = new RatingServiceJDBC();
                 rating = new Rating(answer);
-                ratingService.setRating(rating, user.getUsername());
+                ratingService.setRating(rating, users.getUsername());
                 System.out.println(Color.ANSI_GREEN + "Your rate successfully added. Thanks!" + Color.ANSI_RESET);
                 break;
             }

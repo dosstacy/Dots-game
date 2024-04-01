@@ -1,5 +1,5 @@
 package sk.tuke.gamestudio.services;
-import sk.tuke.gamestudio.entity.User;
+import sk.tuke.gamestudio.entity.Users;
 import sk.tuke.gamestudio.game.dots.features.Color;
 
 import java.sql.*;
@@ -13,12 +13,12 @@ public class UserServiceJDBC implements UserService{
     public boolean signUpCheck = false;
 
     @Override
-    public void addUser(User user) {
+    public void addUser(Users users) {
         try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER))
         {
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, hashPassword(user.getPassword()));
+            preparedStatement.setString(1, users.getUsername());
+            preparedStatement.setString(2, hashPassword(users.getPassword()));
             preparedStatement.executeUpdate();
             signUpCheck = true;
             System.out.println();
@@ -41,7 +41,7 @@ public class UserServiceJDBC implements UserService{
                 int count = resultSet.getInt(1);
 
                 if (count == 0) {
-                    System.out.println(Color.ANSI_RED + "User doesn't exist. Please try again." + Color.ANSI_RESET);
+                    System.out.println(Color.ANSI_RED + "Users doesn't exist. Please try again." + Color.ANSI_RESET);
                     return;
                 }
             }

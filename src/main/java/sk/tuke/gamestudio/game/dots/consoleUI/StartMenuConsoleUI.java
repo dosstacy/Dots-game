@@ -1,12 +1,12 @@
 package sk.tuke.gamestudio.game.dots.consoleUI;
 
-import sk.tuke.gamestudio.entity.User;
+import sk.tuke.gamestudio.entity.Users;
 import sk.tuke.gamestudio.game.dots.features.Color;
 import sk.tuke.gamestudio.services.UserServiceJDBC;
 
 import java.util.Scanner;
 public class StartMenuConsoleUI {
-    private User user;
+    private Users users;
     private String option;
     public StartMenuConsoleUI() {
     }
@@ -18,7 +18,7 @@ public class StartMenuConsoleUI {
         option = new Scanner(System.in).nextLine();
 
         loginOrSignUp();
-        System.out.format("%60s%n", Color.ANSI_PURPLE + "Hello, " + user.getUsername() + Color.ANSI_RESET);
+        System.out.format("%60s%n", Color.ANSI_PURPLE + "Hello, " + users.getUsername() + Color.ANSI_RESET);
     }
     private void loginOrSignUp(){
         String username;
@@ -36,8 +36,8 @@ public class StartMenuConsoleUI {
                     System.out.print("Enter your password: ");
                     password = new Scanner(System.in).nextLine().trim();
                     userService = new UserServiceJDBC();
-                    user = new User(username, password);
-                    userService.loginUser(user.getUsername(), user.getPassword());
+                    users = new Users(username, password);
+                    userService.loginUser(users.getUsername(), users.getPassword());
                     isValidInput = true;
                 }while(!userService.loginCheck);
             } else if (option.equals("2")) {
@@ -59,8 +59,8 @@ public class StartMenuConsoleUI {
                         }
                     }while(password.length() < 6);
                     userService = new UserServiceJDBC();
-                    user = new User(username, password);
-                    userService.addUser(user);
+                    users = new Users(username, password);
+                    userService.addUser(users);
                     isValidInput = true;
                 }while(!userService.signUpCheck);
             }else{
@@ -86,7 +86,7 @@ public class StartMenuConsoleUI {
         System.out.println(Color.ANSI_GREEN + "                               ° ༘⋆\uD83D\uDD87₊˚ෆ \uD83D\uDD87 Community .° ༘⋆\uD83D\uDD87₊˚ෆ\n" + Color.ANSI_RESET);
         System.out.println(Color.ANSI_PURPLE + "                               ✧ ˚. ⿻⋆｡˚ Account ୭ ⿻˚.  ༘ ˚✧\n" + Color.ANSI_RESET);
     }
-    public User getUser() {
-        return user;
+    public Users getUser() {
+        return users;
     }
 }

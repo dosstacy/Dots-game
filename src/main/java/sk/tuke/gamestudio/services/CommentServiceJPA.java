@@ -3,6 +3,7 @@ package sk.tuke.gamestudio.services;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.Comment;
 
 import java.util.List;

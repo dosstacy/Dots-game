@@ -1,9 +1,6 @@
 package sk.tuke.gamestudio.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -21,10 +18,13 @@ import java.sql.Timestamp;
 
 public class Comment implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ident;
+    @Column(name = "comment")
     private String comment;
+    @Column(name = "username")
     private String username;
+    @Column(name = "commented_on")
     private Timestamp commented_on;
     public Comment(String comment, Timestamp commented_on) {
         setComment(comment);
