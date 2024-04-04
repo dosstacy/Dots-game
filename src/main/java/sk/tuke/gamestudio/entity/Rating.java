@@ -1,14 +1,13 @@
 package sk.tuke.gamestudio.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+
 
 @NamedQuery( name = "Rating.getRating",
         query = "SELECT r.rating FROM Rating r WHERE r.username = :username")
@@ -21,18 +20,16 @@ import java.sql.Timestamp;
 
 public class Rating implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ident;
+    @Column(name = "rating")
     private int rating;
+    @Column(name = "rated_on")
     private Timestamp ratedOn;
+    @Column(name = "username")
     private String username;
     public Rating(int rating) {
         setRating(rating);
-    }
-    public Rating(String username, int rating, Timestamp ratedOn) {
-        setUsername(username);
-        setRating(rating);
-        setRatedOn(ratedOn);
     }
     public Rating(){
 
@@ -40,15 +37,6 @@ public class Rating implements Serializable {
     public int getRating() {
         return rating;
     }
-
-    public Timestamp getRatedOn() {
-        return ratedOn;
-    }
-
-    public void setRatedOn(Timestamp ratedOn) {
-        this.ratedOn = ratedOn;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -59,6 +47,14 @@ public class Rating implements Serializable {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public Timestamp getRatedOn() {
+        return ratedOn;
+    }
+
+    public void setRatedOn(Timestamp ratedOn) {
+        this.ratedOn = ratedOn;
     }
 
     public String getRatingInStars(int rating){
@@ -74,13 +70,5 @@ public class Rating implements Serializable {
             return "★★★★★";
         }
         return "✩✩✩✩✩";
-    }
-
-    public int getIdent() {
-        return ident;
-    }
-
-    public void setIdent(int ident) {
-        this.ident = ident;
     }
 }

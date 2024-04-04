@@ -21,19 +21,19 @@ public class RatingServiceJDBC implements RatingService{
             resultSet.next();
             rating = resultSet.getInt("rating");
         } catch (SQLException e) {
-            System.out.println(Color.ANSI_RED +  "You haven't rated the game yet" + Color.ANSI_RESET); //nie je chyba
+            System.out.println(Color.ANSI_RED +  "You haven't rated the game yet" + Color.ANSI_RESET);
         }
         return rating;
     }
     @Override
-    public void setRating(Rating rating, String username){
+    public void setRating(Rating rating){
         String ADD_RATING = "INSERT INTO rating (rating, username, rated_on) VALUES (?, ?, ?)\n" +
                 "ON CONFLICT (username) DO UPDATE SET rating = EXCLUDED.rating, rated_on = EXCLUDED.rated_on;";
         try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_RATING)){
             preparedStatement.setInt(1, rating.getRating());
-            preparedStatement.setString(2, username);
-            preparedStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(2, rating.getUsername());
+            preparedStatement.setTimestamp(3, rating.getRatedOn());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new GameStudioException(e);

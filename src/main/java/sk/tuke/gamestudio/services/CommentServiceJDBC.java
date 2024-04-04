@@ -44,7 +44,7 @@ public class CommentServiceJDBC implements CommentService {
 
     @Override
     public List<Comment> getCommentsForCommunity() {
-        String GET_COMMENT = "SELECT username, comment, date FROM comment;";
+        String GET_COMMENT = "SELECT username, comment, commented_on FROM comment;";
         List<Comment> comments = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_COMMENT)) {

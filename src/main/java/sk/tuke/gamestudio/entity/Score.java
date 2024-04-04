@@ -1,37 +1,29 @@
 package sk.tuke.gamestudio.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-
-@NamedQuery( name = "Score.getDataForAccount",
-        query = "SELECT MAX(s.score) as max_result, s.gamemode, s.date FROM Score s WHERE s.username = :username GROUP BY s.date, s.gamemode ORDER BY max_result DESC LIMIT 10")
-
-@NamedQuery( name = "Score.getTop10",
-        query = "SELECT MAX(s.score) as max_result, s.gamemode, s.date, s.username FROM Score s GROUP BY s.date, s.gamemode, s.username ORDER BY max_result DESC LIMIT 10")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "gamemode"})})
 
 @NamedQuery( name = "Score.reset",
         query = "DELETE FROM Score")
 
 public class Score implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "score_id")
     private int ident;
+    @Column(name = "score")
     private int score;
+    @Column(name = "username")
     private String username;
+    @Column(name = "gamemode")
     private String gamemode;
+    @Column(name = "date")
     private Timestamp date;
-    public Score(int score, String username, String gamemode) {
-        this.score = score;
-        this.username = username;
-        this.gamemode = gamemode;
-    }
     public Score(String username, int score, String gamemode, Timestamp date) {
         setScore(score);
         setUsername(username);
@@ -70,13 +62,5 @@ public class Score implements Serializable {
 
     public void setDate(Timestamp date) {
         this.date = date;
-    }
-
-    public int getIdent() {
-        return ident;
-    }
-
-    public void setIdent(int ident) {
-        this.ident = ident;
     }
 }

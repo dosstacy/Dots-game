@@ -1,12 +1,12 @@
 package sk.tuke.gamestudio.game.dots.consoleUI;
 
-import org.springframework.stereotype.Component;
-import sk.tuke.gamestudio.entity.Users;
+import org.springframework.beans.factory.annotation.Autowired;
+import sk.tuke.gamestudio.entity.User;
 import sk.tuke.gamestudio.game.dots.core.*;
 import sk.tuke.gamestudio.game.dots.features.*;
 
 import java.util.Scanner;
-@Component
+
 public class ConsoleUI {
     private final GameBoard field;
     private final Cursor cursor;
@@ -16,25 +16,41 @@ public class ConsoleUI {
     private int moves = 6;
     private boolean isEndlessEnd = false;
     private PlayingMode playingMode;
-    private final StartMenuConsoleUI startMenu;
-    private final EndMenuConsoleUI endMenu;
-    private final JDBCConsoleUI jdbcConsoleUI;
+    @Autowired
+    private StartMenuConsoleUI startMenu;
+    @Autowired
+    private EndMenuConsoleUI endMenu;
+    @Autowired
+    private JDBCConsoleUI jdbcConsoleUI;
+    private User user;
 
-    public ConsoleUI(Users users) {
+    public ConsoleUI() {
         field = new GameBoard();
         field.createGameBoard();
         cursor = new Cursor(field);
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);
-        startMenu = new StartMenuConsoleUI();
-        endMenu = new EndMenuConsoleUI(users);
-        jdbcConsoleUI = new JDBCConsoleUI(users);
 
         cursor.prevColor = field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot;
         field.gameBoard[cursor.getPosX()][cursor.getPosY()].dot = cursor.selectDot(field.gameBoard[cursor.getPosX()][cursor.getPosY()]);
     }
 
-    public void startGame() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void registration() {
+        startMenu.displayRegistrationMenu();
+        user = startMenu.getUser();
+        endMenu.setUser(user);
+        jdbcConsoleUI.setUser(user);
+        startGame();
+    }
+    public void startGame(){
         Scanner scanner = new Scanner(System.in);
         String input;
         initializeAddition();
@@ -253,7 +269,7 @@ public class ConsoleUI {
     private void timeMode() {
         playingMode = PlayingMode.TIMED;
         long startTime = System.currentTimeMillis();
-        long duration = 15000;
+        long duration = 40000;
         long endTime = startTime + duration;
         while (((endTime - System.currentTimeMillis()) / 1000) > 0) {
             System.out.println(Color.ANSI_RED + "Seconds left: " +Color.ANSI_RESET + (endTime - System.currentTimeMillis()) / 1000);

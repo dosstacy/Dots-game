@@ -1,27 +1,31 @@
 package sk.tuke.gamestudio.game.dots.consoleUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.entity.Users;
+import sk.tuke.gamestudio.entity.User;
 import sk.tuke.gamestudio.game.dots.features.Color;
 import sk.tuke.gamestudio.services.CommentService;
 import sk.tuke.gamestudio.services.RatingService;
 
 import java.sql.Timestamp;
 import java.util.Scanner;
-
-@Component
 public class EndMenuConsoleUI {
-    public Users users;
+    private User user;
     @Autowired
     private CommentService commentService;
     @Autowired
     private RatingService ratingService;
 
-    public EndMenuConsoleUI(Users users) {
-        this.users = users;
+    public EndMenuConsoleUI() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void displayEndMenu() {
@@ -63,7 +67,7 @@ public class EndMenuConsoleUI {
                 System.out.println("The comment should not exceed 100 symbols. Please try again.");
             } else {
                 Comment comment = new Comment(text, new Timestamp(System.currentTimeMillis()));
-                commentService.addComment(comment, users.getUsername());
+                commentService.addComment(comment, user.getUsername());
                 System.out.println(Color.ANSI_GREEN + "Your comment successfully added. Thanks!" + Color.ANSI_RESET);
                 break;
             }
@@ -86,7 +90,9 @@ public class EndMenuConsoleUI {
                 System.out.println("The rating must be only from 1 to 5. Please try again.");
             } else {
                 rating = new Rating(answer);
-                ratingService.setRating(rating, users.getUsername());
+                rating.setRatedOn(new Timestamp(System.currentTimeMillis()));
+                rating.setUsername(user.getUsername());
+                ratingService.setRating(rating);
                 System.out.println(Color.ANSI_GREEN + "Your rate successfully added. Thanks!" + Color.ANSI_RESET);
                 break;
             }

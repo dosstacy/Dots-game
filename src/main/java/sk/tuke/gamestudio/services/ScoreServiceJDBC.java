@@ -1,7 +1,9 @@
 package sk.tuke.gamestudio.services;
 
+import sk.tuke.gamestudio.entity.GetTop10;
+import sk.tuke.gamestudio.entity.MaxScoreResult;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.entity.Users;
+import sk.tuke.gamestudio.entity.User;
 import sk.tuke.gamestudio.game.dots.features.PlayingMode;
 
 import java.sql.*;
@@ -27,7 +29,7 @@ public class ScoreServiceJDBC implements ScoreService {
     private static final String GET_BEST_SCORES = """
             SELECT username, MAX(score) as max_result
             FROM score
-            WHERE gamemode = ? AND usename = ?
+            WHERE gamemode = ? AND username = ?
             GROUP BY username
             ORDER BY max_result DESC
             LIMIT 5;""";
@@ -86,8 +88,8 @@ public class ScoreServiceJDBC implements ScoreService {
             throw new GameStudioException(e);
         }
         return usersScores;
-    } //for all users after every game
-    public List<Integer> getTopUserScores(PlayingMode playingMode, Users username){ //найкращі після кожної гри
+    } //for all user after every game
+    public List<Integer> getTopUserScores(PlayingMode playingMode, User username){ //найкращі після кожної гри
         List<Integer> userScores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_BEST_SCORES))
@@ -112,17 +114,19 @@ public class ScoreServiceJDBC implements ScoreService {
     } //top 10 during every game
 
     @Override
-    public List<String> getDataForAccount(String username){
-        List<String> scores = new ArrayList<>();
+    public List<MaxScoreResult> getDataForAccount(String username){
+        MaxScoreResult maxScoreResult = new MaxScoreResult();
+        List<MaxScoreResult> scores = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_ALL_DATA))
         {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                scores.add(String.valueOf(resultSet.getInt("max_result")));
-                scores.add(resultSet.getString("gamemode"));
-                scores.add(String.valueOf(resultSet.getTimestamp("date")));
+                maxScoreResult.setMaxResult(resultSet.getInt("max_result"));
+                maxScoreResult.setGameMode(resultSet.getString("gamemode"));
+                maxScoreResult.setDate(resultSet.getTimestamp("date"));
+                scores.add(maxScoreResult);
             }
         }catch (SQLException e){
             throw new GameStudioException(e);
@@ -130,16 +134,18 @@ public class ScoreServiceJDBC implements ScoreService {
         return scores;
     }
     @Override
-    public List<Score> getTop10(){
-        List<Score> scores = new ArrayList<>();
+    public List<GetTop10> getTop10(){
+        List<GetTop10> scores = new ArrayList<>();
+        GetTop10 users = new GetTop10();
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(GET_TOP_10)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                scores.add(new Score(resultSet.getString("username"),
-                                     resultSet.getInt("max_result"),
-                                     resultSet.getString("gamemode"),
-                                     resultSet.getTimestamp("date")));
+                users.setUsername(resultSet.getString("username"));
+                users.setGameMode(resultSet.getString("gamemode"));
+                users.setDate(resultSet.getTimestamp("date"));
+                users.setMaxResult(resultSet.getInt("max_result"));
+                scores.add(users);
             }
         }catch (SQLException e){
             throw new GameStudioException(e);

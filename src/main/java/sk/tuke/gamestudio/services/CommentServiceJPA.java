@@ -1,11 +1,9 @@
 package sk.tuke.gamestudio.services;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Component;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import sk.tuke.gamestudio.entity.Comment;
-
 import java.util.List;
 
 @Transactional
@@ -14,22 +12,45 @@ public class CommentServiceJPA implements CommentService{
     private EntityManager entityManager;
     @Override
     public void addComment(Comment comment, String username) {
-        comment.setUsername(username);
-        entityManager.persist(comment);
+        try {
+            comment.setUsername(username);
+            entityManager.persist(comment);
+        }catch (Exception e){
+            throw new GameStudioException(e);
+        }
     }
 
     @Override
     public List<Comment> getUserComments(String username) {
-        return entityManager.createNamedQuery("Comment.getUserComments", Comment.class).setParameter("username", username).getResultList();
+        List<Comment> comments;
+        try{
+            comments = entityManager.createNamedQuery("Comment.getUserComments", Comment.class)
+                    .setParameter("username", username)
+                    .getResultList();
+        }catch (Exception e){
+            throw new GameStudioException(e);
+        }
+        return comments;
     }
 
     @Override
     public List<Comment> getCommentsForCommunity() {
-        return entityManager.createNamedQuery("Comment.getCommentsForCommunity", Comment.class).getResultList();
+        List<Comment> comments;
+        try{
+            comments = entityManager.createNamedQuery("Comment.getCommentsForCommunity", Comment.class)
+                    .getResultList();
+        }catch (Exception e){
+            throw new GameStudioException(e);
+        }
+        return comments;
     }
 
     @Override
     public void reset() {
-        entityManager.createNamedQuery("Comment.reset").executeUpdate();
+        try {
+            entityManager.createNamedQuery("Comment.reset").executeUpdate();
+        }catch (Exception e){
+            throw new GameStudioException(e);
+        }
     }
 }

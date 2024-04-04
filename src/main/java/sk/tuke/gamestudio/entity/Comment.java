@@ -1,17 +1,16 @@
 package sk.tuke.gamestudio.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-
 @NamedQuery( name = "Comment.getUserComments",
-        query = "SELECT c.comment, c.commented_on FROM Comment c WHERE c.username = :username")
+        query = "SELECT c FROM Comment c WHERE c.username = :username")
 
 @NamedQuery( name = "Comment.getCommentsForCommunity",
-        query = "SELECT c.username, c.comment, c.commented_on FROM Comment c")
+        query = "SELECT c FROM Comment c")
 
 @NamedQuery( name = "Comment.reset",
         query = "DELETE FROM Comment")
@@ -19,6 +18,7 @@ import java.sql.Timestamp;
 public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private int ident;
     @Column(name = "comment")
     private String comment;
@@ -57,13 +57,5 @@ public class Comment implements Serializable {
     }
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public int getIdent() {
-        return ident;
-    }
-
-    public void setIdent(int ident) {
-        this.ident = ident;
     }
 }

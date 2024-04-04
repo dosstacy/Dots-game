@@ -5,8 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sk.tuke.gamestudio.entity.Users;
 import sk.tuke.gamestudio.game.dots.consoleUI.ConsoleUI;
+import sk.tuke.gamestudio.game.dots.consoleUI.EndMenuConsoleUI;
+import sk.tuke.gamestudio.game.dots.consoleUI.JDBCConsoleUI;
 import sk.tuke.gamestudio.game.dots.consoleUI.StartMenuConsoleUI;
 import sk.tuke.gamestudio.services.*;
 
@@ -16,26 +17,25 @@ public class SpringClient {
     public static void main(String[] args) {
         SpringApplication.run(SpringClient.class, args);
     }
-
     @Bean
-    public CommandLineRunner runner(StartMenuConsoleUI startMenuConsoleUI) {
-        return args -> {
-            startMenuConsoleUI.displayRegistrationMenu();
-            ConsoleUI consoleUI = new ConsoleUI(startMenuConsoleUI.getUser());
-            consoleUI.startGame();
-        };
+    public CommandLineRunner runner(ConsoleUI consoleUI) {
+        return s -> consoleUI.registration();
     }
 
     @Bean
-    public ConsoleUI consoleUI(Users users) {
-        return new ConsoleUI(users);
+    public ConsoleUI consoleUI() {
+        return new ConsoleUI();
     }
 
     @Bean
-    public Users user() {
-        return new Users();
+    public EndMenuConsoleUI endMenuConsoleUI() {
+        return new EndMenuConsoleUI();
     }
 
+    @Bean
+    public JDBCConsoleUI jdbcConsoleUI() {
+        return new JDBCConsoleUI();
+    }
     @Bean
     public StartMenuConsoleUI startMenuConsoleUI() {
         return new StartMenuConsoleUI();
@@ -55,4 +55,10 @@ public class SpringClient {
     public CommentService commentService() {
         return new CommentServiceJPA();
     }
+
+    @Bean
+    public UserService userService(){
+        return new UserServiceJPA();
+    }
+
 }

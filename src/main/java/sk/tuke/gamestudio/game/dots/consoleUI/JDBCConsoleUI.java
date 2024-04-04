@@ -1,36 +1,28 @@
 package sk.tuke.gamestudio.game.dots.consoleUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import sk.tuke.gamestudio.entity.Comment;
-import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.entity.Users;
+import sk.tuke.gamestudio.entity.*;
 import sk.tuke.gamestudio.game.dots.features.Color;
 import sk.tuke.gamestudio.services.*;
 
+import java.sql.Timestamp;
 import java.util.List;
-
-@Component
 public class JDBCConsoleUI {
     private int scores = 0;
-    private Users users;
+    private User user;
     @Autowired
     private CommentService commentService;
     @Autowired
     private RatingService ratingService;
     @Autowired
     private ScoreService scoreService;
-    public JDBCConsoleUI(Users users) {
-        setUser(users);
+    public JDBCConsoleUI(){}
+    public User getUser() {
+        return user;
     }
 
-    public Users getUser() {
-        return users;
-    }
-
-    public void setUser(Users users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getScores() {
@@ -42,24 +34,27 @@ public class JDBCConsoleUI {
     }
 
     protected void dataInAccountButton(){
-        List<String> data;
-        data = scoreService.getDataForAccount(users.getUsername());
+        List<MaxScoreResult> data;
+        data = scoreService.getDataForAccount(user.getUsername());
 
         System.out.println(Color.ANSI_PURPLE + "Your recent activities displayed here...\n" + Color.ANSI_RESET);
         System.out.format("%40s%n", Color.ANSI_PURPLE + "YOUR BEST SCORES" + Color.ANSI_RESET);
         System.out.println("+------------+------------+---------------------------+");
         System.out.format("| %-10s | %-10s | %-25s |%n", "SCORE", "MODE", "DATE");
         System.out.println("+------------+------------+---------------------------+");
-        for (int element = 0; element < data.size()-1; element += 3) {
-            System.out.format("| %-10s | %-10s | %-25s |%n", data.get(element), data.get(element + 1), data.get(element + 2));
+        for (MaxScoreResult datum : data) {
+            System.out.format("| %-10s | %-10s | %-25s |%n",
+                    datum.getMaxResult(),
+                    datum.getGameMode(),
+                    datum.getDate());
         }
         System.out.println("+------------+------------+---------------------------+");
 
         System.out.print(Color.ANSI_PURPLE + "YOUR RECENT RATING: " + Color.ANSI_RESET);
-        System.out.println(new Rating().getRatingInStars(ratingService.getRating(users.getUsername())));
+        System.out.println(new Rating().getRatingInStars(ratingService.getRating(user.getUsername())));
 
         System.out.println(Color.ANSI_PURPLE + "YOUR RECENT COMMENTS: " + Color.ANSI_RESET);
-        List<Comment> commentsList = commentService.getUserComments(users.getUsername());
+        List<Comment> commentsList = commentService.getUserComments(user.getUsername());
         for (Comment comment : commentsList) {
             System.out.println(Color.ANSI_GREEN + comment.getCommented_on() + Color.ANSI_RESET);
             System.out.println(comment.getComment());
@@ -71,18 +66,18 @@ public class JDBCConsoleUI {
         System.out.println(Color.ANSI_PURPLE + "AVERAGE RATING OF THIS GAME: " + Color.ANSI_RESET + ratingService.getAverageRating());
         System.out.println();
 
-        List<Score> top10;
+        List<GetTop10> top10;
         top10 = scoreService.getTop10();
 
         System.out.format("%45s%n", Color.ANSI_PURPLE + "TOP 10" + Color.ANSI_RESET);
         System.out.println("+-----------------+------------+------------+---------------------------+");
         System.out.format("| %-15s | %-10s | %-10s | %-25s |%n", "USER", "SCORE", "MODE", "DATE");
         System.out.println("+-----------------+------------+------------+---------------------------+");
-        for (Score score : top10) {
+        for (GetTop10 score : top10) {
             System.out.format("| %-15s | %-10s | %-10s | %-25s |%n",
                     score.getUsername(),
-                    score.getScore(),
-                    score.getGamemode(),
+                    score.getMaxResult(),
+                    score.getGameMode(),
                     score.getDate());
         }
         System.out.println("+-----------------+------------+------------+---------------------------+\n");
@@ -96,8 +91,8 @@ public class JDBCConsoleUI {
         }
     }
     protected void writeScoreToDatabase(String mode){
-        Score score = new Score(scores, users.getUsername(), mode);
-        scoreService.addScore(score); //чому тут scoreService null
+        Score score = new Score(user.getUsername(), scores, mode, new Timestamp(System.currentTimeMillis()));
+        scoreService.addScore(score);
     }
 
 
