@@ -9,8 +9,8 @@ public class UserServiceJDBC implements UserService{
     private static final String URL = "jdbc:postgresql://localhost:5432/gamestudio";
     private final String USER = "postgres";
     private final String PASSWORD = "dosstpostgre";
-    public boolean loginCheck = false;
-    public boolean signUpCheck = false;
+    private boolean loginCheck = false;
+    private boolean signUpCheck = false;
 
     @Override
     public void addUser(User user) {
@@ -97,13 +97,4 @@ public class UserServiceJDBC implements UserService{
         return signUpCheck;
     }
 
-    @Override
-    public void setLoginCheck(boolean loginCheck) {
-        this.loginCheck = loginCheck;
-    }
-
-    @Override
-    public void setSignUpCheck(boolean signUpCheck) {
-        this.signUpCheck = signUpCheck;
-    }
 }

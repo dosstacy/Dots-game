@@ -39,7 +39,18 @@ public class StartMenuConsoleUI {
                     System.out.print("Enter your password: ");
                     password = scanner.nextLine().trim();
                     user = new User(username, password);
-                    userService.loginUser(user.getUsername(), user.getPassword());
+
+                    boolean success = true;
+                    try {
+                        userService.loginUser(user.getUsername(), user.getPassword());
+                    } catch (Exception e) {
+                        success = false;
+                        System.out.println(Color.ANSI_RED + "Incorrect login or password" + Color.ANSI_RESET);
+                    }
+                    if(success){
+                        System.out.println(Color.ANSI_GREEN + "Successful log in!" + Color.ANSI_RESET);
+                    }
+
                     isValidInput = true;
                 }while(!userService.getLoginCheck());
             } else if (option.equals("2")) {
@@ -61,7 +72,18 @@ public class StartMenuConsoleUI {
                         }
                     }while(password.length() < 6);
                     user = new User(username, password);
-                    userService.addUser(user);
+
+                    boolean success = true;
+                    try {
+                        userService.addUser(user);
+                    }catch (Exception e){
+                        System.out.println(Color.ANSI_RED + "This login is already in use! Please enter another login." + Color.ANSI_RESET);
+                        success = false;
+                    }
+                    if (success) {
+                        System.out.println(Color.ANSI_GREEN + "Successful sign up!" + Color.ANSI_RESET);
+                    }
+
                     isValidInput = true;
                 }while(!userService.getSignUpCheck());
             }else{

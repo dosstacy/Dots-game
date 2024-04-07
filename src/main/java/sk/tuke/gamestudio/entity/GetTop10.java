@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "top10")
+@Table(name = "top10", uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "gamemode"})})
+
 
 @NamedQuery( name = "Score.getTop10",
         query = "SELECT s FROM GetTop10 s ORDER BY s.maxResult DESC")
@@ -13,6 +14,9 @@ import java.sql.Timestamp;
 
 public class GetTop10 implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ident")
+    private int ident;
     @Column(name = "username")
     private String username;
     @Column(name = "max_result")

@@ -29,15 +29,7 @@ public class RatingServiceJPA implements RatingService{
     @Override
     public int getAverageRating() {
         try {
-            Double result = entityManager.createNamedQuery("Rating.getAverageRating", Double.class)
-                    .getSingleResult();
-
-            if (result != null) {
-                return (int) Math.round(result);
-            } else {
-                System.out.println(Color.ANSI_RED + "No one has rated the game yet" + Color.ANSI_RESET);
-                return 0;
-            }
+            return (int) Math.round(entityManager.createNamedQuery("Rating.getAverageRating", Double.class).getSingleResult());
         } catch (Exception e) {
             throw new GameStudioException(e);
         }
@@ -45,13 +37,11 @@ public class RatingServiceJPA implements RatingService{
 
     @Override
     public int getRating(String username) {
-        int rating = 0;
+        int rating;
         try {
             rating =  entityManager.createNamedQuery("Rating.getRating", Integer.class)
                     .setParameter("username", username)
                     .getSingleResult();
-        }catch (NoResultException e){
-            System.out.println(Color.ANSI_RED + "You haven't rated the game yet" + Color.ANSI_RESET);
         }catch (Exception e){
             throw new GameStudioException(e);
         }

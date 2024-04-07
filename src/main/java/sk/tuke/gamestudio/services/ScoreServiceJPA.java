@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 import sk.tuke.gamestudio.entity.GetTop10;
 import sk.tuke.gamestudio.entity.MaxScoreResult;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.game.dots.features.Color;
 import java.util.List;
 
 @Transactional
@@ -35,6 +34,7 @@ public class ScoreServiceJPA implements ScoreService{
     @Override
     public List<MaxScoreResult> getDataForAccount(String username) {
         try {
+            entityManager.createNativeQuery("TRUNCATE TABLE max_score_result;");
             entityManager.createNativeQuery("""
                             INSERT INTO max_score_result (max_result, gamemode, date)
                             SELECT MAX(s.score) as max_result, s.gamemode, s.date
@@ -60,10 +60,11 @@ public class ScoreServiceJPA implements ScoreService{
                                                     "SELECT MAX(s.score) as max_result, s.username, s.gamemode, s.date " +
                                                     "FROM Score s " +
                                                     "GROUP BY s.username, s.gamemode, s.date " +
-                                                    "ORDER BY max_result DESC;")
+                                                    "ORDER BY max_result DESC " +
+                                                    "ON CONFLICT (gamemode, username) DO UPDATE SET max_result = EXCLUDED.max_result, gamemode = EXCLUDED.gamemode, date = EXCLUDED.date;")
                         .executeUpdate();
         } catch (Exception e) {
-            System.out.println(Color.ANSI_RED + "No top scores found." + Color.ANSI_RESET);
+            throw new GameStudioException(e);
         }
         return entityManager.createNamedQuery("Score.getTop10", GetTop10.class).getResultList();
     }

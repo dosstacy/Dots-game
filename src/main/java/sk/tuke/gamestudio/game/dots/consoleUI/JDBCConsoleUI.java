@@ -51,7 +51,15 @@ public class JDBCConsoleUI {
         System.out.println("+------------+------------+---------------------------+");
 
         System.out.print(Color.ANSI_PURPLE + "YOUR RECENT RATING: " + Color.ANSI_RESET);
-        System.out.println(new Rating().getRatingInStars(ratingService.getRating(user.getUsername())));
+
+        int rating = 0;
+        try {
+            rating = ratingService.getRating(user.getUsername());
+        }catch (Exception e){
+            System.out.println(Color.ANSI_RED + "You haven't rated the game yet" + Color.ANSI_RESET);
+        }
+
+        System.out.println(new Rating().getRatingInStars(rating));
 
         System.out.println(Color.ANSI_PURPLE + "YOUR RECENT COMMENTS: " + Color.ANSI_RESET);
         List<Comment> commentsList = commentService.getUserComments(user.getUsername());
@@ -63,7 +71,13 @@ public class JDBCConsoleUI {
     }
 
     protected void communityButton(){
-        System.out.println(Color.ANSI_PURPLE + "AVERAGE RATING OF THIS GAME: " + Color.ANSI_RESET + ratingService.getAverageRating());
+        int rating = 0;
+        try {
+            rating = ratingService.getAverageRating();
+        }catch (Exception e){
+            System.out.println(Color.ANSI_RED + "No one has rated this game yet" + Color.ANSI_RESET);
+        }
+        System.out.println(Color.ANSI_PURPLE + "AVERAGE RATING OF THIS GAME: " + Color.ANSI_RESET + rating);
         System.out.println();
 
         List<GetTop10> top10;

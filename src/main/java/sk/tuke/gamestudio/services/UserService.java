@@ -8,6 +8,4 @@ public interface UserService {
     void reset();
     boolean getLoginCheck();
     boolean getSignUpCheck();
-    void setLoginCheck(boolean loginCheck);
-    void setSignUpCheck(boolean signUpCheck);
 }

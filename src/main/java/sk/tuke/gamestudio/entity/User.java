@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
 @NamedQuery( name = "User.loginUser",
         query = "SELECT COUNT(*) FROM User u WHERE u.username = :username")
 
@@ -45,6 +45,10 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getIdent() {
+        return ident;
     }
 }
 
