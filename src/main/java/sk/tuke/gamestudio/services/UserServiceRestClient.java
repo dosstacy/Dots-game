@@ -28,14 +28,4 @@ public class UserServiceRestClient implements UserService{
     public void reset() {
         throw new UnsupportedOperationException("Not supported via web service");
     }
-
-    @Override
-    public boolean getLoginCheck() {
-        return Boolean.TRUE.equals(restTemplate.getForObject(url + "/loginCheck", Boolean.class));
-    }
-
-    @Override
-    public boolean getSignUpCheck() {
-        return Boolean.TRUE.equals(restTemplate.getForObject(url + "/signUpCheck", Boolean.class));
-    }
 }

@@ -34,7 +34,7 @@ public class ScoreServiceJPA implements ScoreService{
     @Override
     public List<MaxScoreResult> getDataForAccount(String username) {
         try {
-            entityManager.createNativeQuery("TRUNCATE TABLE max_score_result;");
+            entityManager.createNativeQuery("TRUNCATE TABLE max_score_result;").executeUpdate();
             entityManager.createNativeQuery("""
                             INSERT INTO max_score_result (max_result, gamemode, date)
                             SELECT MAX(s.score) as max_result, s.gamemode, s.date

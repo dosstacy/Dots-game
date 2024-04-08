@@ -26,14 +26,4 @@ public class UserServiceRest {
     public void loginUser(@RequestBody User user) {
         userService.loginUser(user.getUsername(), user.getPassword());
     }
-
-    @GetMapping("/loginCheck")
-    public boolean loginCheck() {
-        return userService.getLoginCheck();
-    }
-
-    @GetMapping("/signUpCheck")
-    public boolean signUpCheck() {
-        return userService.getSignUpCheck();
-    }
 }

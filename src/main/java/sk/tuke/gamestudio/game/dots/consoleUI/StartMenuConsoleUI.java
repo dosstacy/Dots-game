@@ -24,74 +24,65 @@ public class StartMenuConsoleUI {
         loginOrSignUp();
         System.out.format("%60s%n", Color.ANSI_PURPLE + "Hello, " + user.getUsername() + Color.ANSI_RESET);
     }
-    private void loginOrSignUp(){
+    private void loginOrSignUp() {
         String username;
         String password;
 
-        boolean isValidInput = false;
-        do {
-            if(option.equals("1")) {
-                System.out.println();
-                System.out.println(Color.ANSI_PURPLE + "Welcome back!" + Color.ANSI_RESET);
+        boolean success = false;
+        while (!option.equals("1") && !option.equals("2")) {
+            System.out.println(Color.ANSI_RED + "Invalid input. Please try again." + Color.ANSI_RESET);
+            System.out.print("Enter the option: ");
+            option = scanner.nextLine();
+        }
+
+        if (option.equals("1")) {
+            System.out.println();
+            System.out.println(Color.ANSI_PURPLE + "Welcome back!" + Color.ANSI_RESET);
+            do {
+                System.out.print("Please enter your username: ");
+                username = scanner.nextLine().trim();
+                System.out.print("Enter your password: ");
+                password = scanner.nextLine().trim();
+                user = new User(username, password);
+
+                try {
+                    userService.loginUser(user.getUsername(), user.getPassword());
+                    success = true;
+                } catch (Exception e) {
+                    System.out.println(Color.ANSI_RED + "Incorrect login or password" + Color.ANSI_RESET);
+                }
+            } while (!success);
+            System.out.println(Color.ANSI_GREEN + "Successful log in!" + Color.ANSI_RESET);
+        } else {
+            System.out.println();
+            System.out.println(Color.ANSI_PURPLE + "Hello, nice to meet you!" + Color.ANSI_RESET);
+            do {
                 do {
                     System.out.print("Please enter your username: ");
                     username = scanner.nextLine().trim();
+                    if (username.length() < 4 || username.length() > 12) {
+                        System.out.println(Color.ANSI_RED + "Username length must be longer than 4 but shorter than 12!" + Color.ANSI_RESET);
+                    }
+                } while (username.length() < 4 || username.length() > 12);
+                do {
                     System.out.print("Enter your password: ");
                     password = scanner.nextLine().trim();
-                    user = new User(username, password);
-
-                    boolean success = true;
-                    try {
-                        userService.loginUser(user.getUsername(), user.getPassword());
-                    } catch (Exception e) {
-                        success = false;
-                        System.out.println(Color.ANSI_RED + "Incorrect login or password" + Color.ANSI_RESET);
+                    if (password.length() < 6) {
+                        System.out.println(Color.ANSI_RED + "Password length must be longer than 6!" + Color.ANSI_RESET);
                     }
-                    if(success){
-                        System.out.println(Color.ANSI_GREEN + "Successful log in!" + Color.ANSI_RESET);
-                    }
+                } while (password.length() < 6);
+                user = new User(username, password);
 
-                    isValidInput = true;
-                }while(!userService.getLoginCheck());
-            } else if (option.equals("2")) {
-                System.out.println();
-                System.out.println(Color.ANSI_PURPLE + "Hello, nice to meet you!" + Color.ANSI_RESET);
-                do {
-                    do {
-                        System.out.print("Please enter your username: ");
-                        username = scanner.nextLine().trim();
-                        if (username.length() < 4 || username.length() > 12) {
-                            System.out.println(Color.ANSI_RED + "Username length must be longer than 4 but shorter than 12!" + Color.ANSI_RESET);
-                        }
-                    }while(username.length() < 4 || username.length() > 12);
-                    do {
-                        System.out.print("Enter your password: ");
-                        password = scanner.nextLine().trim();
-                        if (password.length() < 6) {
-                            System.out.println(Color.ANSI_RED + "Password length must be longer than 6!" + Color.ANSI_RESET);
-                        }
-                    }while(password.length() < 6);
-                    user = new User(username, password);
+                try {
+                    userService.addUser(user);
+                    success = true;
+                } catch (Exception e) {
+                    System.out.println(Color.ANSI_RED + "This login is already in use! Please enter another login." + Color.ANSI_RESET);
+                }
 
-                    boolean success = true;
-                    try {
-                        userService.addUser(user);
-                    }catch (Exception e){
-                        System.out.println(Color.ANSI_RED + "This login is already in use! Please enter another login." + Color.ANSI_RESET);
-                        success = false;
-                    }
-                    if (success) {
-                        System.out.println(Color.ANSI_GREEN + "Successful sign up!" + Color.ANSI_RESET);
-                    }
-
-                    isValidInput = true;
-                }while(!userService.getSignUpCheck());
-            }else{
-                System.out.println(Color.ANSI_RED + "Invalid input. Please try again." + Color.ANSI_RESET);
-                System.out.print("Enter the option: ");
-                option = scanner.nextLine();
-            }
-        }while(!isValidInput);
+            } while (!success);
+            System.out.println(Color.ANSI_GREEN + "Successful sign up!" + Color.ANSI_RESET);
+        }
     }
     public void displayStartMenu() {
         System.out.println("               ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂ Welcome to the game ⠂⠁⠈⠂⠄⠄⠂⠁⠁⠂⠄⠄⠂⠁⠁⠂");

@@ -8,8 +8,6 @@ import sk.tuke.gamestudio.entity.User;
 public class UserServiceJPA implements UserService{
     @PersistenceContext
     private EntityManager entityManager;
-    private boolean loginCheck = false;
-    private boolean signUpCheck = false;
 
     @Override
     public void addUser(User user) {
@@ -17,10 +15,7 @@ public class UserServiceJPA implements UserService{
         user.setPassword(encodedPassword);
         try {
             entityManager.persist(user);
-            signUpCheck = true;
-            System.out.println();
         }catch (Exception e){
-            signUpCheck = false;
             throw new GameStudioException(e);
         }
     }
@@ -32,11 +27,13 @@ public class UserServiceJPA implements UserService{
                     .setParameter("username", username)
                     .getSingleResult();
 
-            entityManager.createNamedQuery("User.loginUserPassword", String.class)
+            String firstPassword = entityManager.createNamedQuery("User.loginUserPassword", String.class)
                     .setParameter("username", username)
                     .getSingleResult();
 
-            loginCheck = true;
+            if(!firstPassword.equals(hashPassword(password))){
+                throw new GameStudioException();
+            }
         }catch (Exception e){
             throw new GameStudioException(e);
         }
@@ -55,15 +52,4 @@ public class UserServiceJPA implements UserService{
             throw new GameStudioException(e);
         }
     }
-
-    @Override
-    public boolean getLoginCheck() {
-        return loginCheck;
-    }
-
-    @Override
-    public boolean getSignUpCheck() {
-        return signUpCheck;
-    }
-
 }

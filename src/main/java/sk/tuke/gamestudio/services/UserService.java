@@ -6,6 +6,4 @@ public interface UserService {
     void addUser(User user);
     void loginUser(String username, String password);
     void reset();
-    boolean getLoginCheck();
-    boolean getSignUpCheck();
 }

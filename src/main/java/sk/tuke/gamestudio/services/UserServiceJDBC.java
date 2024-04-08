@@ -9,8 +9,6 @@ public class UserServiceJDBC implements UserService{
     private static final String URL = "jdbc:postgresql://localhost:5432/gamestudio";
     private final String USER = "postgres";
     private final String PASSWORD = "dosstpostgre";
-    private boolean loginCheck = false;
-    private boolean signUpCheck = false;
 
     @Override
     public void addUser(User user) {
@@ -20,12 +18,9 @@ public class UserServiceJDBC implements UserService{
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, hashPassword(user.getPassword()));
             preparedStatement.executeUpdate();
-            signUpCheck = true;
             System.out.println();
             System.out.println(Color.ANSI_GREEN + "Successful sign up!" + Color.ANSI_RESET);
         }catch (Exception e){
-            //e.printStackTrace();
-            signUpCheck = false;
             System.out.println(Color.ANSI_RED + "This login is already in use! Please enter another login." + Color.ANSI_RESET);
         }
     }
@@ -62,7 +57,6 @@ public class UserServiceJDBC implements UserService{
             }
             System.out.println();
             System.out.println(Color.ANSI_GREEN + "Successful log in!" + Color.ANSI_RESET);
-            loginCheck = true;
         } catch (SQLException e) {
             throw new GameStudioException(e);
         }
@@ -86,15 +80,4 @@ public class UserServiceJDBC implements UserService{
     private boolean checkPassword(String password, String hashedPassword) {
         return hashPassword(password).equals(hashedPassword);
     }
-
-    @Override
-    public boolean getLoginCheck() {
-        return loginCheck;
-    }
-
-    @Override
-    public boolean getSignUpCheck() {
-        return signUpCheck;
-    }
-
 }
