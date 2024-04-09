@@ -14,6 +14,10 @@ public class ScoreServiceJPA implements ScoreService{
     private EntityManager entityManager;
     @Override
     public void addScore(Score score) {
+        if(score == null){
+            throw new GameStudioException("Score cannot be null");
+        }
+
         if(score.getScore() == 0){
             return;
         }
@@ -33,6 +37,10 @@ public class ScoreServiceJPA implements ScoreService{
 
     @Override
     public List<MaxScoreResult> getDataForAccount(String username) {
+        if(username == null){
+            throw new GameStudioException("Username cannot be null");
+        }
+
         try {
             entityManager.createNativeQuery("TRUNCATE TABLE max_score_result;").executeUpdate();
             entityManager.createNativeQuery("""

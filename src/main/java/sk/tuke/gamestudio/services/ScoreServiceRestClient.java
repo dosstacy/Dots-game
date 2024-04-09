@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class ScoreServiceRestClient implements ScoreService {
     private final String url = "http://localhost:8080/api/score";

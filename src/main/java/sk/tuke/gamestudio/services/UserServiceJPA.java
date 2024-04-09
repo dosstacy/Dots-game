@@ -11,6 +11,9 @@ public class UserServiceJPA implements UserService{
 
     @Override
     public void addUser(User user) {
+        if(user == null) {
+            throw new GameStudioException("User cannot be null");
+        }
         String encodedPassword = hashPassword(user.getPassword());
         user.setPassword(encodedPassword);
         try {
@@ -22,6 +25,9 @@ public class UserServiceJPA implements UserService{
 
     @Override
     public void loginUser(String username, String password) {
+        if(username == null || password == null) {
+            throw new GameStudioException("Username or password cannot be null");
+        }
         try {
             entityManager.createNamedQuery("User.loginUser", Long.class)
                     .setParameter("username", username)

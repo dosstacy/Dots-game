@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.services.CommentService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,18 @@ public class CommentServiceRest {
 
     @GetMapping("/communityComments")
     public List<Comment> getCommentsForCommunity(){
-        return commentService.getCommentsForCommunity();
+        boolean success = true;
+        try{
+            commentService.getCommentsForCommunity();
+        }catch(Exception e){
+            success = false;
+        }
+        if(success){
+            return commentService.getCommentsForCommunity();
+        }else {
+            return Collections.emptyList();
+        }
+        //return commentService.getCommentsForCommunity();
     }
 
 }

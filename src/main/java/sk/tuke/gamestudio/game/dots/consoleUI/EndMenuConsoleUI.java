@@ -77,26 +77,28 @@ public class EndMenuConsoleUI {
     private void rateUs(){
         int answer = 0;
         Rating rating;
+        boolean success = false;
 
         do {
             System.out.println("Please rate us from 1 to 5: ");
             try {
                 answer = new Scanner(System.in).nextInt();
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(Color.ANSI_RED + "Bad input" + Color.ANSI_RESET);
             }
 
-            if(answer <= 0 || answer > 5){
-                System.out.println("The rating must be only from 1 to 5. Please try again.");
-            } else {
-                rating = new Rating(answer);
-                rating.setRatedOn(new Timestamp(System.currentTimeMillis()));
-                rating.setUsername(user.getUsername());
+            rating = new Rating(answer);
+            rating.setRatedOn(new Timestamp(System.currentTimeMillis()));
+            rating.setUsername(user.getUsername());
+
+            try {
                 ratingService.setRating(rating);
-                System.out.println(Color.ANSI_GREEN + "Your rate successfully added. Thanks!" + Color.ANSI_RESET);
-                break;
+                success = true;
+            } catch (Exception e) {
+                System.out.println(Color.ANSI_RED + "The rating must be only from 1 to 5. Please try again." + Color.ANSI_RESET);
             }
 
-        } while (true);
+        } while (!success);
+        System.out.println(Color.ANSI_GREEN + "Your rate successfully added. Thanks!" + Color.ANSI_RESET);
     }
 }

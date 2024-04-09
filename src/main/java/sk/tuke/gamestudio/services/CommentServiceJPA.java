@@ -12,6 +12,10 @@ public class CommentServiceJPA implements CommentService{
     private EntityManager entityManager;
     @Override
     public void addComment(Comment comment, String username) {
+        if(comment == null || username == null){
+            throw new GameStudioException("Comment or username cannot be null");
+        }
+
         try {
             comment.setUsername(username);
             entityManager.persist(comment);
@@ -22,6 +26,10 @@ public class CommentServiceJPA implements CommentService{
 
     @Override
     public List<Comment> getUserComments(String username) {
+        if(username == null){
+            throw new GameStudioException("Username cannot be null");
+        }
+
         List<Comment> comments;
         try{
             comments = entityManager.createNamedQuery("Comment.getUserComments", Comment.class)
