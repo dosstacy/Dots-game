@@ -1,9 +1,11 @@
 package sk.tuke.gamestudio.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sk.tuke.gamestudio.entity.User;
 
+@Service
 public class UserServiceRestClient implements UserService{
     private final String url = "http://localhost:8080/api/user";
 

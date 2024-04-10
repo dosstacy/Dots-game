@@ -1,6 +1,7 @@
 package sk.tuke.gamestudio.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.GetTop10;
 import sk.tuke.gamestudio.entity.MaxScoreResult;
 import sk.tuke.gamestudio.entity.Score;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class ScoreServiceRestClient implements ScoreService {
     private final String url = "http://localhost:8080/api/score";
 

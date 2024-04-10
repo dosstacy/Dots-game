@@ -2,6 +2,7 @@ package sk.tuke.gamestudio.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sk.tuke.gamestudio.entity.Comment;
 
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class CommentServiceRestClient implements CommentService {
     private final String url = "http://localhost:8080/api/comment";
     @Autowired

@@ -38,7 +38,6 @@ public class CommentServiceRest {
         }else {
             return Collections.emptyList();
         }
-        //return commentService.getCommentsForCommunity();
     }
 
 }
