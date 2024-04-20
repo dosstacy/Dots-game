@@ -18,6 +18,7 @@ public class GameBoard {
             }
         }
         selection = new Selection();
+        createGameBoard();
     }
 
     public int getBoardSize() {

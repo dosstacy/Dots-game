@@ -1,0 +1,483 @@
+.start_menu {
+    background-color: #d2d0c3;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.start_menu .div {
+    background-color: #d2d0c3;
+    width: 1500px;
+    height: 690px;
+    position: relative;
+}
+
+@font-face {
+    font-family: 'Gluten-Bold';
+    src: url("fonts/Gluten-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Open Sans-SemiBold';
+    src: url('fonts/OpenSans-Semibold.ttf') format("truetype");
+}
+
+.start_menu .letter-D {
+    position: absolute;
+    top: 71px;
+    left: 384px;
+    font-family: "Gluten-Bold", Helvetica, sans-serif;
+    color: #2b434e;
+    font-size: 250px;
+}
+
+.start_menu .letter-S {
+    position: absolute;
+    top: 71px;
+    left: 956px;
+    font-family: "Gluten-Bold", Helvetica, sans-serif;
+    color: #2b434e;
+    font-size: 240px;
+}
+
+.start_menu .letter-T {
+    position: absolute;
+    top: 71px;
+    left: 770px;
+    font-family: "Gluten-Bold", Helvetica, sans-serif;
+    color: #2b434e;
+    font-size: 250px;
+}
+
+.start_menu .yellow-ellipse-emblem {
+    position: absolute;
+    width: 80px;
+    height: 75px;
+    top: 72px;
+    left: 575px;
+    border-radius: 40px/37.5px;
+    background: linear-gradient(180deg, rgb(245, 186, 66) 31.5%, rgb(250, 144, 60) 58.5%);
+}
+
+.start_menu .blue-ellipse-emblem {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 158px;
+    left: 668px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(38, 187, 167) 31.5%, rgb(34, 117, 157) 58.5%);
+}
+
+.start_menu .pink-ellipse-emblem {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 156px;
+    left: 575px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(251, 144, 110) 11.9%, rgb(227.37, 90.95, 130.39) 48.9%);
+}
+
+.start_menu .green-ellipse-emblem {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 72px;
+    left: 667px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
+}
+
+.start_menu .log-in-button {
+    position: relative;
+    width: 281px;
+    height: 86px;
+    top: 326px;
+    left: 582px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.start_menu .button-text {
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+    color: #f5f5f5;
+    font-size: 30px;
+}
+
+.start_menu .sign-up-button{
+    position: absolute;
+    width: 281px;
+    height: 86px;
+    top: 460px;
+    left: 582px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.start_menu .left-yellow-ellipse {
+    position: absolute;
+    width: 80px;
+    height: 75px;
+    top: 494px;
+    left: 49px;
+    border-radius: 40px/37.5px;
+    background: linear-gradient(180deg, rgb(245, 186, 66) 31.5%, rgb(250, 144, 60) 58.5%);
+}
+
+.start_menu .right-blue-ellipse {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 534px;
+    left: 1359px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(38, 187, 167) 31.5%, rgb(34, 117, 157) 58.5%);
+}
+
+.start_menu .left-pink-ellipse {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 150px;
+    left: 38px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(251, 144, 110) 11.9%, rgb(227.37, 90.95, 130.39) 48.9%);
+}
+
+.start_menu .right-green-ellipse {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 98px;
+    left: 1359px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
+}
+
+.start_menu .ellipse {
+    position: relative;
+    width: 45px;
+    height: 42px;
+    top: 16px;
+    left: 17px;
+    background-color: #fcaf39;
+    border-radius: 22.5px/21px;
+}
+
+.start_menu .ellipse-2 {
+    background-color: #2293a5;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.start_menu .ellipse-3 {
+    background-color: #ed6373;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.start_menu .ellipse-4 {
+    background-color: #5b966f;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.start_menu .ellipse-5 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 108px;
+    left: 114px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-6 {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 626px;
+    left: 114px;
+    border-radius: 5px;
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-7 {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: 650px;
+    left: 78px;
+    border-radius: 11px;
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-8 {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: 327px;
+    left: 32px;
+    border-radius: 11px;
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-9 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 603px;
+    left: 54px;
+    border-radius: 7.5px;
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-10 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 40px;
+    left: 94px;
+    border-radius: 7.5px;
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-11 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 362px;
+    left: 127px;
+    border-radius: 7.5px;
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-12 {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 473px;
+    left: 33px;
+    border-radius: 5px;
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-13 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 402px;
+    left: 66px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgb(252, 175, 57) 27.4%, rgb(250, 144, 60) 65.9%);
+}
+
+.start_menu .ellipse-14 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 320px;
+    left: 86px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgb(252, 175, 57) 27.4%, rgb(250, 144, 60) 65.9%);
+}
+
+.start_menu .ellipse-15 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 81px;
+    left: 43px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgb(252, 175, 57) 27.4%, rgb(250, 144, 60) 65.9%);
+}
+
+.start_menu .ellipse-16 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 248px;
+    left: 104px;
+    border-radius: 7.5px;
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-17 {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 473px;
+    left: 124px;
+    border-radius: 5px;
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-18 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 490px;
+    left: 1430px;
+    border-radius: 10px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-19 {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 50px;
+    left: 1379px;
+    border-radius: 5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-20 {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: 14px;
+    left: 1403px;
+    border-radius: 11px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-21 {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: 337px;
+    left: 1449px;
+    border-radius: 11px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-22 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 68px;
+    left: 1434px;
+    border-radius: 7.5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-23 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 631px;
+    left: 1394px;
+    border-radius: 7.5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-24 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 309px;
+    left: 1361px;
+    border-radius: 7.5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-25 {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 203px;
+    left: 1460px;
+    border-radius: 5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(34, 147, 165) 36.5%, rgb(34, 117, 157) 56.5%);
+}
+
+.start_menu .ellipse-26 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 264px;
+    left: 1417px;
+    border-radius: 10px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(252, 175, 57) 27.4%, rgb(250, 144, 60) 65.9%);
+}
+
+.start_menu .ellipse-27 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 371px;
+    left: 1389px;
+    border-radius: 10px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(252, 175, 57) 27.4%, rgb(250, 144, 60) 65.9%);
+}
+
+.start_menu .ellipse-28 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 639px;
+    left: 1455px;
+    border-radius: 10px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(252, 175, 57) 27.4%, rgb(250, 144, 60) 65.9%);
+}
+
+.start_menu .ellipse-29 {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 458px;
+    left: 1374px;
+    border-radius: 7.5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .ellipse-30 {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 203px;
+    left: 1369px;
+    border-radius: 5px;
+    transform: rotate(179.94deg);
+    background: linear-gradient(180deg, rgb(249, 140, 112) 0%, rgb(227.37, 90.95, 130.39) 85%);
+}
+
+.start_menu .creator {
+    position: absolute;
+    top: 630px;
+    left: 650px;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+    color: #c1a280;
+    font-size: 15px;
+}

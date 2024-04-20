@@ -26,7 +26,6 @@ public class ConsoleUI {
 
     public ConsoleUI() {
         field = new GameBoard();
-        field.createGameBoard();
         cursor = new Cursor(field);
         gameMode = GameMode.CURSOR;
         selection = new Selection(field);

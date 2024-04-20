@@ -1,0 +1,86 @@
+###USER
+
+POST http://localhost:8080/api/user/createAccount
+Content-Type: application/json
+
+{
+  "username": "test2",
+  "password": "123456"
+}
+
+###
+
+POST http://localhost:8080/api/user/logIn
+Content-Type: application/json
+
+{
+"username": "nana",
+"password": "nana123"
+}
+
+###COMMENT
+
+POST http://localhost:8080/api/comment/addComment?username=nana
+Content-Type: application/json
+
+{
+  "username": "nana",
+  "comment": "good game",
+  "commented_on": "2024-04-09T17:39:48+02:00"
+}
+
+###
+
+GET http://localhost:8080/api/comment/nana
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/comment/communityComments
+Accept: application/json
+
+###RATING
+
+POST http://localhost:8080/api/rating/addRating
+Content-Type: application/json
+
+{
+  "username": "nana",
+  "ratedOn": "2024-04-09T17:39:48+02:00",
+  "rating": 4
+}
+
+###
+
+GET http://localhost:8080/api/rating/avgRating
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/rating/nana
+Accept: application/json
+
+###SCORE
+
+POST http://localhost:8080/api/score/addScore
+Content-Type: application/json
+
+{
+  "username": "nana",
+  "date": "2024-04-09T17:39:48+02:00",
+  "score": 12,
+  "gamemode": "timed"
+}
+
+###
+
+GET http://localhost:8080/api/score/nana
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/score/getTop10
+Accept: application/json
+
+
+
