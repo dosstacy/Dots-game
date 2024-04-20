@@ -1,0 +1,33 @@
+.general_background {
+    background-color: #d2d0c3;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.general_background .div {
+    background-color: #d2d0c3;
+    width: 1500px;
+    height: 690px;
+    position: relative;
+}
+
+@font-face {
+    font-family: 'Gluten-Bold';
+    src: url("fonts/Gluten-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Open Sans-SemiBold';
+    src: url('fonts/OpenSans-Semibold.ttf') format("truetype");
+}
+
+.general_background .creator {
+    position: absolute;
+    top: 630px;
+    left: 660px;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+    color: #c1a280;
+    font-size: 15px;
+}

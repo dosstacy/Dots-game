@@ -1,0 +1,148 @@
+.main_menu .letter-D {
+    position: absolute;
+    top: 71px;
+    left: 384px;
+    font-family: "Gluten-Bold", Helvetica, sans-serif;
+    color: #2b434e;
+    font-size: 250px;
+}
+
+.main_menu .letter-S {
+    position: absolute;
+    top: 71px;
+    left: 956px;
+    font-family: "Gluten-Bold", Helvetica, sans-serif;
+    color: #2b434e;
+    font-size: 240px;
+}
+
+.main_menu .letter-T {
+    position: absolute;
+    top: 71px;
+    left: 770px;
+    font-family: "Gluten-Bold", Helvetica, sans-serif;
+    color: #2b434e;
+    font-size: 250px;
+}
+
+.main_menu .yellow-ellipse-emblem {
+    position: absolute;
+    width: 80px;
+    height: 75px;
+    top: 72px;
+    left: 575px;
+    border-radius: 40px/37.5px;
+    background: linear-gradient(180deg, rgb(245, 186, 66) 31.5%, rgb(250, 144, 60) 58.5%);
+}
+
+.main_menu .blue-ellipse-emblem {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 158px;
+    left: 668px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(38, 187, 167) 31.5%, rgb(34, 117, 157) 58.5%);
+}
+
+.main_menu .pink-ellipse-emblem {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 156px;
+    left: 575px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(251, 144, 110) 11.9%, rgb(227.37, 90.95, 130.39) 48.9%);
+}
+
+.main_menu .green-ellipse-emblem {
+    position: absolute;
+    width: 82px;
+    height: 77px;
+    top: 72px;
+    left: 667px;
+    border-radius: 40.93px/38.48px;
+    background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
+}
+
+.main_menu .community-button {
+    position: relative;
+    width: 281px;
+    height: 86px;
+    top: 460px;
+    left: 785px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.main_menu .button-text {
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+    color: #f5f5f5;
+    font-size: 30px;
+}
+
+.main_menu .account-button{
+    position: absolute;
+    width: 281px;
+    height: 86px;
+    top: 460px;
+    left: 400px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.main_menu .play-button{
+    position: absolute;
+    width: 281px;
+    height: 86px;
+    top: 326px;
+    left: 582px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.main_menu .ellipse {
+    position: relative;
+    width: 45px;
+    height: 42px;
+    top: 16px;
+    left: 17px;
+    background-color: #fcaf39;
+    border-radius: 22.5px/21px;
+}
+
+.main_menu .ellipse-2 {
+    background-color: #2293a5;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.main_menu .ellipse-3 {
+    background-color: #ed6373;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.main_menu .ellipse-4 {
+    background-color: #5b966f;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
