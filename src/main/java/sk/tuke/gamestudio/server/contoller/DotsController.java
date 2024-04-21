@@ -20,16 +20,10 @@ public class DotsController {
         return "startMenu";
     }
 
-    @GetMapping("/logIn")
-    public String logIn(Model model) {
+    @GetMapping("/mainMenu")
+    public String mainMenu(Model model) {
         prepareModel(model);
-        return "logIn";
-    }
-
-    @GetMapping("/signUp")
-    public String signUp(Model model) {
-        prepareModel(model);
-        return "signUp";
+        return "mainMenu";
     }
 
     private String getHtmlGameBoard(){
