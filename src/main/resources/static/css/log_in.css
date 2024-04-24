@@ -46,3 +46,11 @@ input[type="submit"]{
     border: none;
     cursor: pointer;
 }
+
+.error-message {
+    position: relative;
+    top: 40px;
+    left: 600px;
+    color: red;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+}

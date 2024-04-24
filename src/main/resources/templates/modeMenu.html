@@ -2,23 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/css/sign_up.css" />
+    <link rel="stylesheet" href="/css/mode_menu.css" />
     <link rel="stylesheet" href="/css/general_sides.css">
     <link rel="stylesheet" href="/css/general_background.css">
     <link rel="icon" href="/images/emblem.png" type="image/png">
+    <title>Modes</title>
 </head>
 <body>
 
-<div class="sign_up">
+<div class="main_menu">
     <div class="general_background">
         <div class="div">
-            <span>We are glad to see you!</span>
-            <form action="/dots/signUp" method="post">
-                <input type="text" id="username" name="username" minlength="4" maxlength=15 placeholder="Enter username" required><br>
-                <input type="password" id="password" name="password" minlength="6" maxlength="15" placeholder="Enter password" required>
-                <input type="submit" value="Sign Up">
-            </form>
-            <div class="error-message" th:if="${loginError}" th:text="${loginError}"></div>
+            <div class="letter-D">D</div>
+            <div class="letter-S">S</div>
+            <div class="letter-T">T</div>
+            <div class="emblem">
+                <div class="yellow-ellipse-emblem"><div class="ellipse"></div></div>
+                <div class="green-ellipse-emblem"><div class="ellipse-4"></div></div>
+                <div class="pink-ellipse-emblem"><div class="ellipse-3"></div></div>
+                <div class="blue-ellipse-emblem"><div class="ellipse-2"></div></div>
+            </div>
             <div class="general_sides">
                 <div class="left-side-dots">
                     <div class="left-yellow-ellipse"><div class="ellipse"></div></div>
@@ -55,8 +58,17 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
-            <button class="image-button" onclick="location.href='http://localhost:8080/dots'"></button>
-            <!--в посиланні треба буде писати юзер-->
+            <button class="timed-button" onclick="location.href='http://localhost:8080/dots/timed'">
+                <span class="button-text">Moves</span>
+            </button>
+            <button class="moves-button" onclick="location.href='http://localhost:8080/dots/moves'">
+                <span class="button-text">Endless</span>
+            </button>
+            <button class="endless-button" onclick="location.href='http://localhost:8080/dots/endless'">
+                <span class="button-text">Timed</span>
+            </button>
+            <button class="exit-button" onclick="location.href='http://localhost:8080/dots'"></button>
+            <button class="back-button" onclick="location.href='http://localhost:8080/dots/mainMenu'"></button>
             <div class="creator">by Anastasiia Dosyn</div>
         </div>
     </div>

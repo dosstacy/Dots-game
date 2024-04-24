@@ -9,7 +9,7 @@ span{
 
 #username, #password {
     position: relative;
-    top: 180px;
+    top: 193px;
     left: 470px;
     width: 500px;
     height: 70px;
@@ -45,4 +45,12 @@ input[type="submit"]{
     background-size: cover;
     border: none;
     cursor: pointer;
+}
+
+.error-message {
+    position: relative;
+    top: -15px;
+    left: 600px;
+    color: red;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
 }

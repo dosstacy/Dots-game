@@ -1,0 +1,80 @@
+table{
+    position: absolute;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: "Open Sans", sans-serif;
+    min-width: 700px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-top: none;
+    border-bottom: none;
+    background-color: #D9D9D9;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+
+    display: block;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+thead tr { /*заголовок*/
+    color: black;
+    text-align: center;
+}
+
+th, td {
+    color: black;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+span{
+    position: absolute;
+    font-size: 20px;
+    font-family: "Open Sans", Helvetica, sans-serif;
+    color: black;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+span.scores{
+    top: 7%;
+}
+
+table.scores-table{
+    top: 10%;
+    left: 50%;
+}
+
+span.comments{
+    top: 40%;
+}
+
+table.comments-table{
+    top: 43%;
+}
+
+span.rating{
+    top: 82%;
+}
+
+.rating-stars{
+    position: absolute;
+    top: 87%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.back-button {
+    position: absolute;
+    width: 58px;
+    height: 51px;
+    left: 180px;
+    top: 46px;
+    background-image: url("../images/arrow-back.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+}

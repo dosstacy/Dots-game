@@ -15,15 +15,18 @@ public class DotsController {
     private GameBoard gameBoard = new GameBoard();
 
     @GetMapping()
-    public String startMenu(Model model) {
-        prepareModel(model);
+    public String startMenu() {
         return "startMenu";
     }
 
     @GetMapping("/mainMenu")
-    public String mainMenu(Model model) {
-        prepareModel(model);
+    public String mainMenu() {
         return "mainMenu";
+    }
+
+    @GetMapping("/modeMenu")
+    public String modeMenu() {
+        return "modeMenu";
     }
 
     private String getHtmlGameBoard(){

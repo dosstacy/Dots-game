@@ -65,14 +65,14 @@
     background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
 }
 
-.main_menu .community-button {
+.main_menu .moves-button {
     position: relative;
     width: 281px;
     height: 86px;
     top: 460px;
     left: 785px;
     border-radius: 50px;
-    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
     border: none;
     cursor: pointer;
 }
@@ -83,36 +83,48 @@
     font-size: 30px;
 }
 
-.main_menu .account-button{
+.main_menu .endless-button{
     position: absolute;
     width: 281px;
     height: 86px;
     top: 460px;
     left: 400px;
     border-radius: 50px;
-    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    background: linear-gradient(180deg, rgb(38, 187, 167) 31.5%, rgb(34, 117, 157) 58.5%);
     border: none;
     cursor: pointer;
 }
 
-.main_menu .play-button{
+.main_menu .timed-button{
     position: absolute;
     width: 281px;
     height: 86px;
     top: 326px;
     left: 600px;
     border-radius: 50px;
-    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    background: linear-gradient(180deg, rgb(251, 144, 110) 11.9%, rgb(227.37, 90.95, 130.39) 48.9%);
     border: none;
     cursor: pointer;
 }
 
-.image-button {
+.back-button {
+    position: absolute;
+    width: 55px;
+    height: 45px;
+    left: 180px;
+    top: 45px;
+    background-image: url("../images/arrow-back.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+}
+
+.exit-button {
     position: absolute;
     width: 65px;
-    height: 75px;
-    left: 180px;
-    top: 40px;
+    height: 69px;
+    left: 241px;
+    top: 65px;
     background-image: url("../images/exit.png");
     background-size: cover;
     border: none;
