@@ -1,0 +1,57 @@
+table.dots-board{
+    position: absolute;
+    left: 20%;
+    top: 13%;
+    background-color: #D9D9D9;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+    border-radius: 8px;
+}
+
+img{
+    height: 70px;
+    width: 70px;
+    margin: 4px 4px;
+}
+
+span{
+    position: absolute;
+    font-family: "Open Sans-SemiBold", sans-serif;
+    font-size: 20px;
+}
+
+span.top{
+    top:19%;
+    left: 65%;
+}
+
+span.bottom{
+    top: 81%;
+    left: 65%;
+    transform: rotate(-180deg);
+}
+
+.group {
+    position: absolute;
+    top: 25%;
+    left: 65%;
+    width: 136px;
+    height: 370px;
+}
+
+.group .big-rect{
+    position: fixed;
+    width: 136px;
+    height: 370px;
+    background: #B0A189;
+    border-radius: 20px;
+}
+
+.group .small-rect {
+    position: relative;
+    height: 303px;
+    width: 118px;
+    background: #E0CCB0;
+    border-radius: 20px;
+    top: 9%;
+    left: 7%;
+}

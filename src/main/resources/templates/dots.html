@@ -4,24 +4,15 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/css/general_background.css">
     <link rel="stylesheet" href="/css/general_sides.css">
-    <link rel="stylesheet" href="/css/start_menu.css">
+    <link rel="stylesheet" href="/css/dots.css">
     <link rel="icon" href="/images/emblem.png" type="image/png">
-    <title>Start menu</title>
+    <title>Dots</title>
 </head>
 <body>
 
-<div class="start_menu">
+<div class="dots">
     <div class="general_background">
         <div class="div">
-            <div class="letter-D">D</div>
-            <div class="letter-S">S</div>
-            <div class="letter-T">T</div>
-            <div class="emblem">
-                <div class="yellow-ellipse-emblem"><div class="ellipse"></div></div>
-                <div class="green-ellipse-emblem"><div class="ellipse-4"></div></div>
-                <div class="pink-ellipse-emblem"><div class="ellipse-3"></div></div>
-                <div class="blue-ellipse-emblem"><div class="ellipse-2"></div></div>
-            </div>
             <div class="general_sides">
                 <div class="left-side-dots">
                     <div class="left-yellow-ellipse"><div class="ellipse"></div></div>
@@ -58,12 +49,14 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
-            <button class="log-in-button" onclick="location.href='http://localhost:8080/dots/logIn'">
-                <span class="button-text">Log In</span>
-            </button>
-            <button class="sign-up-button" onclick="location.href='http://localhost:8080/dots/signUp'">
-                <span class="button-text">Sign Up</span>
-            </button>
+            <div class="board" th:utext="${htmlboard}"></div>
+            <div class="group">
+                <div class="big-rect">
+                    <div class="small-rect"></div>
+                </div>
+            </div>
+            <span class="top">♡❀˖⁺. . . ⋆˙ .❀♡</span>
+            <span class="bottom">♡❀˖⁺. . . ⋆˙ .❀♡</span>
             <div class="creator">by Anastasiia Dosyn</div>
         </div>
     </div>

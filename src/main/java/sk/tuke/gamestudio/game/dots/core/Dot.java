@@ -9,6 +9,10 @@ public class Dot {
         this.dot = dot;
     }
 
+    public String getDot() {
+        return dot;
+    }
+
     public void setState(DotState state) {
         this.state = state;
     }
