@@ -2,23 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/css/sign_up.css" />
-    <link rel="stylesheet" href="/css/general_sides.css">
     <link rel="stylesheet" href="/css/general_background.css">
-    <link rel="icon" href="/images/emblem.png" type="image/png">
+    <link rel="stylesheet" href="/css/general_sides.css">
+    <link rel="stylesheet" href="/css/error_page.css">
+    <title>Dots</title>
 </head>
 <body>
 
-<div class="sign_up">
+<div class="errorPage">
     <div class="general_background">
         <div class="div">
-            <span>We are glad to see you!</span>
-            <form action="/dots/signUp" method="post">
-                <input type="text" id="username" name="username" minlength="4" maxlength=15 placeholder="Enter username" required><br>
-                <input type="password" id="password" name="password" minlength="6" maxlength="15" placeholder="Enter password" required>
-                <input type="submit" value="Sign Up">
-            </form>
-            <div class="error-message" th:if="${loginError}" th:text="${loginError}"></div>
             <div class="general_sides">
                 <div class="left-side-dots">
                     <div class="left-yellow-ellipse"><div class="ellipse"></div></div>
@@ -54,9 +47,8 @@
                     <div class="ellipse-29"></div>
                     <div class="ellipse-30"></div>
                 </div>
+                <div class="error-message" th:if="${rating_error}" th:text="${rating_error}"></div>
             </div>
-            <button class="image-button" onclick="location.href='http://localhost:8080/dots'"></button>
-            <div class="creator">by Anastasiia Dosyn</div>
         </div>
     </div>
 </div>

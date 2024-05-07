@@ -49,7 +49,7 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
-            <div class="board" th:utext="${htmlboard}"></div>
+            <div class='board' id="gameBoard" th:utext="${htmlboard}"></div>
             <div class="group">
                 <div class="big-rect">
                     <div class="small-rect"></div>
@@ -58,6 +58,14 @@
             <span class="top">♡❀˖⁺. . . ⋆˙ .❀♡</span>
             <span class="bottom">♡❀˖⁺. . . ⋆˙ .❀♡</span>
             <div class="creator">by Anastasiia Dosyn</div>
+            <script>
+                document.addEventListener("keydown", function(event) {
+                    if (event.key === " ") {
+                console.log("Пробіл натиснуто!");
+                window.open('/dots/new', '_self');
+                }
+                });
+            </script>
         </div>
     </div>
 </div>

@@ -4,18 +4,19 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
-import sk.tuke.gamestudio.game.dots.core.Dot;
 import sk.tuke.gamestudio.game.dots.core.GameBoard;
+import sk.tuke.gamestudio.game.dots.features.Color;
 
-import java.util.Random;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/dots")
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class DotsController {
-    private GameBoard gameBoard = new GameBoard();
+    private GameBoard gameField;
 
     @GetMapping()
     public String startMenu() {
@@ -34,34 +35,47 @@ public class DotsController {
 
     @GetMapping("/new")
     public String newGame(Model model) {
-        gameBoard = new GameBoard();
         prepareModel(model);
         return "dots";
     }
 
-    private String getHtmlGameBoard(){
-        StringBuilder sb = new StringBuilder();
-        String[] dots = {"/images/violet.png", "/images/blue.png", "/images/green.png", "/images/yellow.png", "/images/pink.png"};
+    @PostMapping("/new")
+    public String newGamePost(Model model, HttpSession session) {
+        gameField = (GameBoard) session.getAttribute("gameBoard");
 
-        sb.append("<table class='dots-board'>\n");
-        for (int row = 0; row < gameBoard.getBoardSize(); row++) {
-            sb.append("<tr>\n");
-            for (int col = 0; col < gameBoard.getBoardSize(); col++) {
-                gameBoard.gameBoard[row][col] = new Dot(dots[new Random().nextInt(dots.length)]);
-                sb.append("<td>\n");
-                sb.append(String.format("<img src='%s' alt='dot' />\n", gameBoard.gameBoard[row][col].getDot()));
-                sb.append("</td>\n");
-            }
-            sb.append("</tr>\n");
+        if (gameField == null) {
+            gameField = new GameBoard();
+            session.setAttribute("gameBoard", gameField);
         }
-        sb.append("</table>\n");
+        prepareModel(model);
+        return "dots";
+    }
+
+    private String getHtmlGameBoard() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("<table class='dots-board'>");
+        for (int row = 0; row < gameField.getBoardSize(); row++) {
+            sb.append("<tr>");
+            for (int col = 0; col < gameField.getBoardSize(); col++) {
+
+                sb.append("<td>");
+                sb.append(String.format("<form action='/dots/new' method='post'>" +
+                        "<input type='hidden' name='row' value='%d'>" +
+                        "<input type='hidden' name='col' value='%d'>" +
+                        "<button type='submit' class='dot-button %s'" +
+                        "</button>" +
+                        "</form>", row, col, Color.returnColor(gameField.gameBoard[row][col].getDot())));
+                sb.append("</td>");
+            }
+            sb.append("</tr>");
+        }
+        sb.append("</table>");
 
         return sb.toString();
     }
 
     private void prepareModel(Model model) {
         model.addAttribute("htmlboard", getHtmlGameBoard());
-        model.addAttribute("gameboard", gameBoard);
     }
-
 }

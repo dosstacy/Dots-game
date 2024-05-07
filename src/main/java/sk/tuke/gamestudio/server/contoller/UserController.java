@@ -10,13 +10,14 @@ import sk.tuke.gamestudio.entity.User;
 import sk.tuke.gamestudio.services.GameStudioException;
 import sk.tuke.gamestudio.services.UserService;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
 @RequestMapping("/dots")
 public class UserController {
     @Autowired
     private UserService userService;
-    private String username;
 
     @GetMapping("/logIn")
     public String getLoginUser() {
@@ -24,10 +25,10 @@ public class UserController {
     }
 
     @PostMapping("/logIn")
-    public String loginUser(String username, String password, Model model) {
+    public String loginUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
         try {
-            setUsername(username);
             userService.loginUser(username, password);
+            session.setAttribute("username", username);
             model.addAttribute("username", username);
             return "redirect:/dots/mainMenu";
         } catch (GameStudioException e) {
@@ -42,21 +43,14 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public String signUpUser(User user, Model model) {
+    public String signUpUser(User user, Model model, HttpSession session) {
         try {
             userService.addUser(user);
+            session.setAttribute("username", user.getUsername());
             return "redirect:/dots/mainMenu";
         } catch (GameStudioException e) {
             model.addAttribute("loginError", "This username is already taken!");
             return "signUp";
         }
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }

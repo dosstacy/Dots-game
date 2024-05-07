@@ -11,8 +11,11 @@ import sk.tuke.gamestudio.entity.GetTop10;
 import sk.tuke.gamestudio.entity.MaxScoreResult;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.services.CommentService;
+import sk.tuke.gamestudio.services.GameStudioException;
 import sk.tuke.gamestudio.services.RatingService;
 import sk.tuke.gamestudio.services.ScoreService;
+
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller()
@@ -24,20 +27,25 @@ public class AccountController {
     private CommentService commentService;
     @Autowired
     private RatingService ratingService;
-    @Autowired
-    private UserController userController;
 
     @GetMapping("/dots/account")
-    public String dataForAccount(Model model) {
-        String username = userController.getUsername();
-        List<MaxScoreResult> scores = scoreService.getDataForAccount(username);
-        List<Comment> comments = commentService.getUserComments(username);
-        int rating = ratingService.getRating(username);
-        String ratingInStars = new Rating().getRatingInStars(rating);
-        model.addAttribute("scores", scores);
-        model.addAttribute("comments", comments);
-        model.addAttribute("rating", ratingInStars);
-        return "account";
+    public String dataForAccount(Model model ,HttpSession session) {
+        try {
+            String username = session.getAttribute("username").toString();
+            List<MaxScoreResult> scores = scoreService.getDataForAccount(username);
+            List<Comment> comments = commentService.getUserComments(username);
+
+            int rating = ratingService.getRating(username);
+            String ratingInStars = new Rating().getRatingInStars(rating);
+
+            model.addAttribute("scores", scores);
+            model.addAttribute("comments", comments);
+            model.addAttribute("rating", ratingInStars);
+            return "account";
+        }catch(GameStudioException e){
+            model.addAttribute("rating_error", "Uh...Ups!\nThe “account” feature is not available.\nYou must first play the game at least once.");
+            return "errorPage";
+        }
     }
 
     @GetMapping("/dots/community")

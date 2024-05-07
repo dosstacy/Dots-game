@@ -1,0 +1,10 @@
+.error-message {
+    position: absolute;
+    top: 265px;
+    left: 340px;
+    font-size: 35px;
+    color: black;
+    text-align: center;
+    max-width: 55%;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+}

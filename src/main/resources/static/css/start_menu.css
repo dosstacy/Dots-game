@@ -174,3 +174,7 @@
     left: 17px;
     border-radius: 23.02px/21.55px;
 }
+
+.start_menu .log-in-button:hover{
+    background: white;
+}

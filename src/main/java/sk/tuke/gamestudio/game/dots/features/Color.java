@@ -22,4 +22,18 @@ public class Color {
         int index = rand.nextInt(COLORS.length);
         return COLORS[index];
     }
+
+    public static String returnColor(String color){
+        if(color.contains(ANSI_RED)){
+            return "red";
+        }else if(color.contains(ANSI_GREEN)){
+            return "green";
+        }else if(color.contains(ANSI_YELLOW)){
+            return "yellow";
+        } else if (color.contains(ANSI_BLUE)) {
+            return "blue";
+        }else{
+            return "purple";
+        }
+    }
 }

@@ -1,16 +1,10 @@
 table.dots-board{
     position: absolute;
-    left: 20%;
-    top: 13%;
+    left: 24%;
+    top: 24%;
     background-color: #D9D9D9;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
-}
-
-img{
-    height: 70px;
-    width: 70px;
-    margin: 4px 4px;
 }
 
 span{
@@ -54,4 +48,32 @@ span.bottom{
     border-radius: 20px;
     top: 9%;
     left: 7%;
+}
+
+.yellow{
+    background: linear-gradient(180deg, rgb(245, 186, 66) 31.5%, rgb(250, 144, 60) 58.5%);
+}
+
+.blue{
+    background: linear-gradient(180deg, rgb(38, 187, 167) 31.5%, rgb(34, 117, 157) 58.5%);
+}
+
+.green{
+    background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
+}
+
+.red{
+    background: linear-gradient(180deg, rgb(251, 144, 110) 11.9%, rgb(227.37, 90.95, 130.39) 48.9%);
+}
+
+.purple{
+    background: linear-gradient(180deg, rgb(156.33, 90.39, 222.28) 11.9%, rgb(95.55, 40.23, 150.87) 58.4%);
+}
+
+.dot-button{
+    border-radius: 50%;
+    border: none;
+    height: 60px;
+    width: 60px;
+    margin: 4px 4px;
 }
