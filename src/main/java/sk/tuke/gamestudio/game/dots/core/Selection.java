@@ -48,7 +48,7 @@ public class Selection implements DotsAction {
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
-                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
                 field.selectedDots[posX][posY].dot = "0";
                 posX--;
@@ -73,7 +73,7 @@ public class Selection implements DotsAction {
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
-                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
                 field.selectedDots[posX][posY].dot = "0";
                 posX++;
@@ -98,7 +98,7 @@ public class Selection implements DotsAction {
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
-                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY]);
                 field.selectedDots[posX][posY].dot = "0";
                 posY++;
             }
@@ -122,7 +122,7 @@ public class Selection implements DotsAction {
                 field.gameBoard[posX][posY].setState(DotState.SELECTED);
                 field.selectedDots[posX][posY].dot = field.gameBoard[posX][posY].dot;
             }else{
-                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY].dot);
+                field.gameBoard[posX][posY].dot = resetSelection(field.gameBoard[posX][posY]);
                 field.gameBoard[posX][posY].setState(DotState.NOT_SELECTED);
                 field.selectedDots[posX][posY].dot = "0";
                 posY--;
@@ -172,7 +172,8 @@ public class Selection implements DotsAction {
             }
         }
     }
-    public String resetSelection(String string){
+    public String resetSelection(Dot dot){
+        String string = dot.dot;
         if(string.contains(Color.RED_BACKGROUND)){
             string = string.replace(Color.RED_BACKGROUND, "");
         } else if (string.contains(Color.BLUE_BACKGROUND)) {

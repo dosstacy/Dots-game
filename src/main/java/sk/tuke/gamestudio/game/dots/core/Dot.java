@@ -13,6 +13,10 @@ public class Dot {
         return dot;
     }
 
+    public void setDot(String dot) {
+        this.dot = dot;
+    }
+
     public void setState(DotState state) {
         this.state = state;
     }

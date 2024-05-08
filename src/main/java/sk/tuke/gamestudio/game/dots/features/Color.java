@@ -23,8 +23,18 @@ public class Color {
         return COLORS[index];
     }
 
-    public static String returnColor(String color){
-        if(color.contains(ANSI_RED)){
+    public static String returnColor(String color) {
+        if (color.contains(RED_BACKGROUND)) {
+            return "red-selection red";
+        } else if (color.contains(BLUE_BACKGROUND)) {
+            return "blue-selection blue";
+        } else if (color.contains(GREEN_BACKGROUND)) {
+            return "green-selection green";
+        } else if (color.contains(YELLOW_BACKGROUND)) {
+            return "yellow-selection yellow";
+        } else if (color.contains(PURPLE_BACKGROUND)) {
+            return "purple-selection purple";
+        }else if(color.contains(ANSI_RED)){
             return "red";
         }else if(color.contains(ANSI_GREEN)){
             return "green";

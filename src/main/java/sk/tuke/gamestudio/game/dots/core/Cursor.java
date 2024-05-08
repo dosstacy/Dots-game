@@ -63,4 +63,11 @@ public class Cursor implements DotsAction {
         string = Color.WHITE_BACKGROUND + string;
         return string;
     }
+
+    public void clearSelection(Dot dot) {
+        if(dot.getDot().contains(Color.WHITE_BACKGROUND)){
+            String clearedText = dot.getDot().replace(Color.WHITE_BACKGROUND, "");
+            dot.setDot(clearedText);
+        }
+    }
 }

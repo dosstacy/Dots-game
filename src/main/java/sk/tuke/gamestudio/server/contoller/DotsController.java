@@ -7,19 +7,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
+import sk.tuke.gamestudio.game.dots.core.Dot;
 import sk.tuke.gamestudio.game.dots.core.GameBoard;
+import sk.tuke.gamestudio.game.dots.core.Selection;
 import sk.tuke.gamestudio.game.dots.features.Color;
+import sk.tuke.gamestudio.game.dots.features.DotState;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/dots")
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class DotsController {
-    private GameBoard gameField;
+    private static GameBoard gameField = new GameBoard();
+    private Selection selection;
 
     @GetMapping()
-    public String startMenu() {
+    public String startMenu(HttpSession session) {
+        session.invalidate();
         return "startMenu";
     }
 
@@ -29,7 +35,13 @@ public class DotsController {
     }
 
     @GetMapping("/modeMenu")
-    public String modeMenu() {
+    public String modeMenu(HttpSession session) {
+        if (session.getAttribute("gameBoard") != null) {
+            session.removeAttribute("gameBoard");
+            System.out.println(session.getAttribute("gameBoard"));
+            System.out.println("атрибут видалено");
+        }
+        gameField = new GameBoard();
         return "modeMenu";
     }
 
@@ -40,15 +52,47 @@ public class DotsController {
     }
 
     @PostMapping("/new")
-    public String newGamePost(Model model, HttpSession session) {
-        gameField = (GameBoard) session.getAttribute("gameBoard");
-
-        if (gameField == null) {
-            gameField = new GameBoard();
+    public String newGamePost(Model model, HttpSession session, HttpServletRequest request) {
+        selection = new Selection(gameField);
+        if (session.getAttribute("gameBoard") == null) {
             session.setAttribute("gameBoard", gameField);
         }
+
+        String row = request.getParameter("row");
+        String col = request.getParameter("col");
+        int rowIndex = Integer.parseInt(row);
+        int colIndex = Integer.parseInt(col);
+        Dot currentDot = gameField.gameBoard[rowIndex][colIndex];
+        if (currentDot != null && currentDot.getState() == DotState.NOT_SELECTED) {
+            gameField.selectedDots[rowIndex][colIndex].dot = gameField.gameBoard[rowIndex][colIndex].dot;
+            currentDot.setDot(selection.selectDot(currentDot));
+            currentDot.setState(DotState.SELECTED);
+        }else if(currentDot != null && currentDot.getState() == DotState.SELECTED){
+            currentDot.setDot(selection.resetSelection(currentDot));
+            currentDot.setState(DotState.NOT_SELECTED);
+            gameField.selectedDots[rowIndex][colIndex].dot = "0";
+        }
+
         prepareModel(model);
         return "dots";
+    }
+
+    @GetMapping("/newSpace")
+    public String newSpace() {
+        int countDots = 0;
+        for (int row = 0; row < gameField.selectedDots.length; row++) {
+            for (int col = 0; col < gameField.selectedDots.length; col++) {
+                if (!gameField.selectedDots[row][col].dot.equals("0")) {
+                    countDots++;
+                }
+            }
+        }
+        if (countDots > 1) {
+            gameField.missingAnimation();
+            gameField.shiftDotsDown();
+            selection.resetAllSelection(gameField);
+        }
+        return "redirect:/dots/new";
     }
 
     private String getHtmlGameBoard() {

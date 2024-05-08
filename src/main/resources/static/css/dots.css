@@ -77,3 +77,23 @@ span.bottom{
     width: 60px;
     margin: 4px 4px;
 }
+
+.yellow-selection {
+    box-shadow: 0 0 10px 0 rgba(245, 186, 66, 0.8), 0 0 10px 5px rgba(250, 144, 60, 0.8);
+}
+
+.blue-selection {
+    box-shadow: 0 0 10px 0 rgba(38, 187, 167, 0.8), 0 0 10px 5px rgba(34, 117, 157, 0.8);
+}
+
+.green-selection {
+    box-shadow: 0 0 10px 0 rgba(77, 192, 115, 0.8), 0 0 10px 5px rgba(70, 112, 84, 0.8);
+}
+
+.red-selection {
+    box-shadow: 0 0 10px 0 rgba(251, 144, 110, 0.8), 0 0 10px 5px rgba(227, 90, 130, 0.8);
+}
+
+.purple-selection{
+    box-shadow: 0 0 10px 0 rgba(156, 90, 222, 0.8), 0 0 10px 5px rgba(95, 40, 150, 0.8);
+}

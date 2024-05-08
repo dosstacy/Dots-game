@@ -181,7 +181,7 @@ public class ConsoleUI {
         }
     }
 
-    private void connectionButton() {
+    public void connectionButton() {
         if (gameMode == GameMode.SELECTION) {
             int countDots = 0;
             for (int row = 0; row < field.selectedDots.length; row++) {

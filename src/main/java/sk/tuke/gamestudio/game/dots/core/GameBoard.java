@@ -37,7 +37,7 @@ public class GameBoard {
         for (int row = 0; row < selectedDots.length; row++) {
             for (int col = 0; col < selectedDots.length; col++) {
                 if (selectedDots[row][col].dot.contains("◯")) {
-                    selection.resetSelection(gameBoard[row][col].dot);
+                    selection.resetSelection(gameBoard[row][col]);
                     gameBoard[row][col].setState(DotState.NOT_SELECTED);
                     gameBoard[row][col].dot = "*";
                 }
