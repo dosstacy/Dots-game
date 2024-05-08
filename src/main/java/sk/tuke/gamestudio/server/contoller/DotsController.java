@@ -15,6 +15,8 @@ import sk.tuke.gamestudio.game.dots.features.DotState;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.util.Stack;
 
 @Controller
 @RequestMapping("/dots")
@@ -22,6 +24,13 @@ import javax.servlet.http.HttpSession;
 public class DotsController {
     private static GameBoard gameField = new GameBoard();
     private Selection selection;
+    private int lastRowIndex = -1;
+    private int lastColIndex = -1;
+    private int rowIndex = -1;
+    private int colIndex = -1;
+    private final Stack<Point> selectedDotsStack = new Stack<>();
+    private final int moves = 20;
+    private int score = 0;
 
     @GetMapping()
     public String startMenu(HttpSession session) {
@@ -58,23 +67,69 @@ public class DotsController {
             session.setAttribute("gameBoard", gameField);
         }
 
-        String row = request.getParameter("row");
-        String col = request.getParameter("col");
-        int rowIndex = Integer.parseInt(row);
-        int colIndex = Integer.parseInt(col);
-        Dot currentDot = gameField.gameBoard[rowIndex][colIndex];
-        if (currentDot != null && currentDot.getState() == DotState.NOT_SELECTED) {
-            gameField.selectedDots[rowIndex][colIndex].dot = gameField.gameBoard[rowIndex][colIndex].dot;
-            currentDot.setDot(selection.selectDot(currentDot));
-            currentDot.setState(DotState.SELECTED);
-        }else if(currentDot != null && currentDot.getState() == DotState.SELECTED){
-            currentDot.setDot(selection.resetSelection(currentDot));
-            currentDot.setState(DotState.NOT_SELECTED);
-            gameField.selectedDots[rowIndex][colIndex].dot = "0";
+        if (rowIndex == -1 || colIndex == -1) {
+            lastRowIndex = rowIndex;
+            lastColIndex = colIndex;
         }
 
+        String row = request.getParameter("row");
+        String col = request.getParameter("col");
+        rowIndex = Integer.parseInt(row);
+        colIndex = Integer.parseInt(col);
+        Dot currentDot = gameField.gameBoard[rowIndex][colIndex];
+
+        if(isSameColor(gameField, lastRowIndex, lastColIndex, rowIndex, colIndex)) {
+            System.out.println("lastRowIndex: " + lastRowIndex + " lastColIndex: " + lastColIndex);
+            System.out.println("rowIndex: " + rowIndex + " colIndex: " + colIndex);
+            if (currentDot != null && currentDot.getState() == DotState.NOT_SELECTED) {
+                if (((lastRowIndex == -1 && lastColIndex == -1) || isValidMove(lastRowIndex, lastColIndex, rowIndex, colIndex))) {
+                    gameField.selectedDots[rowIndex][colIndex].dot = gameField.gameBoard[rowIndex][colIndex].dot;
+                    selectedDotsStack.push(new Point(rowIndex, colIndex));
+                    currentDot.setDot(selection.selectDot(currentDot));
+                    currentDot.setState(DotState.SELECTED);
+                    lastRowIndex = rowIndex;
+                    lastColIndex = colIndex;
+                } else {
+                    System.out.println("виберіть сусідню кульку.");
+                }
+            } else if (currentDot != null && currentDot.getState() == DotState.SELECTED) {
+                if (!selectedDotsStack.isEmpty() && selectedDotsStack.peek().equals(new Point(rowIndex, colIndex))) {
+                    resetSelectionAt(rowIndex, colIndex);
+                    selectedDotsStack.pop();
+                } else {
+                    while (!selectedDotsStack.isEmpty() && !selectedDotsStack.peek().equals(new Point(rowIndex, colIndex))) {
+                        Point p = selectedDotsStack.pop();
+                        resetSelectionAt(p.x, p.y);
+                    }
+                }
+                lastRowIndex = -1;
+                lastColIndex = -1;
+            }
+        }else {
+            System.out.println("another color");
+        }
         prepareModel(model);
         return "dots";
+    }
+
+    private void resetSelectionAt(int row, int col) {
+        Dot currentDot = gameField.gameBoard[row][col];
+        if (currentDot != null && currentDot.getState() == DotState.SELECTED) {
+            currentDot.setDot(selection.resetSelection(currentDot));
+            currentDot.setState(DotState.NOT_SELECTED);
+            gameField.selectedDots[row][col].dot = "0";
+        }
+    }
+
+    private boolean isValidMove(int lastRow, int lastCol, int nextRow, int nextCol) {
+        return (nextRow == lastRow && Math.abs(nextCol - lastCol) == 1) || (nextCol == lastCol && Math.abs(nextRow - lastRow) == 1);
+    }
+
+    private boolean isSameColor(GameBoard field, int lastRow, int lastCol, int nextRow, int nextCol){
+        if(lastRow == -1 || lastCol == -1 || nextRow == -1 || nextCol == -1){
+            return true;
+        }
+        return field.gameBoard[lastRow][lastCol].dot.contains(field.gameBoard[nextRow][nextCol].dot);
     }
 
     @GetMapping("/newSpace")
@@ -91,6 +146,8 @@ public class DotsController {
             gameField.missingAnimation();
             gameField.shiftDotsDown();
             selection.resetAllSelection(gameField);
+            lastRowIndex = -1;
+            lastColIndex = -1;
         }
         return "redirect:/dots/new";
     }

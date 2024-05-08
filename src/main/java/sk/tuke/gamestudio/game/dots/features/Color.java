@@ -1,5 +1,7 @@
 package sk.tuke.gamestudio.game.dots.features;
 
+import sk.tuke.gamestudio.game.dots.core.GameBoard;
+
 import java.util.Random;
 
 public class Color {
