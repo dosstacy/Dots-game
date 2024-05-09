@@ -9,7 +9,7 @@
 
 .start_menu .letter-S {
     position: absolute;
-    top: 71px;
+    top: 78px;
     left: 956px;
     font-family: "Gluten-Bold", Helvetica, sans-serif;
     color: #2b434e;
@@ -69,8 +69,20 @@
     position: relative;
     width: 281px;
     height: 86px;
-    top: 326px;
-    left: 582px;
+    top: 460px;
+    left: 400px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.start_menu .community-button {
+    position: relative;
+    width: 281px;
+    height: 86px;
+    top: 45%;
+    left: 20%;
     border-radius: 50px;
     background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
     border: none;
@@ -88,7 +100,7 @@
     width: 281px;
     height: 86px;
     top: 460px;
-    left: 582px;
+    left: 785px;
     border-radius: 50px;
     background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
     border: none;
@@ -180,5 +192,9 @@
 }
 
 .start_menu .sign-up-button:hover{
+    background: linear-gradient(180deg, rgb(60, 92, 106) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+}
+
+.start_menu .community-button:hover{
     background: linear-gradient(180deg, rgb(60, 92, 106) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
 }

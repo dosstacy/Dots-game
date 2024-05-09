@@ -8,3 +8,15 @@
     max-width: 55%;
     font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
 }
+
+.back-button {
+    position: absolute;
+    width: 58px;
+    height: 51px;
+    left: 180px;
+    top: 46px;
+    background-image: url("../images/arrow-back.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+}

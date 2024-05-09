@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/css/general_background.css">
@@ -49,6 +49,7 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
+            <div class="rect"></div>
             <div class='board' id="gameBoard" th:utext="${htmlboard}"></div>
             <div class="group">
                 <div class="big-rect">
@@ -63,6 +64,7 @@
                 }
                 });
             </script>
+            <button class="back-button" onclick="location.href='http://localhost:8080/dots/saveProgress'"></button>
         </div>
     </div>
 </div>

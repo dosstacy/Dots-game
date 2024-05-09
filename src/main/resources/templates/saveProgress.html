@@ -1,51 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/css/account.css" />
+    <link rel="stylesheet" href="/css/save_progress.css" />
     <link rel="stylesheet" href="/css/general_sides.css">
     <link rel="stylesheet" href="/css/general_background.css">
     <link rel="icon" href="/images/emblem.png" type="image/png">
-    <title>Account</title>
+    <title>Dots</title>
 </head>
 <body>
 
-<div class="account">
+<div class="saveProgress">
     <div class="general_background">
         <div class="div">
-            <span class="scores"><span>SCORES</span></span>
-            <span class="comments"><span>COMMENTS</span></span>
-            <span class="rating"><span>RATING</span></span>
-            <table class="scores-table">
-                <thead>
-                <tr>
-                    <th>SCORES</th>
-                    <th>MODE</th>
-                    <th>DATE</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!--/*@thymesVar id="username" type="sk.tuke.gamestudio.server.controller.UserController"*/-->"
-                <tr th:each="score : ${scores}">
-                    <td th:text="${score.getMaxResult()}"></td>
-                    <td th:text="${score.getGameMode()}"></td>
-                    <td th:text="${score.getDate()}"></td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table class="comments-table">
-                <thead>
-                <tr>
-                    <th>COMMENT</th>
-                    <th>DATE</th>
-                </tr>
-                </thead>
-                <tbody th:utext="${getHtmlComment}"></tbody>
-            </table>
-
-            <span class="rating-stars" th:text="${rating}"></span>
-
             <div class="general_sides">
                 <div class="left-side-dots">
                     <div class="left-yellow-ellipse"><div class="ellipse"></div></div>
@@ -82,7 +49,16 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
-            <button class="back-button" onclick="location.href='http://localhost:8080/dots/mainMenu'"></button>
+            <span class="head">Are you sure you want to quit the game? Save your progress?</span>
+            <form action='/dots/saveProgressPost' method='post'>
+                <button type='submit' class="yes">
+                    <span class="button-text">Yes</span>
+                </button>
+            </form>
+            <button class="no" onclick="location.href='http://localhost:8080/dots/mainMenu'">
+                <span class="button-text">No</span>
+            </button>
+            <div class="creator">by Anastasiia Dosyn</div>
         </div>
     </div>
 </div>

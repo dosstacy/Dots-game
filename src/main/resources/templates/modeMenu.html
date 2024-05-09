@@ -58,13 +58,16 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
-            <button class="moves-button" onclick="location.href='http://localhost:8080/dots/new/moves'">
-                <span class="button-text">Moves</span>
-            </button>
-            <button class="endless-button" onclick="location.href='http://localhost:8080/dots/new/endless'">
-                <span class="button-text">Endless</span>
-            </button>
-            <button class="exit-button" onclick="location.href='http://localhost:8080/dots'"></button>
+            <form action="http://localhost:8080/dots/game/new/moves" method="post">
+                <button class="moves-button" type="submit">
+                    <span class="button-text">Moves</span>
+                </button>
+            </form>
+            <form action="http://localhost:8080/dots/game/new/endless" method="post">
+                <button class="endless-button" type="submit">
+                    <span class="button-text">Endless</span>
+                </button>
+            </form>
             <button class="back-button" onclick="location.href='http://localhost:8080/dots/mainMenu'"></button>
             <div class="creator">by Anastasiia Dosyn</div>
         </div>

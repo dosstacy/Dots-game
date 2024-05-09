@@ -1,0 +1,49 @@
+span{
+    position: relative;
+    top: 20%;
+    left: 20%;
+    font-size: 280%;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+    color: #000000;
+}
+
+#comment, #rate {
+    position: relative;
+    top: 193px;
+    left: 470px;
+    width: 500px;
+    height: 70px;
+    margin: 8px 0;
+    border-radius: 50px;
+    border: none;
+    font-size: 23px;
+    padding-left: 30px;
+}
+
+input[type="submit"]{
+    position: relative;
+    width: 281px;
+    height: 86px;
+    top: 320px;
+    left: 40px;
+    border-radius: 50px;
+    color: white;
+    font-size: 30px;
+    font-family: "Open Sans-SemiBold", Helvetica, sans-serif;
+    background: linear-gradient(180deg, rgb(43, 67, 78) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+    border: none;
+    cursor: pointer;
+}
+
+.image-button {
+    position: absolute;
+    width: 58px;
+    height: 51px;
+    left: 180px;
+    top: 46px;
+    background-image: url("../images/arrow-back.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+}
+

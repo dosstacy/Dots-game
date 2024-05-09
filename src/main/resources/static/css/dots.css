@@ -1,11 +1,22 @@
 table.dots-board{
     position: absolute;
     left: 24%;
-    top: 24%;
+    top: 19%;
     background-color: #D9D9D9;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
 }
+
+.rect{
+    position: absolute;
+    left: 22.5%;
+    top: 16%;
+    width: 480px;
+    height: 480px;
+    background: #B0A189;
+    border-radius: 20px;
+}
+
 .group {
     position: absolute;
     top: 25%;
@@ -110,10 +121,14 @@ table.dots-board{
     z-index: 10;
 }
 
-.time{
+.back-button {
     position: absolute;
-    left: 67.2%;
-    top: 38%;
-    font-size: 21px;
-    font-family: "Open Sans-SemiBold", sans-serif;
+    width: 55px;
+    height: 45px;
+    left: 11%;
+    top: 6.3%;
+    background-image: url("../images/arrow-back.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
 }

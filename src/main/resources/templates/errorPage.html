@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/css/general_background.css">
     <link rel="stylesheet" href="/css/general_sides.css">
     <link rel="stylesheet" href="/css/error_page.css">
+    <link rel="icon" href="/images/emblem.png" type="image/png">
     <title>Dots</title>
 </head>
 <body>
@@ -48,6 +49,7 @@
                     <div class="ellipse-30"></div>
                 </div>
                 <div class="error-message" th:if="${rating_error}" th:text="${rating_error}"></div>
+                <button class="back-button" onclick="window.history.back();"></button>
             </div>
         </div>
     </div>

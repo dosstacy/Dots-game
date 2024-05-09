@@ -7,7 +7,7 @@ import sk.tuke.gamestudio.services.*;
 
 import java.sql.Timestamp;
 import java.util.List;
-public class JDBCConsoleUI {
+public class JDBCUI {
     private int scores = 0;
     private User user;
     @Autowired
@@ -16,7 +16,7 @@ public class JDBCConsoleUI {
     private RatingService ratingService;
     @Autowired
     private ScoreService scoreService;
-    public JDBCConsoleUI(){}
+    public JDBCUI(){}
     public User getUser() {
         return user;
     }

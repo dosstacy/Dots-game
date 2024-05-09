@@ -11,7 +11,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.web.client.RestTemplate;
 import sk.tuke.gamestudio.game.dots.consoleUI.ConsoleUI;
 import sk.tuke.gamestudio.game.dots.consoleUI.EndMenuConsoleUI;
-import sk.tuke.gamestudio.game.dots.consoleUI.JDBCConsoleUI;
+import sk.tuke.gamestudio.game.dots.consoleUI.JDBCUI;
 import sk.tuke.gamestudio.game.dots.consoleUI.StartMenuConsoleUI;
 import sk.tuke.gamestudio.services.*;
 
@@ -42,8 +42,8 @@ public class SpringClient {
     }
 
     @Bean
-    public JDBCConsoleUI jdbcConsoleUI() {
-        return new JDBCConsoleUI();
+    public JDBCUI jdbcConsoleUI() {
+        return new JDBCUI();
     }
     @Bean
     public StartMenuConsoleUI startMenuConsoleUI() {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/community.css" />
@@ -44,8 +44,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="comment: ${comments}">
-                    <td th:text="${comment.getUsername()}"></td>
+                <tr th:each="comment : ${comments}" th:if="${comment.getComment() != null && !comment.getComment().isEmpty()}">                    <td th:text="${comment.getUsername()}"></td>
                     <td th:text="${comment.getComment()}"></td>
                     <td th:text="${comment.getCommented_on()}"></td>
                 </tr>
@@ -90,7 +89,7 @@
                     <div class="ellipse-30"></div>
                 </div>
             </div>
-            <button class="back-button" onclick="location.href='http://localhost:8080/dots/mainMenu'"></button>
+            <button class="back-button" onclick="window.history.back();"></button>
         </div>
     </div>
 </div>

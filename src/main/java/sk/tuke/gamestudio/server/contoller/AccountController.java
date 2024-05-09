@@ -33,7 +33,10 @@ public class AccountController {
     @GetMapping("/dots/account")
     public String dataForAccount(Model model, HttpSession session) {
         try {
-            String username = session.getAttribute("username").toString();
+            String username = (String)session.getAttribute("username");
+            if(username == null) {
+                return "redirect:/login";
+            }
             List<MaxScoreResult> scores = scoreService.getDataForAccount(username);
             List<Comment> comments = commentService.getUserComments(username);
 
@@ -43,6 +46,7 @@ public class AccountController {
             model.addAttribute("scores", scores);
             model.addAttribute("comments", comments);
             model.addAttribute("rating", ratingInStars);
+            model.addAttribute("getHtmlComment", getHtmlCommentTable(comments));
             return "account";
         } catch(Exception e){
             model.addAttribute("rating_error", "Uh...Ups!\nThe “account” feature is not available.\nYou must first play the game at least once.");
@@ -72,20 +76,17 @@ public class AccountController {
     }
 
     @PostMapping("/dots/other")
-    public String other(Model model, @RequestParam String rate, @RequestParam String text, HttpSession session) {
+    public String other(Model model, @RequestParam String rate, @RequestParam String comment, HttpSession session) {
         int rating = 0;
-        try{
-            session.getAttribute("username");
-        }catch (Exception e){
-            model.addAttribute("nullError", "Sorry, but unregistered users cannot leave comments and rate the game...");
-            return "errorPage";
+        String username = (String)session.getAttribute("username");
+        if(username == null) {
+            return "redirect:/login";
         }
 
-        String username = (String) session.getAttribute("username");
-        Comment comment = new Comment(text, new Timestamp(System.currentTimeMillis()));
-        commentService.addComment(comment, username);
-        session.setAttribute("comment", text);
-        model.addAttribute("comment", text);
+        Comment comment1 = new Comment(comment, new Timestamp(System.currentTimeMillis()));
+        commentService.addComment(comment1, username);
+        session.setAttribute("comment", comment);
+        model.addAttribute("comment", comment);
 
         try{
             rating = Integer.parseInt(rate);
@@ -99,6 +100,26 @@ public class AccountController {
         ratings.setUsername(username);
         ratingService.setRating(ratings);
 
-        return "other";
+        return "redirect:/dots/mainMenu";
+    }
+
+    private String getHtmlCommentTable(List<Comment> comments) {
+        StringBuilder sb = new StringBuilder();
+
+        for(Comment comment : comments) {
+            if(comment.getComment() == null || comment.getComment().isEmpty()) {
+                continue;
+            }
+            sb.append("<tr>")
+                    .append("<td>")
+                    .append(comment.getComment())
+                    .append("</td>")
+                    .append("<td>")
+                    .append(comment.getCommented_on())
+                    .append("</td>")
+                    .append("</tr>");
+        }
+
+        return sb.toString();
     }
 }

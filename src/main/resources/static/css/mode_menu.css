@@ -107,18 +107,6 @@
     cursor: pointer;
 }
 
-.exit-button {
-    position: absolute;
-    width: 65px;
-    height: 69px;
-    left: 16%;
-    top: 4.8%;
-    background-image: url("../images/exit.png");
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-}
-
 .main_menu .ellipse {
     position: relative;
     width: 45px;

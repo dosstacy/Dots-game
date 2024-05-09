@@ -20,7 +20,7 @@ public class ConsoleUI {
     @Autowired
     private EndMenuConsoleUI endMenu;
     @Autowired
-    private JDBCConsoleUI jdbcConsoleUI;
+    private JDBCUI JDBCUI;
     private User user;
 
     public ConsoleUI() {
@@ -45,7 +45,7 @@ public class ConsoleUI {
         startMenu.displayRegistrationMenu();
         user = startMenu.getUser();
         endMenu.setUser(user);
-        jdbcConsoleUI.setUser(user);
+        JDBCUI.setUser(user);
         startGame();
     }
     public void startGame(){
@@ -61,7 +61,7 @@ public class ConsoleUI {
             switch (input) {
                 case "timed":
                     timeMode();
-                    jdbcConsoleUI.writeScoreToDatabase("timed");
+                    JDBCUI.writeScoreToDatabase("timed");
                     endMenu.displayEndMenu();
                     break;
                 case "moves":
@@ -73,11 +73,11 @@ public class ConsoleUI {
                         play();
                     }
                 case "account":
-                    jdbcConsoleUI.dataInAccountButton();
+                    JDBCUI.dataInAccountButton();
                     returnQuestion();
                     break;
                 case "community":
-                    jdbcConsoleUI.communityButton();
+                    JDBCUI.communityButton();
                     returnQuestion();
                     break;
                 case "e":
@@ -116,11 +116,11 @@ public class ConsoleUI {
                 break;
             case "e":
                 if(playingMode == PlayingMode.TIMED){
-                   jdbcConsoleUI.writeScoreToDatabase("timed");
+                   JDBCUI.writeScoreToDatabase("timed");
                 } else if (playingMode == PlayingMode.MOVES) {
-                   jdbcConsoleUI.writeScoreToDatabase("moves");
+                   JDBCUI.writeScoreToDatabase("moves");
                 }else {
-                   jdbcConsoleUI.writeScoreToDatabase("endless");
+                   JDBCUI.writeScoreToDatabase("endless");
                 }
                 isEndlessEnd = true;
                 endMenu.displayEndMenu();
@@ -191,7 +191,7 @@ public class ConsoleUI {
                 }
             }
             if (field.getCountDots()  > 1) {
-                jdbcConsoleUI.setScores(jdbcConsoleUI.getScores() + field.getCountDots());
+                JDBCUI.setScores(JDBCUI.getScores() + field.getCountDots());
                 updateScores();
                 if (playingMode == PlayingMode.MOVES) {
                     field.setMoves(field.getMoves() - 1);
@@ -202,7 +202,7 @@ public class ConsoleUI {
                         gameMode = GameMode.CURSOR;
                         selection.resetAllSelection(field);
                         printGameBoard();
-                        jdbcConsoleUI.writeScoreToDatabase("moves");
+                        JDBCUI.writeScoreToDatabase("moves");
                         System.out.println(Color.ANSI_RED + "The moves are over!" + Color.ANSI_RESET);
                         endMenu.displayEndMenu();
                     }
@@ -225,7 +225,7 @@ public class ConsoleUI {
         addition = new String[]{
                 Color.ANSI_YELLOW + "                -\"d\" for moving down;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"u\" for moving up;" + Color.ANSI_RESET,
-                "SCORES: " + jdbcConsoleUI.getScores() + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET,
+                "SCORES: " + JDBCUI.getScores() + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"l\" for moving left;" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"m\" for change mode(selection or cursor);" + Color.ANSI_RESET,
                 Color.ANSI_YELLOW + "                -\"ENTER\" to connect dots;" + Color.ANSI_RESET,
@@ -247,7 +247,7 @@ public class ConsoleUI {
     }
 
     private void updateScores() {
-        addition[2] = "SCORES: " + jdbcConsoleUI.getScores() + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET;
+        addition[2] = "SCORES: " + JDBCUI.getScores() + Color.ANSI_YELLOW + "       -\"r\" for moving right;" + Color.ANSI_RESET;
     }
 
     private void updateMoves() {

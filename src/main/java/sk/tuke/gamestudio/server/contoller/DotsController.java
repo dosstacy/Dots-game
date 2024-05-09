@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.game.dots.consoleUI.JDBCConsoleUI;
+import sk.tuke.gamestudio.game.dots.consoleUI.JDBCUI;
 import sk.tuke.gamestudio.game.dots.core.Dot;
 import sk.tuke.gamestudio.game.dots.core.GameBoard;
 import sk.tuke.gamestudio.game.dots.core.Selection;
@@ -29,7 +29,7 @@ import java.util.Stack;
 @RequestMapping("/dots")
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class DotsController {
-    private static final GameBoard gameField = new GameBoard();
+    private GameBoard gameBoard;
     private Selection selection;
     private int lastRowIndex = -1;
     private int lastColIndex = -1;
@@ -40,7 +40,7 @@ public class DotsController {
     private ScoreService scoreService;
     private final Stack<Point> selectedDotsStack = new Stack<>();
     private PlayingMode playingMode;
-    private final JDBCConsoleUI jdbcConsoleUI = new JDBCConsoleUI();
+    private final JDBCUI JDBCUI = new JDBCUI();
 
     @GetMapping()
     public String startMenu(HttpSession session) {
@@ -49,40 +49,87 @@ public class DotsController {
     }
 
     @GetMapping("/mainMenu")
-    public String mainMenu() {
+    public String mainMenu(HttpSession session) {
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
         return "mainMenu";
     }
 
     @GetMapping("/modeMenu")
     public String modeMenu(HttpSession session) {
-        if (session.getAttribute("gameBoard") != null) {
-            session.removeAttribute("gameBoard");
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
         }
-        gameField.setMoves(20);
-        jdbcConsoleUI.setScores(0);
         return "modeMenu";
     }
 
-    @GetMapping("/new/{mode}")
-    public String newGame(Model model, @PathVariable String mode) {
-        if(mode.equals("timed")){
-            playingMode = PlayingMode.TIMED;
-        } else if (mode.equals("moves")) {
+    @GetMapping("/saveProgress")
+    public String saveProgress(HttpSession session) {
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
+        return "saveProgress";
+    }
+
+    @PostMapping("/saveProgressPost")
+    public String saveProgressPost(HttpSession session) {
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
+
+        Score score = new Score((String) session.getAttribute("username"), JDBCUI.getScores(), mode, new Timestamp(System.currentTimeMillis()));
+        scoreService.addScore(score);
+        return "redirect:/dots/mainMenu";
+    }
+
+    @PostMapping("/game/new/{mode}")
+    public String newGame(HttpSession session, @PathVariable String mode) {
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
+
+        session.removeAttribute("gameBoard");
+        gameBoard = new GameBoard();
+        session.setAttribute("gameBoard", gameBoard);
+        JDBCUI.setScores(0);
+        if (mode.equals("moves")) {
             playingMode = PlayingMode.MOVES;
+            gameBoard.setMoves(20);
         }else{
             playingMode = PlayingMode.ENDLESS;
         }
         this.mode = mode;
+        return "redirect:/dots/game";
+    }
+
+    @GetMapping("/game")
+    public String newGame(Model model, HttpSession session) {
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
+
         prepareModel(model);
         return "dots";
     }
 
-    @PostMapping("/new")
-    public String newGamePost(Model model, HttpSession session, HttpServletRequest request) {
-        selection = new Selection(gameField);
+    @PostMapping("/game")
+    public String newGamePost(Model model, HttpServletRequest request) {
+        var session = request.getSession();
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
+        selection = new Selection(gameBoard);
 
         if (session.getAttribute("gameBoard") == null) {
-            session.setAttribute("gameBoard", gameField);
+            return "redirect:/dots/modeMenu";
         }
 
         if (rowIndex == -1 || colIndex == -1) {
@@ -90,30 +137,22 @@ public class DotsController {
             lastColIndex = colIndex;
         }
 
-        String row = request.getParameter("row");
-        String col = request.getParameter("col");
-        rowIndex = Integer.parseInt(row);
-        colIndex = Integer.parseInt(col);
-        Dot currentDot = gameField.gameBoard[rowIndex][colIndex];
+        rowIndex = Integer.parseInt(request.getParameter("row"));
+        colIndex = Integer.parseInt(request.getParameter("col"));
+        Dot currentDot = gameBoard.gameBoard[rowIndex][colIndex];
 
-        if(isSameColor(lastRowIndex, lastColIndex, rowIndex, colIndex)) {
-            if (currentDot != null && currentDot.getState() == DotState.NOT_SELECTED) {
+        if(isSameColor(lastRowIndex, lastColIndex, rowIndex, colIndex) && currentDot != null) {
+            if (currentDot.getState() == DotState.NOT_SELECTED) {
                 if (((lastRowIndex == -1 && lastColIndex == -1) || isValidMove(lastRowIndex, lastColIndex, rowIndex, colIndex))) {
-                    gameField.selectedDots[rowIndex][colIndex].dot = gameField.gameBoard[rowIndex][colIndex].dot;
-                    selectedDotsStack.push(new Point(rowIndex, colIndex));
-                    currentDot.setDot(selection.selectDot(currentDot));
-                    currentDot.setState(DotState.SELECTED);
-                    lastRowIndex = rowIndex;
-                    lastColIndex = colIndex;
-                } else {
-                    System.out.println("виберіть сусідню кульку.");
+                    selectDot(currentDot);
                 }
-            } else if (currentDot != null && currentDot.getState() == DotState.SELECTED) {
-                if (!selectedDotsStack.isEmpty() && selectedDotsStack.peek().equals(new Point(rowIndex, colIndex))) {
+            } else if (currentDot.getState() == DotState.SELECTED) {
+                Point point = new Point(rowIndex, colIndex);
+                if (!selectedDotsStack.isEmpty() && selectedDotsStack.peek().equals(point)) {
                     resetSelectionAt(rowIndex, colIndex);
                     selectedDotsStack.pop();
                 } else {
-                    while (!selectedDotsStack.isEmpty() && !selectedDotsStack.peek().equals(new Point(rowIndex, colIndex))) {
+                    while (!selectedDotsStack.isEmpty() && !selectedDotsStack.peek().equals(point)) {
                         Point p = selectedDotsStack.pop();
                         resetSelectionAt(p.x, p.y);
                     }
@@ -121,20 +160,27 @@ public class DotsController {
                 lastRowIndex = -1;
                 lastColIndex = -1;
             }
-        }else {
-            System.out.println("another color");
         }
         prepareModel(model);
         return "dots";
     }
 
     private void resetSelectionAt(int row, int col) {
-        Dot currentDot = gameField.gameBoard[row][col];
+        Dot currentDot = gameBoard.gameBoard[row][col];
         if (currentDot != null && currentDot.getState() == DotState.SELECTED) {
             currentDot.setDot(selection.resetSelection(currentDot));
             currentDot.setState(DotState.NOT_SELECTED);
-            gameField.selectedDots[row][col].dot = "0";
+            gameBoard.selectedDots[row][col].dot = "0";
         }
+    }
+
+    private void selectDot(Dot currentDot){
+        gameBoard.selectedDots[rowIndex][colIndex].dot = gameBoard.gameBoard[rowIndex][colIndex].dot;
+        selectedDotsStack.push(new Point(rowIndex, colIndex));
+        currentDot.setDot(selection.selectDot(currentDot));
+        currentDot.setState(DotState.SELECTED);
+        lastRowIndex = rowIndex;
+        lastColIndex = colIndex;
     }
 
     private boolean isValidMove(int lastRow, int lastCol, int nextRow, int nextCol) {
@@ -145,55 +191,59 @@ public class DotsController {
         if(lastRow == -1 || lastCol == -1 || nextRow == -1 || nextCol == -1){
             return true;
         }
-        return DotsController.gameField.gameBoard[lastRow][lastCol].dot.contains(DotsController.gameField.gameBoard[nextRow][nextCol].dot);
+        return gameBoard.gameBoard[lastRow][lastCol].dot.contains(gameBoard.gameBoard[nextRow][nextCol].dot);
     }
 
     @GetMapping("/newSpace")
     public String newSpace(HttpSession session) {
-        gameField.setCountDots(0);
-        for (int row = 0; row < gameField.selectedDots.length; row++) {
-            for (int col = 0; col < gameField.selectedDots.length; col++) {
-                if (!gameField.selectedDots[row][col].dot.equals("0")) {
-                    gameField.setCountDots(gameField.getCountDots() + 1);
+        String username  = (String)session.getAttribute("username");
+        if(username == null){
+            return "redirect:/dots/logIn";
+        }
+
+        gameBoard.setCountDots(0);
+        for (int row = 0; row < gameBoard.selectedDots.length; row++) {
+            for (int col = 0; col < gameBoard.selectedDots.length; col++) {
+                if (!gameBoard.selectedDots[row][col].dot.equals("0")) {
+                    gameBoard.setCountDots(gameBoard.getCountDots() + 1);
                 }
             }
         }
-        if (gameField.getCountDots() > 1) {
-            jdbcConsoleUI.setScores(jdbcConsoleUI.getScores() + gameField.getCountDots());
+        if (gameBoard.getCountDots() > 1) {
+            JDBCUI.setScores(JDBCUI.getScores() + gameBoard.getCountDots());
             if (playingMode == PlayingMode.MOVES) {
-                gameField.setMoves(gameField.getMoves() - 1);
+                gameBoard.setMoves(gameBoard.getMoves() - 1);
             }
+            gameBoard.missingAnimation();
+            gameBoard.shiftDotsDown();
+            selection.resetAllSelection(gameBoard);
+            lastRowIndex = -1;
+            lastColIndex = -1;
         }
-        gameField.missingAnimation();
-        gameField.shiftDotsDown();
-        selection.resetAllSelection(gameField);
-        lastRowIndex = -1;
-        lastColIndex = -1;
 
-        if(gameField.getMoves() <= 0){
-            Score score = new Score((String) session.getAttribute("username"), jdbcConsoleUI.getScores(), mode, new Timestamp(System.currentTimeMillis()));
+        if(gameBoard.getMoves() <= 0){
+            Score score = new Score((String) session.getAttribute("username"), JDBCUI.getScores(), mode, new Timestamp(System.currentTimeMillis()));
             scoreService.addScore(score);
-            System.out.println("ходи закінчилися");
             return "redirect:/dots/afterGameWindow";
         }
-        return "redirect:/dots/new/" + this.mode;
+        return "redirect:/dots/game";
     }
 
     private String getHtmlGameBoard() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("<table class='dots-board'>");
-        for (int row = 0; row < gameField.getBoardSize(); row++) {
+        for (int row = 0; row < gameBoard.getBoardSize(); row++) {
             sb.append("<tr>");
-            for (int col = 0; col < gameField.getBoardSize(); col++) {
+            for (int col = 0; col < gameBoard.getBoardSize(); col++) {
 
                 sb.append("<td>");
-                sb.append(String.format("<form action='/dots/new' method='post'>" +
+                sb.append(String.format("<form action='/dots/game' method='post'>" +
                         "<input type='hidden' name='row' value='%d'>" +
                         "<input type='hidden' name='col' value='%d'>" +
                         "<button type='submit' class='dot-button %s'" +
                         "</button>" +
-                        "</form>", row, col, Color.returnColor(gameField.gameBoard[row][col].getDot())));
+                        "</form>", row, col, Color.returnColor(gameBoard.gameBoard[row][col].getDot())));
                 sb.append("</td>");
             }
             sb.append("</tr>");
@@ -202,12 +252,9 @@ public class DotsController {
 
         if(playingMode == PlayingMode.MOVES){
             sb.append(String.format("<span class='moves-count'>Moves: <br>%d</span>" + "<span class='scores-1'>Scores: <br>%d</span>",
-                    gameField.getMoves(), jdbcConsoleUI.getScores()));
-            System.out.println(gameField.getCountDots());
-        } else if (playingMode == PlayingMode.TIMED) {
-            sb.append(String.format("<span class='time'>Time: </span>" + "<span class='scores-1'>Scores: <br>%d</span>", jdbcConsoleUI.getScores()));
+                    gameBoard.getMoves(), JDBCUI.getScores()));
         }else{
-            sb.append(String.format("<span class='scores'>Scores: <br>%d</span>", jdbcConsoleUI.getScores()));
+            sb.append(String.format("<span class='scores'>Scores: <br>%d</span>", JDBCUI.getScores()));
         }
 
         return sb.toString();
