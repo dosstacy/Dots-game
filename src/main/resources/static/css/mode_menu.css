@@ -9,7 +9,7 @@
 
 .main_menu .letter-S {
     position: absolute;
-    top: 71px;
+    top: 77px;
     left: 956px;
     font-family: "Gluten-Bold", Helvetica, sans-serif;
     color: #2b434e;
@@ -69,8 +69,8 @@
     position: relative;
     width: 281px;
     height: 86px;
-    top: 460px;
-    left: 785px;
+    top: 326px;
+    left: 582px;
     border-radius: 50px;
     background: linear-gradient(180deg, rgb(77.01, 192.53, 115.52) 11.9%, rgb(70.2, 112.62, 84.34) 48.9%);
     border: none;
@@ -88,21 +88,9 @@
     width: 281px;
     height: 86px;
     top: 460px;
-    left: 400px;
+    left: 582px;
     border-radius: 50px;
     background: linear-gradient(180deg, rgb(38, 187, 167) 31.5%, rgb(34, 117, 157) 58.5%);
-    border: none;
-    cursor: pointer;
-}
-
-.main_menu .timed-button{
-    position: absolute;
-    width: 281px;
-    height: 86px;
-    top: 326px;
-    left: 600px;
-    border-radius: 50px;
-    background: linear-gradient(180deg, rgb(251, 144, 110) 11.9%, rgb(227.37, 90.95, 130.39) 48.9%);
     border: none;
     cursor: pointer;
 }
@@ -124,7 +112,7 @@
     width: 65px;
     height: 69px;
     left: 16%;
-    top: 5.3%;
+    top: 4.8%;
     background-image: url("../images/exit.png");
     background-size: cover;
     border: none;
