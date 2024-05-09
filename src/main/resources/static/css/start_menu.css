@@ -176,5 +176,9 @@
 }
 
 .start_menu .log-in-button:hover{
-    background: white;
+    background: linear-gradient(180deg, rgb(60, 92, 106) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
+}
+
+.start_menu .sign-up-button:hover{
+    background: linear-gradient(180deg, rgb(60, 92, 106) 0%, rgb(59.03, 91.7, 106.67) 77.05%);
 }

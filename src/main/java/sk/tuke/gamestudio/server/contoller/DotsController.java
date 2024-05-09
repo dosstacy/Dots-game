@@ -4,14 +4,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
+import sk.tuke.gamestudio.game.dots.consoleUI.JDBCConsoleUI;
 import sk.tuke.gamestudio.game.dots.core.Dot;
 import sk.tuke.gamestudio.game.dots.core.GameBoard;
 import sk.tuke.gamestudio.game.dots.core.Selection;
 import sk.tuke.gamestudio.game.dots.features.Color;
 import sk.tuke.gamestudio.game.dots.features.DotState;
+import sk.tuke.gamestudio.game.dots.features.PlayingMode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,8 +32,8 @@ public class DotsController {
     private int rowIndex = -1;
     private int colIndex = -1;
     private final Stack<Point> selectedDotsStack = new Stack<>();
-    private final int moves = 20;
-    private int score = 0;
+    private PlayingMode playingMode;
+    private final JDBCConsoleUI jdbcConsoleUI = new JDBCConsoleUI();
 
     @GetMapping()
     public String startMenu(HttpSession session) {
@@ -54,8 +57,16 @@ public class DotsController {
         return "modeMenu";
     }
 
-    @GetMapping("/new")
-    public String newGame(Model model) {
+    @GetMapping("/new/{mode}")
+    public String newGame(Model model, @PathVariable String mode) {
+        if(mode.equals("timed")){
+            playingMode = PlayingMode.TIMED;
+        } else if (mode.equals("moves")) {
+            playingMode = PlayingMode.MOVES;
+        }else{
+            playingMode = PlayingMode.ENDLESS;
+        }
+        System.out.println(mode);
         prepareModel(model);
         return "dots";
     }
@@ -63,6 +74,7 @@ public class DotsController {
     @PostMapping("/new")
     public String newGamePost(Model model, HttpSession session, HttpServletRequest request) {
         selection = new Selection(gameField);
+
         if (session.getAttribute("gameBoard") == null) {
             session.setAttribute("gameBoard", gameField);
         }
@@ -134,20 +146,28 @@ public class DotsController {
 
     @GetMapping("/newSpace")
     public String newSpace() {
-        int countDots = 0;
+        gameField.setCountDots(0);
         for (int row = 0; row < gameField.selectedDots.length; row++) {
             for (int col = 0; col < gameField.selectedDots.length; col++) {
                 if (!gameField.selectedDots[row][col].dot.equals("0")) {
-                    countDots++;
+                    gameField.setCountDots(gameField.getCountDots() + 1);
                 }
             }
         }
-        if (countDots > 1) {
-            gameField.missingAnimation();
-            gameField.shiftDotsDown();
-            selection.resetAllSelection(gameField);
-            lastRowIndex = -1;
-            lastColIndex = -1;
+        if (gameField.getCountDots() > 1) {
+            jdbcConsoleUI.setScores(jdbcConsoleUI.getScores() + gameField.getCountDots());
+            if (playingMode == PlayingMode.MOVES) {
+                gameField.setMoves(gameField.getMoves() - 1);
+            }
+        }
+        gameField.missingAnimation();
+        gameField.shiftDotsDown();
+        selection.resetAllSelection(gameField);
+        lastRowIndex = -1;
+        lastColIndex = -1;
+
+        if(gameField.getMoves() == 0){
+            System.out.println("ходи закінчилися");
         }
         return "redirect:/dots/new";
     }
@@ -172,6 +192,16 @@ public class DotsController {
             sb.append("</tr>");
         }
         sb.append("</table>");
+
+        if(playingMode == PlayingMode.MOVES){
+            sb.append(String.format("<span class='moves-count'>Moves: <br>%d</span>" + "<span class='scores-1'>Scores: <br>%d</span>",
+                    gameField.getMoves(), gameField.getCountDots()));
+            System.out.println(gameField.getCountDots());
+        } else if (playingMode == PlayingMode.TIMED) {
+            sb.append(String.format("<span class='time'>Time: </span>" + "<span class='scores-1'>Scores: <br>%d</span>", gameField.getCountDots()));
+        }else{
+            sb.append(String.format("<span class='scores'>Scores: <br>%d</span>", gameField.getCountDots()));
+        }
 
         return sb.toString();
     }

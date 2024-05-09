@@ -42,7 +42,7 @@ public class AccountController {
             model.addAttribute("comments", comments);
             model.addAttribute("rating", ratingInStars);
             return "account";
-        }catch(GameStudioException e){
+        } catch(Exception e){
             model.addAttribute("rating_error", "Uh...Ups!\nThe “account” feature is not available.\nYou must first play the game at least once.");
             return "errorPage";
         }

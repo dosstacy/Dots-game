@@ -13,7 +13,6 @@ public class ConsoleUI {
     private GameMode gameMode;
     private final Selection selection;
     private String[] addition;
-    private int moves = 6;
     private boolean isEndlessEnd = false;
     private PlayingMode playingMode;
     @Autowired
@@ -183,21 +182,21 @@ public class ConsoleUI {
 
     public void connectionButton() {
         if (gameMode == GameMode.SELECTION) {
-            int countDots = 0;
+            field.setCountDots(0);
             for (int row = 0; row < field.selectedDots.length; row++) {
                 for (int col = 0; col < field.selectedDots.length; col++) {
                     if (!field.selectedDots[row][col].dot.equals("0")) {
-                        countDots++;
+                        field.setCountDots(field.getCountDots() + 1);
                     }
                 }
             }
-            if (countDots > 1) {
-                jdbcConsoleUI.setScores(jdbcConsoleUI.getScores() + countDots);
+            if (field.getCountDots()  > 1) {
+                jdbcConsoleUI.setScores(jdbcConsoleUI.getScores() + field.getCountDots());
                 updateScores();
                 if (playingMode == PlayingMode.MOVES) {
-                    moves -= 1;
+                    field.setMoves(field.getMoves() - 1);
                     updateMoves();
-                    if (moves == 0) {
+                    if (field.getMoves() == 0) {
                         field.missingAnimation();
                         field.shiftDotsDown();
                         gameMode = GameMode.CURSOR;
@@ -252,11 +251,11 @@ public class ConsoleUI {
     }
 
     private void updateMoves() {
-        addition[3] = "MOVES: " + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
-        if (moves == 5 || moves == 4) {
-            addition[3] = "MOVES: " + Color.ANSI_YELLOW + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
-        } else if (moves <= 3) {
-            addition[3] = "MOVES: " + Color.ANSI_RED + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        addition[3] = "MOVES: " + field.getMoves() + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        if (field.getMoves() == 5 || field.getMoves() == 4) {
+            addition[3] = "MOVES: " + Color.ANSI_YELLOW + field.getMoves() + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        } else if (field.getMoves() <= 3) {
+            addition[3] = "MOVES: " + Color.ANSI_RED + field.getMoves() + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
         }
     }
 
@@ -279,13 +278,13 @@ public class ConsoleUI {
 
     private void moveMode() {
         playingMode = PlayingMode.MOVES;
-        while (moves >= 0) {
-            if (moves == 5 || moves == 4) {
-                addition[3] = "MOVES: " + Color.ANSI_YELLOW + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
-            } else if (moves <= 3) {
-                addition[3] = "MOVES: " + Color.ANSI_RED + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+        while (field.getMoves() >= 0) {
+            if (field.getMoves() == 5 || field.getMoves() == 4) {
+                addition[3] = "MOVES: " + Color.ANSI_YELLOW + field.getMoves() + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+            } else if (field.getMoves() <= 3) {
+                addition[3] = "MOVES: " + Color.ANSI_RED + field.getMoves() + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
             } else {
-                addition[3] = "MOVES: " + moves + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
+                addition[3] = "MOVES: " + field.getMoves() + Color.ANSI_YELLOW + "        -\"l\" for moving left;" + Color.ANSI_RESET;
             }
             play();
         }

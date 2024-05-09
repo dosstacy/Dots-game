@@ -1,0 +1,51 @@
+.image-button {
+    position: absolute;
+    width: 65px;
+    height: 75px;
+    left: 180px;
+    top: 40px;
+    background-image: url("../images/exit.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+}
+
+.main_menu .ellipse {
+    position: relative;
+    width: 45px;
+    height: 42px;
+    top: 16px;
+    left: 17px;
+    background-color: #fcaf39;
+    border-radius: 22.5px/21px;
+}
+
+.main_menu .ellipse-2 {
+    background-color: #2293a5;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.main_menu .ellipse-3 {
+    background-color: #ed6373;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}
+
+.main_menu .ellipse-4 {
+    background-color: #5b966f;
+    position: relative;
+    width: 46px;
+    height: 43px;
+    top: 16px;
+    left: 17px;
+    border-radius: 23.02px/21.55px;
+}

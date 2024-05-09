@@ -104,7 +104,7 @@ public class JDBCConsoleUI {
             System.out.println();
         }
     }
-    protected void writeScoreToDatabase(String mode){
+    public void writeScoreToDatabase(String mode){
         Score score = new Score(user.getUsername(), scores, mode, new Timestamp(System.currentTimeMillis()));
         scoreService.addScore(score);
     }

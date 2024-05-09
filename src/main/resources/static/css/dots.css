@@ -6,24 +6,6 @@ table.dots-board{
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
 }
-
-span{
-    position: absolute;
-    font-family: "Open Sans-SemiBold", sans-serif;
-    font-size: 20px;
-}
-
-span.top{
-    top:19%;
-    left: 65%;
-}
-
-span.bottom{
-    top: 81%;
-    left: 65%;
-    transform: rotate(-180deg);
-}
-
 .group {
     position: absolute;
     top: 25%;
@@ -96,4 +78,42 @@ span.bottom{
 
 .purple-selection{
     box-shadow: 0 0 10px 0 rgba(156, 90, 222, 0.8), 0 0 10px 5px rgba(95, 40, 150, 0.8);
+}
+
+.scores{
+    position: absolute;
+    left: 67.2%;
+    top: 45%;
+    font-size: 21px;
+    font-family: "Open Sans-SemiBold", sans-serif;
+    text-align: center;
+    z-index: 10;
+}
+
+.moves-count{
+    position: absolute;
+    left: 67.2%;
+    top: 38%;
+    font-size: 21px;
+    font-family: "Open Sans-SemiBold", sans-serif;
+    text-align: center;
+    z-index: 10;
+}
+
+.scores-1{
+    position: absolute;
+    left: 67.2%;
+    top: 55%;
+    font-size: 21px;
+    font-family: "Open Sans-SemiBold", sans-serif;
+    text-align: center;
+    z-index: 10;
+}
+
+.time{
+    position: absolute;
+    left: 67.2%;
+    top: 38%;
+    font-size: 21px;
+    font-family: "Open Sans-SemiBold", sans-serif;
 }

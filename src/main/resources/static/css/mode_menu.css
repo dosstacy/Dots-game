@@ -111,8 +111,8 @@
     position: absolute;
     width: 55px;
     height: 45px;
-    left: 180px;
-    top: 45px;
+    left: 11%;
+    top: 6.3%;
     background-image: url("../images/arrow-back.png");
     background-size: cover;
     border: none;
@@ -123,8 +123,8 @@
     position: absolute;
     width: 65px;
     height: 69px;
-    left: 241px;
-    top: 65px;
+    left: 16%;
+    top: 5.3%;
     background-image: url("../images/exit.png");
     background-size: cover;
     border: none;
@@ -170,3 +170,4 @@
     left: 17px;
     border-radius: 23.02px/21.55px;
 }
+

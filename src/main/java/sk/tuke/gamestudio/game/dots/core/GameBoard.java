@@ -8,6 +8,8 @@ public class GameBoard {
     private final int boardSize = 6;
     private final Selection selection;
     public Dot[][] selectedDots;
+    private int countDots = 0;
+    private int moves = 20;
 
     public GameBoard() {
         gameBoard = new Dot[boardSize][boardSize];
@@ -70,5 +72,21 @@ public class GameBoard {
                 selectedDot[j].dot = "0";
             }
         }
+    }
+
+    public int getCountDots() {
+        return countDots;
+    }
+
+    public void setCountDots(int countDots) {
+        this.countDots = countDots;
+    }
+
+    public int getMoves() {
+        return moves;
+    }
+
+    public void setMoves(int moves) {
+        this.moves = moves;
     }
 }
