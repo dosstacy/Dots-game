@@ -65,11 +65,6 @@ public class AccountController {
         return "community";
     }
 
-    @GetMapping("/dots/afterGameWindow")
-    public String afterGameWindow() {
-        return "afterGameWindow";
-    }
-
     @GetMapping("/dots/other")
     public String otherButton() {
         return "other";

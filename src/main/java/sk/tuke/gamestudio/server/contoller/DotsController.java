@@ -42,35 +42,11 @@ public class DotsController {
     private PlayingMode playingMode;
     private final JDBCUI JDBCUI = new JDBCUI();
 
-    @GetMapping()
-    public String startMenu(HttpSession session) {
-        session.invalidate();
-        return "startMenu";
-    }
-
-    @GetMapping("/mainMenu")
-    public String mainMenu(HttpSession session) {
-        String username  = (String)session.getAttribute("username");
-        if(username == null){
-            return "redirect:/dots/logIn";
-        }
-        return "mainMenu";
-    }
-
-    @GetMapping("/modeMenu")
-    public String modeMenu(HttpSession session) {
-        String username  = (String)session.getAttribute("username");
-        if(username == null){
-            return "redirect:/dots/logIn";
-        }
-        return "modeMenu";
-    }
-
     @GetMapping("/saveProgress")
     public String saveProgress(HttpSession session) {
         String username  = (String)session.getAttribute("username");
         if(username == null){
-            return "redirect:/dots/logIn";
+            return "redirect:/dots/unregisteredPage";
         }
         return "saveProgress";
     }
@@ -79,7 +55,7 @@ public class DotsController {
     public String saveProgressPost(HttpSession session) {
         String username  = (String)session.getAttribute("username");
         if(username == null){
-            return "redirect:/dots/logIn";
+            return "redirect:/dots/unregisteredPage";
         }
 
         Score score = new Score((String) session.getAttribute("username"), JDBCUI.getScores(), mode, new Timestamp(System.currentTimeMillis()));
@@ -91,7 +67,7 @@ public class DotsController {
     public String newGame(HttpSession session, @PathVariable String mode) {
         String username  = (String)session.getAttribute("username");
         if(username == null){
-            return "redirect:/dots/logIn";
+            return "redirect:/dots/unregisteredPage";
         }
 
         session.removeAttribute("gameBoard");
@@ -112,7 +88,7 @@ public class DotsController {
     public String newGame(Model model, HttpSession session) {
         String username  = (String)session.getAttribute("username");
         if(username == null){
-            return "redirect:/dots/logIn";
+            return "redirect:/dots/unregisteredPage";
         }
 
         prepareModel(model);
@@ -124,7 +100,7 @@ public class DotsController {
         var session = request.getSession();
         String username  = (String)session.getAttribute("username");
         if(username == null){
-            return "redirect:/dots/logIn";
+            return "redirect:/dots/unregisteredPage";
         }
         selection = new Selection(gameBoard);
 
@@ -198,7 +174,7 @@ public class DotsController {
     public String newSpace(HttpSession session) {
         String username  = (String)session.getAttribute("username");
         if(username == null){
-            return "redirect:/dots/logIn";
+            return "redirect:/dots/unregisteredPage";
         }
 
         gameBoard.setCountDots(0);
