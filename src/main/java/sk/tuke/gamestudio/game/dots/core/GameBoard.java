@@ -3,6 +3,8 @@ package sk.tuke.gamestudio.game.dots.core;
 import sk.tuke.gamestudio.game.dots.features.Color;
 import sk.tuke.gamestudio.game.dots.features.DotState;
 
+import java.util.Random;
+
 public class GameBoard {
     public Dot[][] gameBoard;
     private final int boardSize = 6;
@@ -56,14 +58,32 @@ public class GameBoard {
                         newRowIndex--;
                     }
                     if (newRowIndex >= 0) {
+                        // Переміщення dot та DotState
                         gameBoard[col][row].dot = gameBoard[newRowIndex][row].dot;
+                        gameBoard[col][row].setState(gameBoard[newRowIndex][row].getState());
                         gameBoard[newRowIndex][row].dot = "*";
-                    }else {
+                        gameBoard[newRowIndex][row].setState(DotState.NOT_SELECTED);
+                    } else {
                         gameBoard[col][row].dot = Color.randomColor() + "◯" + Color.ANSI_RESET;
+                        gameBoard[col][row].setState(DotState.NOT_SELECTED);
                     }
                 }
             }
         }
+
+        // Додавання бомби з ймовірністю 20%
+        if (shouldPlaceBomb()) {
+            Random rand = new Random();
+            int index = rand.nextInt(boardSize);
+            gameBoard[index][index].dot = "◯";
+            gameBoard[index][index].setState(DotState.BOMB);
+        }
+    }
+
+    private boolean shouldPlaceBomb() {
+        Random rand = new Random();
+        int chance = rand.nextInt(5);
+        return chance == 0;
     }
 
     public void cleanArray(){

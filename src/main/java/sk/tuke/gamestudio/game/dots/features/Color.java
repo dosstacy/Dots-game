@@ -44,8 +44,10 @@ public class Color {
             return "yellow";
         } else if (color.contains(ANSI_BLUE)) {
             return "blue";
-        }else{
+        }else if(color.contains(ANSI_PURPLE)){
             return "purple";
+        }else{
+            return "bomb";
         }
     }
 }

@@ -45,4 +45,9 @@ public class MenuController {
     public String unregisteredPage() {
         return "unregisteredPage";
     }
+
+    @GetMapping("/instruction")
+    public String instructionPage() {
+        return "instructionPage";
+    }
 }

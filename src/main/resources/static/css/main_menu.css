@@ -183,3 +183,15 @@
     left: 17px;
     border-radius: 23.02px/21.55px;
 }
+
+.main_menu .how-to-play{
+    position: absolute;
+    width: 57px;
+    height: 48px;
+    left: 82%;
+    top: 57px;
+    background-image: url("../images/how-to-play.png");
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+}

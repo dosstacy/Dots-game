@@ -90,7 +90,6 @@ public class DotsController {
         if(username == null){
             return "redirect:/dots/unregisteredPage";
         }
-
         prepareModel(model);
         return "dots";
     }
@@ -137,6 +136,33 @@ public class DotsController {
                 lastColIndex = -1;
             }
         }
+        if(currentDot.getState() == DotState.BOMB){
+            if(rowIndex-1 != -1){
+                selectDot(gameBoard.gameBoard[rowIndex-1][colIndex]);
+            }
+            if(colIndex-1 != -1) {
+                selectDot(gameBoard.gameBoard[rowIndex][colIndex - 1]);
+            }
+            if(colIndex+1 != 6) {
+                selectDot(gameBoard.gameBoard[rowIndex][colIndex + 1]);
+            }
+            if(rowIndex+1 != 6) {
+                selectDot(gameBoard.gameBoard[rowIndex + 1][colIndex]);
+            }
+            if(rowIndex+1 != 6 && colIndex+1 != 6) {
+                selectDot(gameBoard.gameBoard[rowIndex+1][colIndex+1]);
+            }
+            if(rowIndex-1 != -1 && colIndex-1 != -1) {
+                selectDot(gameBoard.gameBoard[rowIndex-1][colIndex-1]);
+            }
+            if(rowIndex-1 != -1 && colIndex+1 != 6) {
+                selectDot(gameBoard.gameBoard[rowIndex-1][colIndex+1]);
+            }
+            if(rowIndex+1 != 6 && colIndex-1 != -1) {
+                selectDot(gameBoard.gameBoard[rowIndex+1][colIndex-1]);
+            }
+        }
+
         prepareModel(model);
         return "dots";
     }
@@ -190,18 +216,65 @@ public class DotsController {
             if (playingMode == PlayingMode.MOVES) {
                 gameBoard.setMoves(gameBoard.getMoves() - 1);
             }
-            gameBoard.missingAnimation();
-            gameBoard.shiftDotsDown();
-            selection.resetAllSelection(gameBoard);
-            lastRowIndex = -1;
-            lastColIndex = -1;
         }
+
+        for(int i = 0; i < gameBoard.gameBoard.length; i++){
+            for(int j = 0; j < gameBoard.gameBoard.length; j++) {
+                if (gameBoard.getCountDots() == 1 && gameBoard.gameBoard[i][j].getState() == DotState.BOMB) {
+                    if (i - 1 != -1) {
+                        gameBoard.selectedDots[i - 1][j].dot = gameBoard.gameBoard[i - 1][j].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if (j - 1 != -1) {
+                        gameBoard.selectedDots[i][j - 1].dot = gameBoard.gameBoard[i][j - 1].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if (i + 1 != 6) {
+                        gameBoard.selectedDots[i + 1][j].dot = gameBoard.gameBoard[i + 1][j].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if (j + 1 != 6) {
+                        gameBoard.selectedDots[i][j + 1].dot = gameBoard.gameBoard[i][j + 1].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if (i + 1 != 6 && j + 1 != 6) {
+                        gameBoard.selectedDots[i + 1][j + 1].dot = gameBoard.gameBoard[i + 1][j + 1].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if (i - 1 != -1 && j - 1 != -1) {
+                        gameBoard.selectedDots[i - 1][j - 1].dot = gameBoard.gameBoard[i - 1][j - 1].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if(i-1 != -1 && j+1 != 6) {
+                        gameBoard.selectedDots[i - 1][j + 1].dot = gameBoard.gameBoard[i - 1][j + 1].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+                    if(i+1 != 6 && j-1 != -1) {
+                        gameBoard.selectedDots[i + 1][j - 1].dot = gameBoard.gameBoard[i + 1][j - 1].dot;
+                        gameBoard.setCountDots(gameBoard.getCountDots() + 1);
+                    }
+
+                    JDBCUI.setScores(JDBCUI.getScores() + gameBoard.getCountDots());
+                    if (playingMode == PlayingMode.MOVES) {
+                        gameBoard.setMoves(gameBoard.getMoves() - 1);
+                    }
+
+                }
+            }
+        }
+        gameBoard.missingAnimation();
+        gameBoard.shiftDotsDown();
+        selection.resetAllSelection(gameBoard);
+        gameBoard.cleanArray();
+        lastRowIndex = -1;
+        lastColIndex = -1;
 
         if(gameBoard.getMoves() <= 0){
             Score score = new Score((String) session.getAttribute("username"), JDBCUI.getScores(), mode, new Timestamp(System.currentTimeMillis()));
             scoreService.addScore(score);
             return "redirect:/dots/afterGameWindow";
         }
+
         return "redirect:/dots/game";
     }
 

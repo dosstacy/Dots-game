@@ -9,6 +9,11 @@ public class Dot {
         this.dot = dot;
     }
 
+    public Dot(Dot other) {
+        this.dot = other.dot;
+        this.state = other.state;
+    }
+
     public String getDot() {
         return dot;
     }
